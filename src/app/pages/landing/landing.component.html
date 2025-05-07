@@ -1,0 +1,58 @@
+
+<div>
+  <!--  HERO -->
+  <div class="flex w-full h-[90vh] items-left justify-left bg-primary text-primary-dark">
+    <div class="text-left mt-40 p-20">
+      <h1 class="titulo
+      text-[115px]
+      sm:text-[30px]
+      md:text-[80px]
+      lg:text-[85px]
+      xl:text-[115px]
+      font-IBM">Adopta un animal cariñoso</h1>
+      <p class="
+      text-[50px]
+      sm:text-[24px]
+      md:text-[24px]
+      lg:text-[50px]
+      xl:text-[50px]
+      mt-4 font-light max-w-250">Rescatar, adoptar y ayudar transforma vidas. Juntos, hacemos la diferencia.</p>
+
+      <!-- Boton y imagen -->
+      <div class="bg-primary pt-20">
+          <!-- Imagen para pantalla menor a 971px -->
+        <img src="img/huellitas.png" alt="huellas" class="absolute top-33 right-0 w-full max-w-[900px] object-cover opacity-5  hidden max-[971px]:block z-0">
+
+
+        <button class="bg-btn-primary-ligth text-white text-[25px] px-5 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300">
+          Registrarse
+        </button>
+      </div>
+
+    </div>
+
+
+
+  <!-- Imagen para pantallas menores de 1282px a 971px -->
+  <img src="img/animalesHero.png" alt="perro" class="absolute bottom-50 right-0 w-full max-w-[650px] object-cover hidden max-[1649px]:block min-[1649px]:hidden z-0">
+
+  <!-- Imagen para pantallas mayores a 1282px -->
+  <img src="img/perroabrigo.png" alt="animales" class="absolute bottom-20 right-30 w-4xl object-cover hidden min-[1649px]:block z-0">
+
+  </div>
+
+  <!-- Apartado del componente slider -->
+  <section class="mt-25">
+    <h1 class="text-[35px] uppercase font-poppins font-semibold text-texto-gris-oscuro text-center">EXPERIENCIAS DE ADOPCIÓN</h1>
+    <p class="text-[20px] uppercase font-poppins font-normal text-texto-gris-claro text-center" >Cada adopción tiene su historia, ¿cuál será la tuya?</p>
+    <app-slider [num]="1" (slideLeft)="slideLeft($event)" (slideRight)="slideRight($event)"></app-slider>
+  </section>
+
+<!-- Apartado del componente card -->
+  <section class="mt-25 mb-20">
+    <h1 class="text-[35px] uppercase font-poppins font-semibold text-texto-gris-oscuro text-center">ADOPTA CON CONFIANZA</h1>
+    <p class="text-[20px] uppercase font-poppins font-normal text-texto-gris-claro text-center" >Cada adopción tiene su historia, ¿cuál será la tuya?</p>
+    <app-card></app-card>
+  </section>
+
+</div>

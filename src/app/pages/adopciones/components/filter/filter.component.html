@@ -1,0 +1,51 @@
+<div class="hidden lg:flex justify-center gap-6 bg-transparent py-4">
+  <!-- Filtro: Animal -->
+  <div class="flex items-center">
+    <label for="animal" class="text-[16px] text-texto-gris-oscuro mr-2">Animal:</label>
+    <select id="animal" class="bg-transparent border border-gray-300 px-3 py-2 rounded-md text-texto-gris-oscuro">
+      <option value="perro">Perro</option>
+      <option value="gato">Gato</option>
+      <option value="tortuga">Tortuga</option>
+      <!-- Agregar más opciones si es necesario -->
+    </select>
+  </div>
+
+  <!-- Filtro: Ciudad -->
+  <div class="flex items-center">
+    <label for="ciudad" class="text-[16px] text-texto-gris-oscuro mr-2">Ciudad:</label>
+    <select id="ciudad" class="bg-transparent border border-gray-300 px-3 py-2 rounded-md text-texto-gris-oscuro">
+      <option value="rotta">Málaga</option>
+      <option value="cadiz">Cádiz</option>
+      <option value="sevilla">Sevilla</option>
+      <!-- Agregar más opciones si es necesario -->
+    </select>
+  </div>
+
+  <!-- Filtro: Género -->
+  <div class="flex items-center">
+    <label for="genero" class="text-[16px] text-texto-gris-oscuro mr-2">Género:</label>
+    <select id="genero" class="bg-transparent border border-gray-300 px-3 py-2 rounded-md text-texto-gris-oscuro">
+      <option value="hembra">Hembra</option>
+      <option value="macho">Macho</option>
+      <!-- Agregar más opciones si es necesario -->
+    </select>
+  </div>
+
+  <!-- Filtro: Tamaño -->
+  <div class="flex items-center">
+    <label for="tamano" class="text-[16px] text-texto-gris-oscuro mr-2">Tamaño:</label>
+    <select id="tamano" class="bg-transparent border border-gray-300 px-3 py-2 rounded-md text-texto-gris-oscuro">
+      <option value="pequeno">Pequeño</option>
+      <option value="mediano">Mediano</option>
+      <option value="grande">Grande</option>
+    </select>
+  </div>
+</div>
+
+<!-- Icono de filtro -->
+<div class="lg:hidden flex justify-end bg-transparent py-4">
+  <button id="iconoFiltro" class="text-2xl text-texto-marron-oscuro hover:text-gray-900" data-dropdown-toggle="dropdownId">
+    <i class="fas fa-sliders-h"></i>
+  </button>
+</div>
+

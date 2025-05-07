@@ -1,0 +1,46 @@
+
+<!-- shadow-lg <a class="nav-link" href="#" routerLink="/adopciones" routerLinkActive="link-primary">Recetas</a> -->
+<nav class="hidden lg:fixed top-0 left-0 w-full bg-white/50 backdrop-blur-md p-4 lg:flex items-center justify-between z-99">
+
+  <!-- Imagen logo -->
+  <img src="img/logo_color.png" alt="HuellitasSolidarias" class="max-w-[250px] h-auto">
+
+  <!-- Paginas -->
+  <ul class="flex space-x-6 text-texto-navbar text-lg">
+    <li>
+      <a href="/adopciones" routerLink="/adopciones" class="hover:text-gray-500 transition duration-300">ADOPCIONES</a>
+    </li>
+    <li>
+      <a href="/reportes" routerLink="/reportes" class="hover:text-gray-500 transition duration-300">REPORTES</a>
+    </li>
+    <li>
+      <a href="/publicaciones" routerLink="/publicaciones" class="hover:text-gray-500 transition duration-300">PUBLICACIONES</a>
+    </li>
+  </ul>
+
+  <!-- Botones -->
+  <div class="flex items-center space-x-4">
+    <button class="text-texto-navbar px-4 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300 hover:text-white" (click)="goToLogin()">
+      Iniciar sesión
+    </button>
+    <button class="bg-btn-primary-dark text-white px-4 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300" (click)="goToRegister()">
+      Registrarse
+    </button>
+  </div>
+
+</nav>
+
+<nav class="lg:hidden fixed top-0 left-0 w-full bg-white/50 backdrop-blur-md p-4 flex items-center justify-between z-90">
+
+  <!-- Imagen logo -->
+  <img src="img/logo_color.png" alt="HuellitasSolidarias" class="max-w-[250px] h-auto">
+
+
+  <!-- Botones -->
+  <div class="flex items-center space-x-4">
+    <button class="text-2xl text-texto-navbar px-4 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300 hover:text-white">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+
+</nav>

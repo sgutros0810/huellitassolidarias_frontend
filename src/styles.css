@@ -1,1 +1,181 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+@theme {
+  /* Fondos */
+  --color-primary: #fef8ee;
+  --color-primary-light: #FAF3E0;
+  --color-primary-dark: #584A48;
+
+  /* Textos */
+  --color-texto-navbar: #766D48;
+  --color-texto-marron-claro: #C9A582;
+  --color-texto-marron-oscuro: #584A48;
+
+  --color-texto-gris-oscuro: #686564;
+  --color-texto-gris-claro: #A19F96;
+
+  /* Botones */
+  --color-btn-primary-dark: #584A48;
+  --color-btn-primary-ligth: #C9A582;
+
+  /* Fuentes */
+  --font-roboto: "Roboto", sans-serif;
+  --font-IBM: "IBM_Plex_Serif", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+
+
+}
+
+
+/* --------------------- Fuentes ----------------------------------- */
+
+
+@font-face {
+  font-family: 'IBM_Plex_Serif';
+  src: url('/public/fonts/IBM-Plex-Serif/IBM-Plex-Serif-Regular.woff2') format('woff2'),
+       url('/public/fonts/IBM-Plex-Serif/IBM-Plex-Serif-Regular.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('/public/fonts/Roboto/static/Roboto-ExtraBold.woff2') format('woff2'),
+       url('/public/fonts/Roboto/static/Roboto-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+}
+
+/* Poppins */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/public/fonts/Poppins/Poppins-Thin.woff2') format('woff2'),
+       url('/public/fonts/Poppins/Poppins-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/public/fonts/Poppins/Poppins-ExtraLight.woff2') format('woff2'),
+       url('/public/fonts/Poppins/Poppins-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/public/fonts/Poppins/Poppins-Light.woff2') format('woff2'),
+       url('/public/fonts/Poppins/Poppins-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/public/fonts/Poppins/Poppins-Regular.woff2') format('woff2'),
+       url('/public/fonts/Poppins/Poppins-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/public/fonts/Poppins/Poppins-Medium.woff2') format('woff2'),
+       url('/public/fonts/Poppins/Poppins-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/public/fonts/Poppins/Poppins-SemiBold.woff2') format('woff2'),
+       url('/public/fonts/Poppins/Poppins-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/public/fonts/Poppins/Poppins-Bold.woff2') format('woff2'),
+       url('/public/fonts/Poppins/Poppins-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/public/fonts/Poppins/Poppins-ExtraBold.woff2') format('woff2'),
+       url('/public/fonts/Poppins/Poppins-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/public/fonts/Poppins/Poppins-Black.woff2') format('woff2'),
+       url('/public/fonts/Poppins/Poppins-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* --------------------- Contentido ------------------------------- */
+body {
+  padding-top: 70px;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f8f8;
+}
+
+footer {
+  font-size: 16px;
+  font-family:  var(--font-roboto), sans-serif;
+}
+
+
+/* ------------------- Botones ---------------------------------- */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* ---------------- Slider ---------------------*/
+.margin-button{
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0;
+}
+
+.margin-card:hover .my-margin-button{
+  opacity: 1;
+}
+
+.hover-class:hover{
+  outline: rgb(249, 249, 249) solid 3px;
+  outline-offset: 3px;
+}
+
+.hide-scrollbar {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+
+
+.titulo {
+  font-family: 'IBM Plex Serif', serif;
+}
+.flex {
+  transition: transform 0.5s ease-in-out;
+}
