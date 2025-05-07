@@ -9,7 +9,7 @@ import { RegisterShelterComponent } from './pages/auth/register/register-shelter
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'loginuser', component: LoginComponent },
   { path: 'registeruser', component: RegisterUserComponent },
   { path: 'registershelter', component: RegisterShelterComponent },
   { path: 'adopciones', component: AdopcionesComponent },

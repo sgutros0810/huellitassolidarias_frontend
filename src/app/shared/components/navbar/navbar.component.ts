@@ -1,22 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
-  imports: [
-    RouterLinkActive,
-    RouterLink
-  ],
+  imports: [ RouterLink ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
 
-  constructor(private router: Router) {}
+  private router = inject(Router);
 
-  
   goToLogin() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/loginuser']);
   }
 
   goToRegister() {

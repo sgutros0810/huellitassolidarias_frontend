@@ -1,28 +1,32 @@
-import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AuthService {
-  private isAuthenticated = signal<boolean>(false);
-  constructor(private router: Router) { }
+  private http = inject(HttpClient);
+  private router = inject(Router);
 
-  login(){
-    this.isAuthenticated.set(true);
-    this.router.navigate(['']);
+  token = signal<string | null> (localStorage.getItem('authToken'));
+
+  loginUser(email:string, password:string){
+    return this.http.post<{token:string}>(`${environment.apiUrl}/auth/login`, {email, password})
+    .pipe(tap(response => this.handleAuthSuccess(response.token)));
   }
 
-  logout(){
-    this.isAuthenticated.set(false);
-    this.router.navigate(['']);
+  loginShelter(identification:string, password:string){
+
   }
 
-  isLoggedIn(): boolean{
-    return this.isAuthenticated();
+  handleAuthSuccess(token:string) {
+    localStorage.setItem('authToken', token);
+    this.token.set(token);
+    this.router.navigate(['/adopciones']);
   }
-
-
 
 }
