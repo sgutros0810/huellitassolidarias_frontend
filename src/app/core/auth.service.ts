@@ -15,13 +15,24 @@ export class AuthService {
   token = signal<string | null> (localStorage.getItem('authToken'));
 
   loginUser(email:string, password:string){
-    return this.http.post<{token:string}>(`${environment.apiUrl}/auth/login`, {email, password})
+    return this.http.post<{token:string}>(`${environment.apiUrl}/auth/loginuser`, {email, password})
     .pipe(tap(response => this.handleAuthSuccess(response.token)));
   }
 
-  loginShelter(identification:string, password:string){
+  // loginShelter(identification:string, password:string){
+  // }
 
+  logout(){
+    localStorage.removeItem('authToken');
+    this.token.set(null);
+    this.router.navigate(['/loginuser'])
   }
+
+    registerUser(name:string, lastname:string, phoneNumber:string, username:string ,email:string, password:string){
+    return this.http.post<{token:string}>(`${environment.apiUrl}/auth/registeruser`, {name, lastname, phoneNumber, username, email, password})
+    .pipe(tap(response => this.handleAuthSuccess(response.token)));
+  }
+
 
   handleAuthSuccess(token:string) {
     localStorage.setItem('authToken', token);

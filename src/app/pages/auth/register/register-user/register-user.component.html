@@ -16,14 +16,14 @@
       <p class="font-bold text-xs mt-4 text-texto-marron-claro">¡Bienvenido! Regístrate y empieza hoy.</p>
 
       <!-- Formulario de Usuario -->
-      <form class="flex flex-col gap-4 mt-5">
-        <input class="p-2 mt-4 rounded-xl border" type="text" placeholder="Nombre">
-        <input class="p-2 mt-1 rounded-xl border" type="text" placeholder="Apellidos">
-        <input class="p-2 mt-1 rounded-xl border" type="text" placeholder="Telefono">
-        <input class="p-2 mt-1 rounded-xl border" type="text" placeholder="Nombre de usuario">
-        <input class="p-2 mt-1 rounded-xl border" type="email" placeholder="Email">
-        <input class="p-2 mt-1 rounded-xl border" type="password" placeholder="Contraseña">
-        <button class="bg-btn-primary-ligth rounded-xl text-white py-2 hover:scale-105 duration-300 mt-2">
+      <form (submit)="registerUser()" class="flex flex-col gap-4 mt-5">
+        <input class="p-2 mt-4 rounded-xl border" type="text" name="name" placeholder="Nombre" [(ngModel)]="name">
+        <input class="p-2 mt-1 rounded-xl border" type="text" name="lastname" placeholder="Apellidos" [(ngModel)]="lastname">
+        <input class="p-2 mt-1 rounded-xl border" type="text" name="phoneNumber" placeholder="Telefono" [(ngModel)]="phoneNumber">
+        <input class="p-2 mt-1 rounded-xl border" type="text" name="username" placeholder="Nombre de usuario" [(ngModel)]="username">
+        <input class="p-2 mt-1 rounded-xl border" type="email" name="email" placeholder="Email" [(ngModel)]="email">
+        <input class="p-2 mt-1 rounded-xl border" type="password" name="password" placeholder="Contraseña" [(ngModel)]="password">
+        <button type="submit" class="bg-btn-primary-ligth rounded-xl text-white py-2 hover:scale-105 duration-300 mt-2">
           Registrarse
         </button>
       </form>

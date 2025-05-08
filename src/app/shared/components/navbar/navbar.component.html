@@ -20,7 +20,7 @@
 
   <!-- Botones -->
   <div class="flex items-center space-x-4">
-    <button class="text-texto-navbar px-4 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300 hover:text-white" ((click))="goToLogin()">
+    <button class="text-texto-navbar px-4 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300 hover:text-white" (click)="goToLogin()">
       Iniciar sesión
     </button>
     <button class="bg-btn-primary-dark text-white px-4 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300" (click)="goToRegister()">
@@ -31,10 +31,8 @@
 </nav>
 
 <nav class="lg:hidden fixed top-0 left-0 w-full bg-white/50 backdrop-blur-md p-4 flex items-center justify-between z-90">
-
   <!-- Imagen logo -->
   <img src="img/logo_color.png" alt="HuellitasSolidarias" class="max-w-[250px] h-auto">
-
 
   <!-- Botones -->
   <div class="flex items-center space-x-4">

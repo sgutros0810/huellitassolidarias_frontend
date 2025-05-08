@@ -1,27 +1,24 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/auth.service';
-import { Router } from '@angular/router';
-import { authGuard } from '../../../core/auth.guard';
-
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [ FormsModule ],
   templateUrl: './login.component.html',
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   private authService = inject(AuthService);
 
   email: string = '';
   password: string = '';
 
-  ngOnInit() {
-    alert(`Las credenciales son: 'prueba@ejemplo.com' y password: prueba`)
-  }
 
   loginUser() {
+    console.log('email - '+ this.email)
+    console.log('password - '+ this.password)
     if(!this.email || !this.password){
       alert('ERES BOBO!');
       return;
