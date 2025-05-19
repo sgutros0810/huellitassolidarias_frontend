@@ -16,13 +16,13 @@
       <p class="font-bold text-xs mt-4 text-texto-marron-claro">¡Bienvenido! Regístrate y empieza hoy.</p>
 
       <!-- Formulario de Usuario -->
-      <form (submit)="registerUser()" class="flex flex-col gap-4 mt-5">
+      <form (submit)="registerUser()" class="flex flex-col gap-5 mt-5">
         <input class="p-2 mt-4 rounded-xl border" type="text" name="name" placeholder="Nombre" [(ngModel)]="name">
         <input class="p-2 mt-1 rounded-xl border" type="text" name="lastname" placeholder="Apellidos" [(ngModel)]="lastname">
         <input class="p-2 mt-1 rounded-xl border" type="text" name="phoneNumber" placeholder="Telefono" [(ngModel)]="phoneNumber">
-        <input class="p-2 mt-1 rounded-xl border" type="text" name="username" placeholder="Nombre de usuario" [(ngModel)]="username">
-        <input class="p-2 mt-1 rounded-xl border" type="email" name="email" placeholder="Email" [(ngModel)]="email">
-        <input class="p-2 mt-1 rounded-xl border" type="password" name="password" placeholder="Contraseña" [(ngModel)]="password">
+        <input class="p-2 mt-1 rounded-xl border" type="text" name="username" placeholder="Nombre de usuario" [(ngModel)]="username" required>
+        <input class="p-2 mt-1 rounded-xl border" type="email" name="email" placeholder="Email" [(ngModel)]="email" required>
+        <input class="p-2 mt-1 rounded-xl border" type="password" name="password" placeholder="Contraseña" [(ngModel)]="password" required>
         <button type="submit" class="bg-btn-primary-ligth rounded-xl text-white py-2 hover:scale-105 duration-300 mt-2">
           Registrarse
         </button>
@@ -48,7 +48,7 @@
 
       <div class="mt-8 text-xs font-bold border-b border-primary-dark py-8 flex justify-between items-center">
         <p class="text-texto-marron-oscuro">¿Ya tienes una cuenta?</p>
-        <a href="/login" class=" text-texto-marron-claro">Iniciar sesión</a>
+        <a href="/loginuser" class=" text-texto-marron-claro">Iniciar sesión</a>
       </div>
 
       <div class="mt-8 mb-5 text-xs font-bold flex justify-between items-center">

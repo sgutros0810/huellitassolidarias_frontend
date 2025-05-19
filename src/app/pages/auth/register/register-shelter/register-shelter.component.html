@@ -12,18 +12,19 @@
   <div class="bg-gray-50 z-5 flex rounded-2xl shadow-lg lg:max-w-5xl md:max-w-3xl sm:w-full xs:w-full p-5 items-center">
     <!-- Formulario -->
     <div class="w-full px-8">
-      <h2 class="font-bold text-2xl text-texto-marron-oscuro">Registrarse</h2>
+      <h2 class="font-bold text-2xl text-texto-marron-oscuro">Registrarse como refugio</h2>
       <p class="font-bold text-xs mt-4 text-texto-marron-claro">¡Bienvenido! Regístrate y empieza hoy.</p>
 
 
       <!-- Formulario de Refugio -->
-      <form class="flex flex-col gap-4 mt-5">
-        <input class="p-2 mt-4 rounded-xl border" type="text" placeholder="Nombre del refugio">
-        <input class="p-2 mt-1 rounded-xl border" type="text" placeholder="Nº Identificación">
-        <input class="p-2 mt-1 rounded-xl border" type="text" placeholder="Dirección">
-        <input class="p-2 mt-1 rounded-xl border" type="text" placeholder="Teléfono">
-        <input class="p-2 mt-1 rounded-xl border" type="email" placeholder="Email">
-        <input class="p-2 mt-1 rounded-xl border" type="password" placeholder="Contraseña">
+      <form (submit)="registerShelter()" class="flex flex-col gap-5 mt-5">
+        <input class="p-2 mt-4 rounded-xl border" type="text" name="nameShelter" placeholder="Nombre del refugio" [(ngModel)]="nameShelter">
+        <input class="p-2 mt-1 rounded-xl border" type="text" name="identification" placeholder="Nº Identificación" [(ngModel)]="identification" required>
+        <input class="p-2 mt-1 rounded-xl border" type="text" name="username" placeholder="Nombre de usuario" [(ngModel)]="username" required>
+        <input class="p-2 mt-1 rounded-xl border" type="text" name="address" placeholder="Dirección" [(ngModel)]="address">
+        <input class="p-2 mt-1 rounded-xl border" type="number" name="phoneNumber" placeholder="Teléfono" [(ngModel)]="phoneNumber">
+        <input class="p-2 mt-1 rounded-xl border" type="email" name="email" placeholder="Email" [(ngModel)]="email" required>
+        <input class="p-2 mt-1 rounded-xl border" type="password" name="password" placeholder="Contraseña" [(ngModel)]="password" required>
         <button class="bg-btn-primary-ligth rounded-xl text-white py-2 hover:scale-105 duration-300 mt-2">
           Registrarse
         </button>
@@ -52,7 +53,7 @@
 
       <div class="mt-8 text-xs font-bold border-b border-primary-dark py-8 flex justify-between items-center">
         <p class="text-texto-marron-oscuro">¿Ya tienes una cuenta?</p>
-        <a href="/login" class=" text-texto-marron-claro">Iniciar sesión</a>
+        <a href="/loginshelter" class=" text-texto-marron-claro">Iniciar sesión</a>
       </div>
       <div class="mt-8 mb-5 text-xs font-bold flex justify-between items-center">
         <p class="text-texto-marron-oscuro">¿Eres un usuario?</p>

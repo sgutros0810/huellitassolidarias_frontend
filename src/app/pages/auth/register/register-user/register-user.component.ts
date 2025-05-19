@@ -26,7 +26,6 @@ export class RegisterUserComponent {
       return;
     }
 
-    
     this.authService.registerUser(this.name, this.lastname, this.phoneNumber, this.username, this.email, this.password).subscribe();
   }
 }

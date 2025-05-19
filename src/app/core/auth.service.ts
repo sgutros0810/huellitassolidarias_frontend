@@ -19,8 +19,10 @@ export class AuthService {
     .pipe(tap(response => this.handleAuthSuccess(response.token)));
   }
 
-  // loginShelter(identification:string, password:string){
-  // }
+  loginShelter(identificacionFiscal:string, password:string){
+        return this.http.post<{token:string}>(`${environment.apiUrl}/auth/loginshelter`, {identificacionFiscal, password})
+        .pipe(tap(response => this.handleAuthSuccess(response.token)));
+  }
 
   logout(){
     localStorage.removeItem('authToken');
@@ -28,16 +30,24 @@ export class AuthService {
     this.router.navigate(['/loginuser'])
   }
 
-    registerUser(name:string, lastname:string, phoneNumber:string, username:string ,email:string, password:string){
+  registerUser(name:string, lastname:string, phoneNumber:string, username:string ,email:string, password:string){
     return this.http.post<{token:string}>(`${environment.apiUrl}/auth/registeruser`, {name, lastname, phoneNumber, username, email, password})
     .pipe(tap(response => this.handleAuthSuccess(response.token)));
   }
 
+  registerShelter(nameShelter:string, identification:string, username:string, address:string, phoneNumber:string ,email:string, password:string){
+    return this.http.post<{token:string}>(`${environment.apiUrl}/auth/registershelter`, {nameShelter, username, identification, address, phoneNumber, email, password})
+    .pipe(tap(response => this.handleAuthSuccess(response.token)));
+  }
 
   handleAuthSuccess(token:string) {
     localStorage.setItem('authToken', token);
     this.token.set(token);
     this.router.navigate(['/adopciones']);
+  }
+
+  isUserLogged() {
+
   }
 
 }
