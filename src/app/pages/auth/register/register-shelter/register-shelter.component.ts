@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './register-shelter.component.html',
   styleUrl: './register-shelter.component.css'
 })
+
 export class RegisterShelterComponent {
 
   private authService = inject(AuthService);
@@ -16,9 +17,12 @@ export class RegisterShelterComponent {
   username: string = '';
   identification: string = '';
   address: string = '';
+  city: string = '';
+  country: string = '';
   phoneNumber: string = '';
   email: string = '';
   password: string = '';
+  website_url: string = '';
 
   registerShelter(){
 
@@ -27,6 +31,20 @@ export class RegisterShelterComponent {
       return;
     }
 
-    this.authService.registerShelter(this.nameShelter, this.identification, this.username, this.address, this.phoneNumber, this.email, this.password).subscribe();
+      const payload = {
+        nameShelter: this.nameShelter,
+        identification: this.identification,
+        username: this.username,
+        address: this.address,
+        city: this.city,
+        country: this.country,
+        phoneNumber: this.phoneNumber,
+        email : this.email,
+        password : this.password,
+        website_url : this.website_url
+      }
+      console.log(payload)
+
+    this.authService.registerShelter(payload).subscribe();
   }
 }

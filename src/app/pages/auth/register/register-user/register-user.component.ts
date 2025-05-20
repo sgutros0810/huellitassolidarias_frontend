@@ -18,6 +18,9 @@ export class RegisterUserComponent {
   username: string = '';
   email: string = '';
   password: string = '';
+  address: string = '';
+  city: string = '';
+  country: string = '';
 
   registerUser(){
 
@@ -26,6 +29,18 @@ export class RegisterUserComponent {
       return;
     }
 
-    this.authService.registerUser(this.name, this.lastname, this.phoneNumber, this.username, this.email, this.password).subscribe();
+    const payload = {
+      name: this.name,
+      lastname: this.lastname,
+      phoneNumber: this.phoneNumber,
+      username: this.username,
+      address: this.address,
+      city: this.city,
+      country: this.country,
+      email : this.email,
+      password : this.password
+    }
+
+    this.authService.registerUser(payload).subscribe();
   }
 }

@@ -30,13 +30,13 @@ export class AuthService {
     this.router.navigate(['/loginuser'])
   }
 
-  registerUser(name:string, lastname:string, phoneNumber:string, username:string ,email:string, password:string){
-    return this.http.post<{token:string}>(`${environment.apiUrl}/auth/registeruser`, {name, lastname, phoneNumber, username, email, password})
+  registerUser(data: any){
+    return this.http.post<{token:string}>(`${environment.apiUrl}/auth/registeruser`, data)
     .pipe(tap(response => this.handleAuthSuccess(response.token)));
   }
 
-  registerShelter(nameShelter:string, identification:string, username:string, address:string, phoneNumber:string ,email:string, password:string){
-    return this.http.post<{token:string}>(`${environment.apiUrl}/auth/registershelter`, {nameShelter, username, identification, address, phoneNumber, email, password})
+  registerShelter(data: any){
+    return this.http.post<{token:string}>(`${environment.apiUrl}/auth/registershelter`, data)
     .pipe(tap(response => this.handleAuthSuccess(response.token)));
   }
 
