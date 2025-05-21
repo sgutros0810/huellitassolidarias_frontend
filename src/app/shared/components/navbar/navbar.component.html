@@ -1,5 +1,4 @@
-
-<!-- shadow-lg <a class="nav-link" href="#" routerLink="/adopciones" routerLinkActive="link-primary">Recetas</a> -->
+<!-- Navbar - Modo escritorio -->
 <nav class="hidden lg:fixed top-0 left-0 w-full bg-white/50 backdrop-blur-md p-4 lg:flex items-center justify-between z-99">
 
   <!-- Imagen logo -->
@@ -18,27 +17,79 @@
     </li>
   </ul>
 
-  <!-- Botones -->
-  <div class="flex items-center space-x-4">
-    <button class="text-texto-navbar px-4 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300 hover:text-white" (click)="goToLogin()">
-      Iniciar sesión
-    </button>
-    <button class="bg-btn-primary-dark text-white px-4 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300" (click)="goToRegister()">
-      Registrarse
-    </button>
-  </div>
-
+  @if(!isAuthenticated()){
+    <!-- Botones -->
+    <div class="flex items-center space-x-4">
+      <button class="text-texto-navbar px-4 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300 hover:text-white" (click)="goToLogin()">
+        Iniciar sesión
+      </button>
+      <button class="bg-btn-primary-dark text-white px-4 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300" (click)="goToRegister()">
+        Registrarse
+      </button>
+    </div>
+  } @else {
+    <div class="flex items-center space-x-4">
+      <button class="text-4xl text-texto-navbar hover:text-gray-600 transition duration-300">
+        <i class="fas fa-user-circle"></i>
+      </button>
+    </div>
+  }
 </nav>
 
-<nav class="lg:hidden fixed top-0 left-0 w-full bg-white/50 backdrop-blur-md p-4 flex items-center justify-between z-90">
-  <!-- Imagen logo -->
-  <img src="img/logo_color.png" alt="HuellitasSolidarias" class="max-w-[250px] h-auto">
 
-  <!-- Botones -->
-  <div class="flex items-center space-x-4">
-    <button class="text-2xl text-texto-navbar px-4 py-2 rounded-lg hover:bg-btn-primary-dark transition duration-300 hover:text-white">
+<!-- Navbar - modo movil -->
+<nav class="lg:hidden fixed top-0 left-0 w-full bg-white/50 backdrop-blur-md p-4 flex flex-col z-90">
+  <div class="flex items-center justify-between">
+
+    <!-- Imagen logo -->
+    <img src="img/logo_color.png" alt="HuellitasSolidarias" class="max-w-[200px] h-auto">
+
+    <!-- Botón -->
+    <button class="text-2xl text-texto-navbar px-4 py-2 hover:bg-btn-primary-dark transition duration-300 hover:text-white" (click)="toggleNav()">
       <i class="fas fa-bars"></i>
     </button>
   </div>
-
 </nav>
+
+
+
+
+<!-- Menú desplegable -->
+<div class="fixed top-0 right-0 h-full w-3/4 max-w-xs bg-white/50 backdrop-blur-sm shadow-lg z-[9999] transform transition-transform duration-300 ease-in-out flex flex-col"
+     [class.translate-x-full]="!isNavOpen"
+     [class.translate-x-0]="isNavOpen">
+
+  <!-- Botón cerrar 'X' -->
+  <div class="flex justify-end p-4">
+    <button class="text-2xl text-texto-navbar" (click)="toggleNav()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+ <!-- Páginas -->
+  <div class="flex flex-col space-y-6 text-texto-navbar text-lg p-4">
+    <a routerLink="/adopciones" (click)="toggleNav()" class="hover:text-gray-500 transition duration-300">ADOPCIONES</a>
+    <a routerLink="/reportes" (click)="toggleNav()" class="hover:text-gray-500 transition duration-300">REPORTES</a>
+    <a routerLink="/publicaciones" (click)="toggleNav()" class="hover:text-gray-500 transition duration-300">PUBLICACIONES</a>
+  </div>
+
+  <!-- Botones -->
+  <div class="mt-auto mb-15 p-4 space-y-6">
+    @if(!isAuthenticated()) {
+      <button (click)="goToLogin(); toggleNav()" class="w-full text-center font-semibold text-btn-primary-dark border border-btn-primary-dark px-4 py-2 rounded-xl hover:bg-btn-primary-dark hover:text-white transition duration-300">
+        Iniciar sesión
+      </button>
+<!-- w-full text-center font-semibold bg-btn-primary-dark text-white px-4 py-2 rounded-xl hover:bg-btn-primary transition duration-300 -->
+      <button (click)="goToRegister(); toggleNav()" class="w-full text-center font-semibold bg-btn-primary-dark text-white px-4 py-2 rounded-xl">
+        Registrarse
+      </button>
+    } @else {
+      <button class="text-left text-2xl px-4 py-2 hover:text-gray-500 transition duration-300">
+        <i class="fas fa-user-circle"></i>
+      </button>
+    }
+  </div>
+
+</div>
+
+

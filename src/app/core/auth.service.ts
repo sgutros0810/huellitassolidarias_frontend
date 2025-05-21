@@ -47,7 +47,6 @@ export class AuthService {
   }
 
   isUserLogged() {
-
+    return !!this.token()
   }
-
 }
