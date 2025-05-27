@@ -1,0 +1,12 @@
+
+@for(post of posts; track post.id){
+  <div class="bg-amber-50">
+    <h3>{{post.title}}</h3>
+    <p>{{post.content}}</p>
+
+    @if(post.imageUrl) {
+      <img [src]="'http://localhost:8080' + post.imageUrl" alt="Imagen post" style="max-width: 300px;"/>
+    }
+  </div>
+}
+

@@ -22,13 +22,10 @@
   --font-roboto: "Roboto", sans-serif;
   --font-IBM: "IBM_Plex_Serif", sans-serif;
   --font-poppins: "Poppins", sans-serif;
-
-
 }
 
 
 /* --------------------- Fuentes ----------------------------------- */
-
 
 @font-face {
   font-family: 'IBM_Plex_Serif';
@@ -110,7 +107,7 @@
 /* --------------------- Contentido ------------------------------- */
 body {
   padding-top: 70px;
-  font-family: 'Poppins', sans-serif;
+  /* font-family: 'Poppins', sans-serif; */
   background-color: #f8f8f8;
 }
 
@@ -167,4 +164,20 @@ footer {
 }
 .flex {
   transition: transform 0.5s ease-in-out;
+}
+
+/* -------------- Navbar ------------- */
+@keyframes fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-down {
+  animation: fade-down 0.3s ease-out;
 }

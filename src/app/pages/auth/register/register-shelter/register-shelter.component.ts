@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../../../core/auth.service';
+
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-register-shelter',

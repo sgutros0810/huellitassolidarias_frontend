@@ -45,7 +45,7 @@
     <img src="img/logo_color.png" alt="HuellitasSolidarias" class="max-w-[200px] h-auto">
 
     <!-- Botón -->
-    <button class="text-2xl text-texto-navbar px-4 py-2 hover:bg-btn-primary-dark transition duration-300 hover:text-white" (click)="toggleNav()">
+    <button class="text-2xl text-texto-navbar px-4 py-2 hover:bg-btn-primary-dark rounded-2xl transition duration-300 hover:text-white" (click)="toggleNav()">
       <i class="fas fa-bars"></i>
     </button>
   </div>
@@ -53,39 +53,37 @@
 
 
 
-
 <!-- Menú desplegable -->
-<div class="fixed top-0 right-0 h-full w-3/4 max-w-xs bg-white/50 backdrop-blur-sm shadow-lg z-[9999] transform transition-transform duration-300 ease-in-out flex flex-col"
-     [class.translate-x-full]="!isNavOpen"
-     [class.translate-x-0]="isNavOpen">
+<div *ngIf="isNavOpen" class="lg:hidden w-full bg-white/70 backdrop-blur-md shadow-lg px-6 pb-6 flex flex-col space-y-4 text-texto-navbar text-lg animate-fade-down z-99999">
 
   <!-- Botón cerrar 'X' -->
-  <div class="flex justify-end p-4">
-    <button class="text-2xl text-texto-navbar" (click)="toggleNav()">
+  <!-- <div class="flex justify-end p-4">
+    <button class="text-2xl text-texto-navbar" (click)="toggleNav()">3
       <i class="fas fa-times"></i>
     </button>
-  </div>
+  </div> -->
 
  <!-- Páginas -->
-  <div class="flex flex-col space-y-6 text-texto-navbar text-lg p-4">
-    <a routerLink="/adopciones" (click)="toggleNav()" class="hover:text-gray-500 transition duration-300">ADOPCIONES</a>
-    <a routerLink="/reportes" (click)="toggleNav()" class="hover:text-gray-500 transition duration-300">REPORTES</a>
-    <a routerLink="/publicaciones" (click)="toggleNav()" class="hover:text-gray-500 transition duration-300">PUBLICACIONES</a>
+  <div class="flex flex-col space-y-6 text-texto-navbar text-lg p-6">
+    <a routerLink="/adopciones" (click)="toggleNav()"    class="px-4 py-2 hover:text-gray-500 transition duration-300">ADOPCIONES</a>
+    <a routerLink="/reportes" (click)="toggleNav()"      class="px-4 py-2 hover:text-gray-500 transition duration-300">REPORTES</a>
+    <a routerLink="/publicaciones" (click)="toggleNav()" class="px-4 py-2 hover:text-gray-500 transition duration-300">PUBLICACIONES</a>
   </div>
 
   <!-- Botones -->
-  <div class="mt-auto mb-15 p-4 space-y-6">
+  <div class="pt-4 space-y-3">
     @if(!isAuthenticated()) {
       <button (click)="goToLogin(); toggleNav()" class="w-full text-center font-semibold text-btn-primary-dark border border-btn-primary-dark px-4 py-2 rounded-xl hover:bg-btn-primary-dark hover:text-white transition duration-300">
         Iniciar sesión
       </button>
-<!-- w-full text-center font-semibold bg-btn-primary-dark text-white px-4 py-2 rounded-xl hover:bg-btn-primary transition duration-300 -->
+      <!-- w-full text-center font-semibold bg-btn-primary-dark text-white px-4 py-2 rounded-xl hover:bg-btn-primary transition duration-300 -->
       <button (click)="goToRegister(); toggleNav()" class="w-full text-center font-semibold bg-btn-primary-dark text-white px-4 py-2 rounded-xl">
         Registrarse
       </button>
     } @else {
-      <button class="text-left text-2xl px-4 py-2 hover:text-gray-500 transition duration-300">
-        <i class="fas fa-user-circle"></i>
+      <button class="w-full flex items-center gap-2 text-left text-lg font-semibold text-texto-navbar px-4 py-3 ml-6 rounded-xl">
+        <i class="fas fa-user-circle text-3xl"></i>
+        <span>Mi cuenta</span>
       </button>
     }
   </div>
