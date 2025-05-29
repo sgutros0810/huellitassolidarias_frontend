@@ -48,7 +48,7 @@
           </button>
         </div>
       }
-      
+
     </div>
   }
 </nav>
@@ -66,7 +66,7 @@
     <img src="img/logo_color.png" alt="HuellitasSolidarias" class="max-w-[200px] h-auto">
 
     <!-- Botón -->
-    <button class="text-2xl text-texto-navbar px-4 py-2 hover:bg-btn-primary-dark rounded-2xl transition duration-300 hover:text-white" (click)="toggleNav()">
+    <button class="text-2xl text-texto-navbar px-4 py-2 transition duration-300 hover:text-text-marron-claro/50" (click)="toggleNav()">
       <i [ngClass]="isNavOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
     </button>
   </div>
@@ -115,11 +115,11 @@
 
       } @else {
 
-        <a routerLink="#" (click)="toggleNav()" class="px-4 py-8 text-lg font-semibold texto-marron-claro hover:bg-gray-100">
+        <a routerLink="#" (click)="toggleNav()" class="w-full px-4 py-8 text-lg font-semibold texto-marron-claro ">
           <i class="fas fa-user mr-2"></i>
           Mi perfil
         </a>
-        <button (click)="logout(); toggleNav()" class="w-full text-left px-4 py-8 text-lg font-semibold text-red-800 hover:bg-gray-100 flex items-center gap-2">
+        <button (click)="logout(); toggleNav()" class="w-full text-left px-4 py-8 text-lg font-semibold text-red-800 flex items-center gap-2">
           <i class="fas fa-sign-out-alt mr-2"></i>
           Cerrar sesión
         </button>
