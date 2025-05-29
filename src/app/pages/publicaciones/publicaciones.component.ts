@@ -10,14 +10,16 @@ import { PostsListComponent } from "./components/posts-list/posts-list.component
   styleUrl: './publicaciones.component.css'
 })
 export class PublicacionesComponent {
-mostrarFormulario = false;
+  mostrarFormulario = false;
 
-abrirModal() {
-  this.mostrarFormulario = true;
-}
+  openModal() {
+    document.body.classList.add('overflow-hidden');
+    this.mostrarFormulario = true;
+  }
 
-cerrarModal() {
-  this.mostrarFormulario = false;
-}
+  closeModal() {
+    document.body.classList.remove('overflow-hidden');
+    this.mostrarFormulario = false;
+  }
 
 }

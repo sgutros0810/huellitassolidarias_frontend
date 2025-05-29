@@ -1,12 +1,39 @@
 
-@for(post of posts; track post.id){
-  <div class="bg-amber-50">
-    <h3>{{post.title}}</h3>
-    <p>{{post.content}}</p>
+<section class="justify-center mx-6 space-y-10">
+  @for(post of posts; track post.id) {
+    <div class="flex flex-col lg:flex-row bg-white rounded-2xl shadow-xl overflow-hidden w-full my-10 lg:h-[500px]">
 
-    @if(post.imageUrl) {
-      <img [src]="'http://localhost:8080' + post.imageUrl" alt="Imagen post" style="max-width: 300px;"/>
-    }
-  </div>
-}
+      <!-- Imagen -->
+      @if(post.imageUrl) {
+        <div class="w-full h-[200px] lg:h-full lg:w-1/2">
+          <img [src]="'http://localhost:8080' + post.imageUrl" alt="Imagen post"
+               class="w-full h-full object-cover rounded-t-2xl lg:rounded-t-none lg:rounded-l-2xl" />
+        </div>
+      }
 
+      <!-- Contenido y comentarios -->
+      <div class="w-full lg:w-1/2 flex flex-col px-4 py-5 overflow-y-auto max-h-[500px]">
+
+        <!-- Titulo del post -->
+        <h2 class="text-[20px] lg:text-[24px] text-center font-bold text-texto-marron-oscuro mb-2">
+          {{ post.title }}
+        </h2>
+
+        <!-- Contenido -->
+        <div class="text-sm text-gray-800 mb-4">
+          <p class="break-words whitespace-normal">
+            <span class="font-bold text-texto-marron-claro mr-2">{{ post.username }}</span>
+            {{ post.content }}
+          </p>
+        </div>
+
+        <!-- Comentarios de los usuarios -->
+        <div class="mt-auto">
+          <app-comments-post></app-comments-post>
+        </div>
+
+      </div>
+
+    </div>
+  }
+</section>

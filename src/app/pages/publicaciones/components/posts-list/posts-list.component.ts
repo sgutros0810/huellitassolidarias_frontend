@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../../../core/services/post.service';
+import { CommentsPostComponent } from "../comments-post/comments-post.component";
 
 @Component({
   selector: 'app-posts-list',
-  imports: [],
+  imports: [CommentsPostComponent],
   templateUrl: './posts-list.component.html',
   styleUrl: './posts-list.component.css'
 })
@@ -19,7 +20,6 @@ export class PostsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadMorePosts();
-
   }
 
   loadMorePosts(): void {
@@ -27,10 +27,9 @@ export class PostsListComponent implements OnInit {
     this.postService.getPosts(this.page, this.size).subscribe({
       next: (newPosts) => {
 
-
-        newPosts.forEach( post => {
-          console.log(post)
-        });
+        // newPosts.forEach( post => {
+        //   console.log(post)
+        // });
 
         if(newPosts.length === 0){
           this.allLoaded = true;

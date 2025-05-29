@@ -5,6 +5,10 @@
   --color-primary: #fef8ee;
   --color-primary-light: #FAF3E0;
   --color-primary-dark: #584A48;
+  --color-primary-gris: #e5e5e5b5;
+
+  --color-bg-marron-claro: #C9A582;
+  --color-bg-marron-oscuro: #584A48;
 
   /* Textos */
   --color-texto-navbar: #766D48;

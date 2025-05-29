@@ -48,6 +48,7 @@ export class PostformComponent {
 
         this.post = { title: '', content: ''};
         this.selectedFile = null;
+        this.postService.getPosts(0, 0);
         this.close();
       },
       error: (error: any)  => {

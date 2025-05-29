@@ -28,13 +28,34 @@
       </button>
     </div>
   } @else {
-    <div class="flex items-center space-x-4">
-      <button class="text-4xl text-texto-navbar hover:text-gray-600 transition duration-300">
+
+    <div class="relative flex items-center space-x-4">
+      <button (click)="toggleUserMenu()" class="text-4xl text-texto-navbar hover:text-texto-marron-claro transition duration-300">
         <i class="fas fa-user-circle"></i>
       </button>
+
+      <!-- Si el usuario abre el submenu del perfil -->
+      @if(isUserMenuOpen){
+        <div
+            class="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-xl z-50 overflow-hidden border border-gray-200">
+          <a routerLink="/mi-perfil" (click)="closeUserMenu()"
+            class="flex items-center gap-2 px-4 py-2 text-sm text-texto-marron-claro hover:bg-gray-100">
+            <i class="fas fa-user"></i> Mi perfil
+          </a>
+          <button (click)="logout(); closeUserMenu()"
+                  class="w-full flex items-center gap-2 px-4 py-2 text-sm text-texto-marron-claro hover:bg-gray-100">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+          </button>
+        </div>
+      }
+      
     </div>
   }
 </nav>
+
+
+
+
 
 
 <!-- Navbar - modo movil -->
@@ -46,48 +67,63 @@
 
     <!-- Botón -->
     <button class="text-2xl text-texto-navbar px-4 py-2 hover:bg-btn-primary-dark rounded-2xl transition duration-300 hover:text-white" (click)="toggleNav()">
-      <i class="fas fa-bars"></i>
+      <i [ngClass]="isNavOpen ? 'fas fa-times' : 'fas fa-bars'"></i>
     </button>
   </div>
 </nav>
 
 
+@if(isNavOpen){
 
-<!-- Menú desplegable -->
-<div *ngIf="isNavOpen" class="lg:hidden w-full bg-white/70 backdrop-blur-md shadow-lg px-6 pb-6 flex flex-col space-y-4 text-texto-navbar text-lg animate-fade-down z-99999">
+  <!-- Menú desplegable -->
+  <div class="lg:hidden w-full bg-white/70 backdrop-blur-md shadow-lg px-6 pb-6 flex flex-col space-y-4 text-texto-navbar text-lg rounded-b-[15px] animate-fade-down z-99999">
 
-  <!-- Botón cerrar 'X' -->
-  <!-- <div class="flex justify-end p-4">
-    <button class="text-2xl text-texto-navbar" (click)="toggleNav()">3
-      <i class="fas fa-times"></i>
-    </button>
-  </div> -->
+    <!-- Botón cerrar 'X' -->
+    <!-- <div class="flex justify-end p-4">
+      <button class="text-2xl text-texto-navbar" (click)="toggleNav()">3
+        <i class="fas fa-times"></i>
+      </button>
+    </div> -->
 
- <!-- Páginas -->
-  <div class="flex flex-col space-y-6 text-texto-navbar text-lg p-6">
-    <a routerLink="/adopciones" (click)="toggleNav()"    class="px-4 py-2 hover:text-gray-500 transition duration-300">ADOPCIONES</a>
-    <a routerLink="/reportes" (click)="toggleNav()"      class="px-4 py-2 hover:text-gray-500 transition duration-300">REPORTES</a>
-    <a routerLink="/publicaciones" (click)="toggleNav()" class="px-4 py-2 hover:text-gray-500 transition duration-300">PUBLICACIONES</a>
+  <!-- Páginas -->
+    <div class="flex flex-col space-y-6 text-texto-marron-oscuro text-lg p-6">
+      <a routerLink="/adopciones" (click)="toggleNav()"    class="px-2 py-2 hover:text-gray-500 transition duration-300">
+        <i class="fas fa-paw text-btn-primary-dark mr-2"></i>
+        ADOPCIONES
+      </a>
+      <a routerLink="/reportes" (click)="toggleNav()"      class="px-2 py-2 hover:text-gray-500 transition duration-300">
+        <i class="fas fa-file-alt text-btn-primary-dark mr-2"></i>
+        REPORTES
+      </a>
+      <a routerLink="/publicaciones" (click)="toggleNav()" class="px-2 py-2 hover:text-gray-500 transition duration-300">
+        <i class="fas fa-newspaper text-btn-primary-dark mr-2"></i>
+        PUBLICACIONES
+      </a>
+    </div>
+
+    <!-- Botones -->
+    <div class="p-6 space-y-6">
+      <!-- Si el usuario no esta logeado le aparecera los botones de registrarse o iniciar sesión -->
+      @if(!isAuthenticated()) {
+        <button (click)="goToLogin(); toggleNav()" class="w-full text-center font-semibold text-btn-primary-dark border border-btn-primary-dark px-4 py-2 rounded-xl hover:bg-btn-primary-dark hover:text-white transition duration-300">
+          Iniciar sesión
+        </button>
+
+        <button (click)="goToRegister(); toggleNav()" class="w-full text-center font-semibold bg-btn-primary-dark text-white px-4 py-2 rounded-xl">
+          Registrarse
+        </button>
+
+      } @else {
+
+        <a routerLink="#" (click)="toggleNav()" class="px-4 py-8 text-lg font-semibold texto-marron-claro hover:bg-gray-100">
+          <i class="fas fa-user mr-2"></i>
+          Mi perfil
+        </a>
+        <button (click)="logout(); toggleNav()" class="w-full text-left px-4 py-8 text-lg font-semibold text-red-800 hover:bg-gray-100 flex items-center gap-2">
+          <i class="fas fa-sign-out-alt mr-2"></i>
+          Cerrar sesión
+        </button>
+      }
+    </div>
   </div>
-
-  <!-- Botones -->
-  <div class="pt-4 space-y-3">
-    @if(!isAuthenticated()) {
-      <button (click)="goToLogin(); toggleNav()" class="w-full text-center font-semibold text-btn-primary-dark border border-btn-primary-dark px-4 py-2 rounded-xl hover:bg-btn-primary-dark hover:text-white transition duration-300">
-        Iniciar sesión
-      </button>
-      <!-- w-full text-center font-semibold bg-btn-primary-dark text-white px-4 py-2 rounded-xl hover:bg-btn-primary transition duration-300 -->
-      <button (click)="goToRegister(); toggleNav()" class="w-full text-center font-semibold bg-btn-primary-dark text-white px-4 py-2 rounded-xl">
-        Registrarse
-      </button>
-    } @else {
-      <button class="w-full flex items-center gap-2 text-left text-lg font-semibold text-texto-navbar px-4 py-3 ml-6 rounded-xl">
-        <i class="fas fa-user-circle text-3xl"></i>
-        <span>Mi cuenta</span>
-      </button>
-    }
-  </div>
-
-</div>
-
-
+}

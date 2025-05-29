@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [ RouterLink, NgIf ],
+  imports: [ RouterLink, CommonModule ],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
@@ -14,7 +14,9 @@ export class NavbarComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
 
+  isUserMenuOpen = false;
   authenticated:boolean = false;
+  isNavOpen = false;
 
   goToLogin() {
     this.router.navigate(['/loginuser']);
@@ -28,9 +30,19 @@ export class NavbarComponent {
     return this.authService.isUserLogged();
   }
 
-  isNavOpen = false;
-
   toggleNav() {
     this.isNavOpen = !this.isNavOpen;
+  }
+
+  toggleUserMenu() {
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+  }
+
+  closeUserMenu() {
+    this.isUserMenuOpen = false;
+  }
+
+  logout() {
+    // Lógica para cerrar sesión
   }
 }
