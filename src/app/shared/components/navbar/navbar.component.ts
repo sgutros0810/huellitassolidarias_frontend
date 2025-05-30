@@ -32,6 +32,13 @@ export class NavbarComponent {
 
   toggleNav() {
     this.isNavOpen = !this.isNavOpen;
+    const isMobile = window.innerWidth < 1024;
+
+    if (this.isNavOpen && isMobile) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
   }
 
   toggleUserMenu() {

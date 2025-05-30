@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { PostModel } from '../modals/post.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,15 @@ import { Observable } from 'rxjs';
 export class PostService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl + '/posts';
+
+  PostModel: Array<PostModel> = [];
+  listPostBS: BehaviorSubject<Array<PostModel>> = new BehaviorSubject<Array<PostModel>>([]);
+  listPostObs$ = this.listPostBS.asObservable();
+
+
+  constructor(){
+
+  }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('authToken');
@@ -31,10 +41,16 @@ export class PostService {
   }
 
   // obtener posts
-  getPosts(page:number, size:number) {
-    return this.http.get<any[]>(this.apiUrl, {
+  async getPosts(page:number, size:number) {
+    // return this.http.get<any[]>(this.apiUrl, {
+    //   headers: this.getAuthHeaders()
+    // });
+
+    this.PostModel = await firstValueFrom( this.http.get<PostModel[]>(this.apiUrl, {
       headers: this.getAuthHeaders()
-    });
+    }));
+
+    this.listPostBS.next(this.PostModel);
   }
 
   // Obtener comentarios de un post

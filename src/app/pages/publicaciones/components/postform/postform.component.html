@@ -9,6 +9,13 @@
     <h2 class="text-2xl font-semibold mb-2 text-center">Crear nuevo post</h2>
 
     <form (ngSubmit)="submitPost()" #postForm="ngForm" class="flex flex-col flex-grow space-y-5 justify-start">
+
+      <select [(ngModel)]="post.category">
+        <option value="ADOPTION">Adopcion</option>
+        <option value="ADVICE">Consejo</option>
+        <option value="RESCUE">Rescate</option>
+      </select>
+
       <div>
         <p>Título:</p>
         <input type="text" name="title" [(ngModel)]="post.title" class="w-full border border-bg-marron-claro rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-bg-marron-claro" required/>

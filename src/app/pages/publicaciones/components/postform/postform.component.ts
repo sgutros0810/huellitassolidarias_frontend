@@ -15,7 +15,8 @@ export class PostformComponent {
 
   post = {
       title: '',
-      content: ''
+      content: '',
+      category: 'ADOPTION'
   };
 
   selectedFile: File | null = null;
@@ -35,6 +36,7 @@ export class PostformComponent {
     const formData = new FormData();
     formData.append('title', this.post.title);
     formData.append('content', this.post.content);
+    formData.append('category', this.post.category);
 
     if (this.selectedFile) {
       formData.append('image', this.selectedFile);
@@ -46,7 +48,7 @@ export class PostformComponent {
       next: (response : any)  => {
         // console.log('Publicación creada', response);
 
-        this.post = { title: '', content: ''};
+        this.post = { title: '', content: '', category: 'ADOPTION'};
         this.selectedFile = null;
         this.postService.getPosts(0, 0);
         this.close();
