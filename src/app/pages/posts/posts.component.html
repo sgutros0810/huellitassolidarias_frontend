@@ -1,0 +1,21 @@
+<div>
+  <section class="mt-15">
+    <h1 class="text-[35px] uppercase font-poppins font-semibold text-texto-marron-oscuro text-center">PUBLICACIONES</h1>
+    <p class="text-[18px] uppercase font-poppins font-normal text-texto-gris-claro text-center mx-15" >Sus ojos cuentan historias que no deberíamos ignorar</p>
+  </section>
+</div>
+
+<div class="text-left mx-5 my-10">
+  <button
+    (click)="openModal()"
+    class="bg-texto-marron-oscuro text-white px-6 py-2 rounded-lg font-poppins font-medium transition duration-200 hover:bg-opacity-90">Nueva publicacion
+  </button>
+</div>
+
+<section class="mt-16">
+  <app-posts-list></app-posts-list>
+</section>
+
+@if(mostrarFormulario) {
+  <app-postform (closed)="closeModal()"></app-postform>
+}

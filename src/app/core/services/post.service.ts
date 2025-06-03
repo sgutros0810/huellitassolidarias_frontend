@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { PostModel } from '../modals/post.model';
@@ -34,10 +34,10 @@ export class PostService {
   }
 
   // Crear un nuevo post
-  createPost(formData: FormData) {
-    return this.http.post(this.apiUrl, formData, {
+  async createPost(formData: FormData) {
+    return  await firstValueFrom( this.http.post(this.apiUrl, formData, {
       headers: this.getAuthHeaders(), responseType: 'text'
-    });
+    }));
   }
 
   // obtener posts
@@ -46,8 +46,10 @@ export class PostService {
     //   headers: this.getAuthHeaders()
     // });
 
+    const params = new HttpParams().set("page", String(page)).set("size", String(size))
+
     this.PostModel = await firstValueFrom( this.http.get<PostModel[]>(this.apiUrl, {
-      headers: this.getAuthHeaders()
+      params
     }));
 
     this.listPostBS.next(this.PostModel);

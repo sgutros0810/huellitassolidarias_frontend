@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
+import { UserProfileModel } from '../../../core/modals/user.model';
 
 @Component({
   selector: 'app-navbar',
@@ -17,6 +18,7 @@ export class NavbarComponent {
   isUserMenuOpen = false;
   authenticated:boolean = false;
   isNavOpen = false;
+  profile: UserProfileModel | null = null;
 
   goToLogin() {
     this.router.navigate(['/loginuser']);
@@ -24,6 +26,10 @@ export class NavbarComponent {
 
   goToRegister() {
     this.router.navigate(['/registeruser']);
+  }
+
+  goToProfile() {
+   this.router.navigate(['/myprofile']);
   }
 
   isAuthenticated() {
@@ -50,6 +56,6 @@ export class NavbarComponent {
   }
 
   logout() {
-    // Lógica para cerrar sesión
+    return this.authService.logout();
   }
 }

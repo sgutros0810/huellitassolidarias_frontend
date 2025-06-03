@@ -1,0 +1,124 @@
+<section class="min-h-screen bg-gray-50">
+  <div class="grid grid-cols-1 lg:grid-cols-[350px_1fr] min-h-screen">
+
+    @if(profile){
+      <!-- Panel de perfil (izquierda en escritorio con altura full) -->
+      <div class="bg-white shadow-xl px-6 flex flex-col h-full lg:h-screen lg:sticky lg:top-0">
+        <div class="flex flex-col items-center mb-6 pt-5">
+
+          <img [src]="'http://localhost:8080' + profile.profileImageUrl"  type="file" (change)="onFileSelected($event)"  accept="image/*"  alt="Avatar" class="w-32 h-32 rounded-full object-cover mb-4 shadow-md" />
+
+          <!-- @if(isEditing){
+            <input
+                type="file"
+                class="w-full text-sm text-texto-marron-claro file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-light file:text-texto-marron-oscuro hover:file:bg-primary-dark hover:file:text-texto-marron-claro mt-2"
+              />
+          } -->
+
+          <h2 class="text-2xl font-semibold text-texto-marron-claro text-center">
+            {{profile.name}} {{profile.lastname}}
+          </h2>
+          <p class="text-sm text-texto-marron-oscuro">
+            {{profile.role==='USUARIO' ? 'Usuario' : 'Refugio'}}
+          </p>
+        </div>
+
+        <div class="space-y-3 text-sm text-gray-700 flex-grow overflow-auto sm:mt-4">
+          @if(!isEditing){
+            @if(profile.role !== 'USUARIO'){
+              <p><strong>Refugio:</strong> {{ profile.nameShelter }}</p>
+              <p><strong>Identificación:</strong> {{ profile.identification }}</p>
+
+              <!-- Si tiene url  -->
+              @if(profile.websiteUrl){
+                <p><strong>Web:</strong>
+                  <a href="{{ profile.websiteUrl }}" target="_blank" class="text-blue-600 hover:underline break-words">
+                    {{profile.websiteUrl}}
+                  </a>
+                </p>
+              }
+
+            }
+            <p><strong>Email:</strong> {{profile.email}}</p>
+            <p><strong>Ciudad:</strong> {{profile.city}}, {{profile.country}}</p>
+            <p><strong>Dirección:</strong> {{profile.address}}</p>
+            <p><strong>Teléfono:</strong> {{profile.phoneNumber}}</p>
+            <p><strong>Registro:</strong> {{profile.creationDate | date:'longDate'}}</p>
+
+          } @else {
+
+            <form class="space-y-4 text-sm text-gray-700">
+              @if(profile.role !== 'USUARIO'){
+                <div>
+                  <label class="text-texto-marron-oscuro font-semibold mb-1">Refugio</label>
+                  <input [(ngModel)]="profile.nameShelter" name="nameShelter" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-btn-primary-dark" />
+                </div>
+                <div>
+                  <label class="text-texto-marron-oscuro font-semibold mb-1">Identificación</label>
+                  <input [(ngModel)]="profile.identification" name="identification" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-btn-primary-dark" />
+                </div>
+                @if(profile.websiteUrl){
+                  <div>
+                    <label class="text-texto-marron-oscuro font-semibold mb-1">Web</label>
+                    <input [(ngModel)]="profile.websiteUrl" name="websiteUrl" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-btn-primary-dark" />
+                  </div>
+                }
+              }
+
+              <div>
+                <label class="text-texto-marron-oscuro font-semibold mb-1">Email</label>
+                <input [(ngModel)]="profile.email" name="email" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-btn-primary-dark" disabled/>
+              </div>
+
+              <div>
+                <label class="text-texto-marron-oscuro font-semibold mb-1">Ciudad</label>
+                <input [(ngModel)]="profile.city" name="city" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-btn-primary-dark" />
+              </div>
+
+              <div>
+                <label class="text-texto-marron-oscuro font-semibold mb-1">País</label>
+                <input [(ngModel)]="profile.country" name="country" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-btn-primary-dark" />
+              </div>
+
+              <div>
+                <label class="text-texto-marron-oscuro font-semibold mb-1">Dirección</label>
+                <input [(ngModel)]="profile.address" name="address" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-btn-primary-dark" />
+              </div>
+
+              <div>
+                <label class="text-texto-marron-oscuro font-semibold mb-1">Teléfono</label>
+                <input [(ngModel)]="profile.phoneNumber" name="phoneNumber" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-btn-primary-dark" />
+              </div>
+
+              <p><strong>Registro:</strong> {{profile.creationDate | date:'longDate' }}</p>
+            </form>
+
+          }
+
+        </div>
+
+
+        <div class="mt-6 space-y-3">
+          <button class="w-full bg-btn-primary-dark hover:bg-btn-primary-ligth text-white font-medium py-2 px-4 rounded-xl transition-colors duration-200 shadow-sm lg:mt-6"  (click)="isEditing ? saveProfile() : editProfile()" >
+            {{isEditing ? "Guardar cambios" : "Editar perfil"}}
+          </button>
+          <!-- Si ESTA EDITANDO APARECE EL BOTON DE CANCELAR -->
+          @if(isEditing){
+            <button class="w-full hover:bg-red-200 hover:text-red-950 bg-red-950 text-white font-medium py-2 px-4 rounded-xl transition-colors duration-200 shadow-sm" (click)="cancelEdit()">
+              Cancelar
+            </button>
+          }
+
+        </div>
+      </div>
+    }
+
+
+    <!-- Posts (derecha) -->
+    <main class="p-4 md:p-6 overflow-y-auto">
+      <app-my-posts-list></app-my-posts-list>
+    </main>
+  </div>
+</section>
+
+
