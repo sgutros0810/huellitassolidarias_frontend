@@ -28,9 +28,11 @@ export class PostService {
   }
 
 
-  // Obtener un post por ID
-  getPostById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/posts/${id}`);
+  // Obtener posts de usuario
+  getMyPosts(page: number = 0, size: number = 10): Observable<PostModel[]>{
+    return this.http.get<PostModel[]>(`${this.apiUrl}/my-posts?page=${page}&size=${size}`,
+      { headers: this.getAuthHeaders() }
+    )
   }
 
   // Crear un nuevo post
@@ -40,29 +42,47 @@ export class PostService {
     }));
   }
 
-  // obtener posts
-  async getPosts(page:number, size:number) {
-    // return this.http.get<any[]>(this.apiUrl, {
-    //   headers: this.getAuthHeaders()
-    // });
 
-    const params = new HttpParams().set("page", String(page)).set("size", String(size))
+  async getPosts(page: number, size: number): Promise<void>{
+    if (page < 0) page = 0;
+    if (size < 1) size = 10;
 
-    this.PostModel = await firstValueFrom( this.http.get<PostModel[]>(this.apiUrl, {
-      params
-    }));
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
 
+      this.PostModel = await firstValueFrom(
+        this.http.get<PostModel[]>(this.apiUrl, {params})
+      );
+
+      this.listPostBS.next(this.PostModel);
+  }
+
+
+  //Eliminar mi post
+  deleteMyPost(postId: number){
+    return this.http.delete(`${this.apiUrl}/${postId}`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text' as const
+    });
+  }
+
+  deletePostLocal(postId: number): void{
+    console.log(this.PostModel)
+    this.PostModel = this.PostModel.filter(post => post.id !== postId)
     this.listPostBS.next(this.PostModel);
+    console.log(this.PostModel)
+
   }
 
   // Obtener comentarios de un post
-  getComments(postId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/posts/${postId}/comments`);
+  getComments(postId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${postId}/comments`);
   }
 
   // Agregar un comentario a un post
-  addComment(postId: string, text: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/posts/${postId}/comments`, { text }, {
+  addComment(postId: number, text: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${postId}/comments`, { text }, {
       headers: this.getAuthHeaders()
     });
   }

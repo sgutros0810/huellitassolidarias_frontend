@@ -30,7 +30,29 @@ export class PostformComponent {
     console.log(this.selectedFile)
   }
 
-  submitPost() {
+  // submitPost() {
+  //   if (!this.post.title || !this.post.content) return;
+
+  //   const formData = new FormData();
+  //   formData.append('title', this.post.title);
+  //   formData.append('content', this.post.content);
+  //   formData.append('category', this.post.category);
+
+  //   if (this.selectedFile) {
+  //     formData.append('image', this.selectedFile);
+  //   } else {
+  //     console.log("Selecciona una imagen")
+  //   }
+
+  //   this.postService.createPost(formData);
+  //   // console.log('Publicación creada', response);
+  //   this.postService.getPosts(0, 0);
+
+
+  // }
+
+
+    async submitPost() {
     if (!this.post.title || !this.post.content) return;
 
     const formData = new FormData();
@@ -41,19 +63,23 @@ export class PostformComponent {
     if (this.selectedFile) {
       formData.append('image', this.selectedFile);
     } else {
-      console.log("Selecciona una imagen")
+      console.log("Selecciona una imagen");
     }
 
-    this.postService.createPost(formData);
+    try {
+      await this.postService.createPost(formData);
+      await this.postService.getPosts(0, 10);
+      this.post = { title: '', content: '', category: '' };
+      this.selectedFile = null;
+      this.close();
 
-        // console.log('Publicación creada', response);
-
-
-
-        this.postService.getPosts(0, 0);
-
+    } catch (error) {
+      console.error(error)
+    }
 
   }
+
+
 
   close() {
     this.closed.emit();

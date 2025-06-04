@@ -1,6 +1,47 @@
-<section>
-  <h2 class="text-2xl font-semibold text-texto-marron-oscuro mb-4">Mis publicaciones</h2>
+<section class="mt-10 mx-0 lg:mx-8 space-y-5 ">
 
+@if(myPostList | async;  as posts) {
+
+    @if(posts.length < 1) {
+      <p class="text-center text-gray-500 mt-10">No tienes publicaciones</p>
+    } @else {
+      @for(post of myPostList | async ; track post.id) {
+
+        <div class="flex h-[180px] p-2 gap-2 md:gap-4 lg:gap-4 shadow-2xl bg-white rounded-xl">
+
+          <!-- Si tiene imagen -->
+          @if(post.imageUrl) {
+            <div class="w-[120px] md:w-[160px] lg:w-[160px] px-0 lg:px-2 md:px-2 py-2 shrink-0">
+              <img [src]="'http://localhost:8080' + post.imageUrl" alt="Imagen post" class="w-full h-full object-cover rounded-2xl" />
+            </div>
+          }
+
+          <!-- Contenido del post -->
+          <div class="flex flex-col flex-grow lg:pr-2 mt-2">
+            <!-- título + fecha -->
+            <div class="flex justify-between items-start  gap-x-4">
+              <h2 class="text-lg font-semibold text-texto-marron-oscuro mb-1 ml-2 mr-5 line-clamp-1">{{ post.title }}</h2>
+              <p class="text-sm text-gray-500 whitespace-nowrap">{{ post.createdAt | date:'mediumDate' }}</p>
+            </div>
+
+            <!-- Contenido -->
+            <p class="text-sm text-gray-500 mt-1 ml-2 mr-5 line-clamp-3 whitespace-pre-line">{{ post.content }}</p>
+
+            <!-- Botón 'ELIMINAR' -->
+            <div class="flex justify-end mt-auto sm:mb-2 sm:mr-2">
+              <button class="w-[100px] text-red-900  font-medium py-2 px-2 rounded-xl transition-colors duration-200" (click)="deletePost(post.id)">
+                Eliminar
+              </button>
+            </div>
+
+          </div>
+        </div>
+      }
+    }
+
+  } @else {
+    <p class="text-center text-gray-500 mt-10">Cargando publicaciones...</p>
+  }
 
 </section>
 

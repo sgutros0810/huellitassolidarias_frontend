@@ -19,7 +19,7 @@ export class PostsListComponent implements OnInit {
   allLoaded = false;
   postList: Observable<Array<PostModel>> | undefined;
   // posts: PostModel[] = [];´
-  
+
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
@@ -28,29 +28,4 @@ export class PostsListComponent implements OnInit {
     this.postService.getPosts(this.page, this.size);
   }
 
-  // loadMorePosts(): void {
-  //   this.loading = true;
-  //   this.postService.getPosts(this.page, this.size).subscribe({
-  //     next: (newPosts) => {
-
-  //       // newPosts.forEach( post => {
-  //       //   console.log(post)
-  //       // });
-
-  //       if(newPosts.length === 0){
-  //         this.allLoaded = true;
-
-  //       } else {
-  //         this.posts.push(...newPosts);
-  //         this.page++;
-  //       }
-
-  //       this.loading = false;
-  //     },
-  //     error: (error) => {
-  //       console.log("Error: ", error)
-  //       this.loading = false;
-  //     }
-  //   })
-  // }
 }
