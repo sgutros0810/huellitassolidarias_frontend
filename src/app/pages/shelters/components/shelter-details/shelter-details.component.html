@@ -1,0 +1,126 @@
+<section class="p-8 max-w-4xl mx-auto bg-white rounded-3xl shadow-lg">
+  @if (shelter(); as s) {
+    <!-- Encabezado con imagen y datos -->
+    <div class="flex flex-col sm:flex-row items-center gap-8 mb-10">
+      <img
+        src="img/logopro.png"
+        alt="Foto del refugio"
+        class="w-32 h-32 rounded-full border-4 border-primary object-cover shadow-lg"
+      />
+      <div class="text-center sm:text-left space-y-2 flex-1">
+        <h1 class="text-xl md:text-4xl lg:text-4xl font-extrabold text-texto-marron-oscuro">{{ s.nameShelter }}</h1>
+        <!-- <p class="text-gray-500 text-sm">CIF: <span class="font-semibold">{{ s.identification }}</span></p> -->
+        <p class="text-texto-negro text-lg font-semibold">📞 {{ s.phoneNumber }}</p>
+
+        <!-- Pagina web del refugio -->
+        @if(s.websiteUrl){
+          <div class="mt-2 space-x-3">
+            <a class="text-primary-dark hover:underline font-medium text-base" [href]="s.websiteUrl" target="_blank" rel="noopener noreferrer"> 🌐 Visitar sitio web</a>
+            <!-- Verificado opcional -->
+            <!-- <span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full">✔ Verificado</span> -->
+          </div>
+        }
+
+
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <nav class="border-b border-gray-300 mb-8">
+      <ul class="flex justify-center gap-12 text-base font-semibold text-gray-500" id="tabs">
+        <li>
+          <button
+            class="pb-4 transition-colors duration-300"
+            [class.border-b-4]="activeTab() === 'datos'"
+            [class.border-primary]="activeTab() === 'datos'"
+            [class.text-primary-dark]="activeTab() === 'datos'"
+            (click)="setActiveTab('datos')"
+            type="button" >
+            Datos
+          </button>
+        </li>
+        <li>
+          <button
+            class="pb-4 transition-colors duration-300"
+            [class.border-b-4]="activeTab() === 'ayuda'"
+            [class.border-primary]="activeTab() === 'ayuda'"
+            [class.text-primary-dark]="activeTab() === 'ayuda'"
+            (click)="setActiveTab('ayuda')"
+            type="button" >
+            Ayuda
+          </button>
+        </li>
+        <li>
+          <button
+            class="pb-4 transition-colors duration-300"
+            [class.border-b-4]="activeTab() === 'adopciones'"
+            [class.border-primary]="activeTab() === 'adopciones'"
+            [class.text-primary-dark]="activeTab() === 'adopciones'"
+            (click)="setActiveTab('adopciones')"
+            type="button" >
+            Adopciones
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="space-y-10">
+      <!-- Datos -->
+      @if (activeTab() === 'datos') {
+        <section id="datos" class="tab-content">
+          <div class="bg-gray-50 p-6 rounded-xl border border-gray-300 shadow-sm">
+            <p class="text-texto-marron font-semibold text-lg mb-3">📍 Dirección</p>
+            <p class="text-gray-700 text-base leading-relaxed">
+              {{ s.address }}<br />
+              {{ s.city }}, {{ s.country }}
+            </p>
+          </div>
+
+          <div class="mt-8 w-full h-96 rounded-xl overflow-hidden shadow-md border border-gray-300">
+            @if (mapUrl) {
+              <iframe
+                title="Ubicación del refugio en Google Maps"
+                width="100%"
+                height="100%"
+                [src]="mapUrl"
+                style="border:0;"
+                allowfullscreen
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Ayuda -->
+      @if (activeTab() === 'ayuda') {
+        <section id="ayuda" class="tab-content">
+          <h2 class="text-2xl font-bold text-texto-marron-oscuro mb-5"> ¿Cómo ayudar? </h2>
+          <ul class="list-disc list-inside text-gray-700 text-base space-y-2">
+            <li>Cuenta bancaria: <strong>Desconocido</strong></li>
+            <li>Bizum: <strong>Desconocido</strong></li>
+            <li>PayPal:
+              <!-- <a [href]="s.paypal ?? 'https://paypal.me/refugiohuellitas'" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline">
+                {{ s.paypal ?? 'paypal.me/refugiohuellitas' }}
+              </a> -->
+            </li>
+            <li>Transferencia con concepto: “Donación + tu nombre”</li>
+          </ul>
+        </section>
+      }
+
+      <!-- Adopciones -->
+      @if (activeTab() === 'adopciones') {
+        <section id="adopciones" class="tab-content">
+          <h2 class="text-2xl font-bold text-texto-marron-oscuro mb-6">🐾 Animales en adopción</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+           
+          </div>
+        </section>
+      }
+    </div>
+  } @else {
+    <p class="text-center text-gray-400 py-24 text-lg">Cargando detalles del refugio...</p>
+  }
+</section>

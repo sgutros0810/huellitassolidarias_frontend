@@ -4,10 +4,11 @@ import { ShelterModel } from '../../../../core/modals/shelter.model';
 import { UserService } from '../../../../core/services/user.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-list-shelters',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './list-shelters.component.html',
   styleUrl: './list-shelters.component.css'
 })

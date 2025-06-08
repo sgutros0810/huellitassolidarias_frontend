@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, catchError, firstValueFrom, Observable, throwError } from 'rxjs';
 import { UserProfileModel } from '../modals/user.model';
 import { ShelterModel } from '../modals/shelter.model';
+import { ShelterDetailModel } from '../modals/shelter-detail.model';
 
 
 @Injectable({
@@ -21,7 +22,7 @@ export class UserService {
   listSheltersObs$ = this.listSheltersBS.asObservable();
 
 
-  constructor() {}
+  constructor(private zone: NgZone) {}
 
   //
   private getAuthHeaders(): HttpHeaders {
@@ -57,7 +58,6 @@ export class UserService {
     );
   }
 
-
   // Editar perfil del usuario por ID de usaurio
   updateShelterProfile(profile: Partial<UserProfileModel>): Observable<UserProfileModel> {
     return this.http.put<UserProfileModel>(`${this.apiUrl}/shelterprofile`, profile, {
@@ -71,7 +71,6 @@ export class UserService {
     );
   }
 
-
   updateProfileImage(formData: FormData): Observable<void> {
     return this.http.put<void>(`${environment.apiUrl}/profile-image`, formData, {
       headers: {
@@ -80,8 +79,7 @@ export class UserService {
     });
   }
 
-
-
+  // Obtiene todos los usaurios con ROL = REFUGIO
   async getShelters(page: number, size: number): Promise<void> {
     if (page < 0) page = 0;
     if (size < 1) size = 10;
@@ -91,9 +89,23 @@ export class UserService {
       .set('size', size.toString());
 
     this.ShelterModel = (await firstValueFrom(
-      this.http.get<{ content: ShelterModel[] }>(this.apiUrl + '/shelters', { params })
+      this.http.get<{ content: ShelterModel[] }>(`${environment.apiUrl}/shelters`, { params })
     )).content;
 
     this.listSheltersBS.next(this.ShelterModel);
   }
+
+  // Obtiene todos los usaurios con ROL = REFUGIO
+  // async getSheltersById(shelterId:number) {
+  //   this.ShelterModel = (await firstValueFrom(
+  //     this.http.get<{ content: ShelterModel[] }>(this.apiUrl + `/shelters/details/${shelterId}`)
+  //   )).content;
+
+  //   this.zone.run(() => {this.listSheltersBS.next(this.ShelterModel);  });
+  // }
+
+  getShelterById(shelterId: number): Observable<ShelterDetailModel> {
+    return this.http.get<ShelterDetailModel>(`${environment.apiUrl}/shelters/details/${shelterId}`);
+  }
+
 }

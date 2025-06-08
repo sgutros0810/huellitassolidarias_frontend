@@ -9,6 +9,7 @@ import { LoginShelterComponent } from './pages/auth/login/login-shelter/login-sh
 import { MyprofileComponent } from './pages/myprofile/myprofile.component';
 import { PostsComponent } from './pages/posts/posts.component';
 import { SheltersComponent } from './pages/shelters/shelters.component';
+import { ShelterDetailsComponent } from './pages/shelters/components/shelter-details/shelter-details.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -21,5 +22,6 @@ export const routes: Routes = [
   { path: 'publicaciones', component: PostsComponent },
   { path: 'shelters', component: SheltersComponent },
   { path: 'myprofile', component: MyprofileComponent },
+  { path: 'shelters/details/:id', component: ShelterDetailsComponent, title:"Detalles del refugio" },
   { path: '**', redirectTo: '' }
 ];

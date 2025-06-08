@@ -1,0 +1,58 @@
+<div class="fixed bg-black/50 backdrop-blur-sm inset-0 flex items-center justify-center z-50">
+  <div class="flex flex-col justify-between overflow-y-auto relative bg-white p-10 rounded-xl shadow-xl w-full h-screen" (click)="$event.stopPropagation()">
+
+    <!-- Botón de cerrar -->
+    <button (click)="closeModal()" class="absolute top-2 right-2 text-2xl font-bold text-gray-500 hover:text-gray-900">×</button>
+
+    <h2 class="text-2xl font-semibold mb-6 text-center">Crear nueva adopción</h2>
+
+    <form #adoptionForm="ngForm" (ngSubmit)="submitAdoption()" class="space-y-5 flex flex-col flex-grow justify-start">
+
+      <div>
+        <label>Nombre:</label>
+        <input type="text" name="name" [(ngModel)]="adoption.name" required class="input-style" />
+      </div>
+
+      <div>
+        <label>Especie:</label>
+        <select name="species" [(ngModel)]="adoption.species" required class="input-style">
+          <option value="DOG">Perro</option>
+          <option value="CAT">Gato</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Raza:</label>
+        <input type="text" name="breed" [(ngModel)]="adoption.breed" class="input-style" />
+      </div>
+
+      <div>
+        <label>Edad:</label>
+        <input type="number" name="age" [(ngModel)]="adoption.age" min="0" class="input-style" />
+      </div>
+
+      <div>
+        <label>Tamaño:</label>
+        <input type="text" name="size" [(ngModel)]="adoption.size" class="input-style" />
+      </div>
+
+      <div class="flex items-center gap-4">
+        <label>
+          <input type="checkbox" name="vaccinated" [(ngModel)]="adoption.vaccinated" />
+          Vacunado
+        </label>
+        <label>
+          <input type="checkbox" name="sterilized" [(ngModel)]="adoption.sterilized" />
+          Esterilizado
+        </label>
+      </div>
+
+      <!-- Botones -->
+      <div class="flex flex-col lg:flex-row justify-between items-center gap-4 pt-6 mt-auto border-t border-primary-dark">
+        <button type="submit" class="w-full lg:w-auto px-5 py-2 lg:px-10 lg:py-10 bg-primary-light font-bold text-texto-marron-oscuro rounded-[8px] hover:bg-primary-dark hover:text-white" [disabled]="adoptionForm.invalid">Publicar</button>
+        <button type="button" (click)="closeModal()" class="w-full lg:w-auto py-2 px-4 lg:px-10 lg:py-10 hover:bg-red-200 hover:text-red-950 bg-red-950/70 text-white font-medium rounded-[8px] transition-colors duration-200 shadow-sm">Cancelar</button>
+      </div>
+
+    </form>
+  </div>
+</div>
