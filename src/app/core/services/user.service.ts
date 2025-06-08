@@ -1,8 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { catchError, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, firstValueFrom, Observable, throwError } from 'rxjs';
 import { UserProfileModel } from '../modals/user.model';
+import { ShelterModel } from '../modals/shelter.model';
 
 
 @Injectable({
@@ -13,6 +14,12 @@ export class UserService {
 
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
+
+
+  ShelterModel: Array<ShelterModel> = [];
+  listSheltersBS: BehaviorSubject<Array<ShelterModel>> = new BehaviorSubject<Array<ShelterModel>>([]);
+  listSheltersObs$ = this.listSheltersBS.asObservable();
+
 
   constructor() {}
 
@@ -71,5 +78,22 @@ export class UserService {
         Authorization: `Bearer ${localStorage.getItem('authToken')!}`
       }
     });
+  }
+
+
+
+  async getShelters(page: number, size: number): Promise<void> {
+    if (page < 0) page = 0;
+    if (size < 1) size = 10;
+
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    this.ShelterModel = (await firstValueFrom(
+      this.http.get<{ content: ShelterModel[] }>(this.apiUrl + '/shelters', { params })
+    )).content;
+
+    this.listSheltersBS.next(this.ShelterModel);
   }
 }

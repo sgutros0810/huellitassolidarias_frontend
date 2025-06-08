@@ -1,9 +1,6 @@
-export interface PostModel {
+export interface CommentModel {
   id: number;
-  title: string;
   content: string;
-  imageUrl:string;
   username: string;
   createdAt: Date;
-
 }

@@ -1,0 +1,25 @@
+
+
+@if(sheltersList | async;  as shelters) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    @if(shelters.length < 1) {
+
+      <p class="text-center text-gray-500 mt-10 h-screen">No hay refugios</p>
+
+    } @else {
+
+      @for(shelter of sheltersList | async ; track shelter.id) {
+        <div class="bg-white shadow-md rounded-2xl p-6 flex items-center gap-4">
+          <img src="img/logo.png" alt="Foto de refugio" class="w-20 h-20 rounded-full object-cover border-2 border-primary" />
+          <div>
+            <h2 class="text-lg font-semibold text-texto-marron-oscuro">{{shelter.username}}</h2>
+            <p class="text-base text-texto-negro font-medium">{{shelter.nameShelter}}</p>
+            <p class="text-sm text-texto-gris-claro">📍 {{shelter.city}}, {{shelter.country}}</p>
+          </div>
+        </div>
+      }
+
+    }
+  </div>
+}

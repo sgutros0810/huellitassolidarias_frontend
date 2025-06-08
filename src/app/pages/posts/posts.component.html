@@ -1,21 +1,27 @@
-<div>
-  <section class="mt-15">
-    <h1 class="text-[35px] uppercase font-poppins font-semibold text-texto-marron-oscuro text-center">PUBLICACIONES</h1>
-    <p class="text-[18px] uppercase font-poppins font-normal text-texto-gris-claro text-center mx-15" >Sus ojos cuentan historias que no deberíamos ignorar</p>
-  </section>
-</div>
+<section>
+  <div>
+    <section class="mt-15">
+      <h1 class="text-[35px] uppercase font-poppins font-semibold text-texto-marron-oscuro text-center">PUBLICACIONES</h1>
+      <p class="text-[18px] uppercase font-poppins font-normal text-texto-gris-claro text-center mx-15" >Sus ojos cuentan historias que no deberíamos ignorar</p>
+    </section>
+  </div>
 
-<div class="text-left mx-5 my-10">
-  <button
-    (click)="openModal()"
-    class="bg-texto-marron-oscuro text-white px-6 py-2 rounded-lg font-poppins font-medium transition duration-200 hover:bg-opacity-90">Nueva publicacion
-  </button>
-</div>
 
-<section class="mt-16">
-  <app-posts-list></app-posts-list>
+
+  <div class="mt-16 space-y-6 px-4 py-8  items-center lg:mx-25">
+
+    <div class="flex flex-col items-center space-y-6">
+      <div (click)="openModal()" class="text-center bg-white text-gray-400 border-gray-200 py-8 w-full max-w-[600px] rounded-xl shadow-sm border rounded-lg font-poppins font-medium">
+        Nueva publicacion
+      </div>
+    </div>
+
+
+    <app-posts-list></app-posts-list>
+  </div>
+
+  @if(mostrarFormulario) {
+    <app-postform (closed)="closeModal()"></app-postform>
+  }
+
 </section>
-
-@if(mostrarFormulario) {
-  <app-postform (closed)="closeModal()"></app-postform>
-}

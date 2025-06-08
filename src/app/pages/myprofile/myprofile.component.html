@@ -3,17 +3,11 @@
 
     @if(profile){
       <!-- Panel de perfil (izquierda en escritorio con altura full) -->
-      <div class="bg-white shadow-xl px-6 flex flex-col h-full lg:h-screen lg:sticky lg:top-0">
+      <div class="bg-white shadow-xl px-6 flex flex-col justify-between h-full lg:h-screen lg:sticky lg:top-0">
         <div class="flex flex-col items-center mb-6 pt-5">
 
           <img [src]="'http://localhost:8080' + profile.profileImageUrl"  type="file" (change)="onFileSelected($event)"  accept="image/*"  alt="Avatar" class="w-32 h-32 rounded-full object-cover mb-4 shadow-md" />
 
-          <!-- @if(isEditing){
-            <input
-                type="file"
-                class="w-full text-sm text-texto-marron-claro file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-light file:text-texto-marron-oscuro hover:file:bg-primary-dark hover:file:text-texto-marron-claro mt-2"
-              />
-          } -->
 
           <h2 class="text-2xl font-semibold text-texto-marron-claro text-center">
             {{profile.name}} {{profile.lastname}}
@@ -92,14 +86,12 @@
 
               <p><strong>Registro:</strong> {{profile.creationDate | date:'longDate' }}</p>
             </form>
-
           }
-
         </div>
 
 
-        <div class="mt-6 space-y-3">
-          <button class="w-full bg-btn-primary-dark hover:bg-btn-primary-ligth text-white font-medium py-2 px-4 rounded-xl transition-colors duration-200 shadow-sm lg:mt-6"  (click)="isEditing ? saveProfile() : editProfile()" >
+        <div class="my-2 lg:my-6">
+          <button class="w-full bg-btn-primary-dark hover:bg-btn-primary-ligth text-white font-medium py-2 px-4 rounded-xl transition-colors duration-200 shadow-sm"  (click)="isEditing ? saveProfile() : editProfile()" >
             {{isEditing ? "Guardar cambios" : "Editar perfil"}}
           </button>
           <!-- Si ESTA EDITANDO APARECE EL BOTON DE CANCELAR -->
@@ -116,7 +108,7 @@
 
     <!-- Posts (derecha) -->
     <main class="p-4 md:p-6 overflow-y-auto">
-       <h2 class="text-2xl text-center font-semibold text-texto-marron-oscuro mb-4">Mis publicaciones</h2>
+      <h2 class="text-2xl text-center font-semibold text-texto-marron-oscuro mb-4">Mis publicaciones</h2>
       <app-my-posts-list></app-my-posts-list>
     </main>
   </div>

@@ -8,6 +8,7 @@ import { LoginUserComponent } from './pages/auth/login/login-user/login-user.com
 import { LoginShelterComponent } from './pages/auth/login/login-shelter/login-shelter.component';
 import { MyprofileComponent } from './pages/myprofile/myprofile.component';
 import { PostsComponent } from './pages/posts/posts.component';
+import { SheltersComponent } from './pages/shelters/shelters.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: 'adopciones', component: AdopcionesComponent },
   { path: 'reportes', component: ReportesComponent },
   { path: 'publicaciones', component: PostsComponent },
+  { path: 'shelters', component: SheltersComponent },
   { path: 'myprofile', component: MyprofileComponent },
   { path: '**', redirectTo: '' }
 ];

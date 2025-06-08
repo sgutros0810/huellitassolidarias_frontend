@@ -1,40 +1,50 @@
-
-<section class="justify-center mx-6 space-y-10">
-  @if(postList | async;  as posts) {
+<section class="flex flex-col items-center space-y-6 min-h-screen">
+  @if(postList | async; as posts) {
 
     @if(posts.length < 1) {
-      <h3 class="text-center text-gray-500 py-10 h-screen">No hay publicaciones</h3>
+      <h3 class="text-center text-gray-500 py-10">No hay publicaciones</h3>
     } @else {
-      @for(post of postList | async ; track post.id) {
-        <div class="flex flex-col lg:flex-row bg-white rounded-2xl shadow-xl overflow-hidden w-full my-10 lg:h-[500px]">
+      @for(post of postList | async; track post.id) {
+        <div class="w-full max-w-[600px] bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-4">
+
+          <!-- Usuario y fecha -->
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-gray-300 rounded-full"></div> <!-- Placeholder de avatar -->
+            <div>
+              <p class="font-semibold text-texto-marron-oscuro">{{ post.username }}</p>
+              <p class="text-xs text-gray-500">{{ formatPostDate(post.createdAt) }}</p>
+            </div>
+          </div>
+
+          <!-- Título -->
+          <h2 class="text-lg font-bold text-texto-marron-claro">
+            {{ post.title }}
+          </h2>
+
+          <!-- Contenido -->
+          <p class="text-sm text-gray-700 whitespace-pre-line break-words">
+            {{ post.content }}
+          </p>
 
           <!-- Imagen -->
           @if(post.imageUrl) {
-            <div class="w-full h-[200px] lg:h-full lg:w-1/2">
-              <img [src]="'http://localhost:8080' + post.imageUrl" alt="Imagen post"class="w-full h-full object-cover rounded-t-2xl lg:rounded-t-none lg:rounded-l-2xl" />
+            <div class="w-full rounded-lg overflow-hidden">
+              <img [src]="'http://localhost:8080' + post.imageUrl" alt="Imagen del post" class="w-full h-auto object-cover" />
             </div>
           }
 
-          <!-- Contenido y comentarios -->
-          <div class="w-full lg:w-1/2 flex flex-col px-4 py-5 overflow-y-auto max-h-[500px]">
-
-            <!-- Titulo del post -->
-            <h2 class="text-[20px] lg:text-[24px] text-center font-bold text-texto-marron-oscuro mb-2">
-              {{ post.title }}
-            </h2>
-
-            <!-- Contenido -->
-            <div class="text-sm text-gray-800 mb-4">
-              <p class="break-words whitespace-pre-line">
-                <span class="font-bold text-texto-marron-claro mr-2">{{ post.username }}</span>
-                {{ post.content }}
-              </p>
+          <!-- Comentarios -->
+           @if(commentPostId === post.id){
+            <div>
+              <app-comments-post [postId]="post.id"></app-comments-post>
             </div>
+           }
 
-            <!-- Comentarios de los usuarios -->
-            <div class="mt-auto">
-              <app-comments-post></app-comments-post>
-            </div>
+
+          <!-- Comentar -->
+          <div class="flex justify-between text-sm text-gray-500 pt-2 border-t border-gray-200">
+            <!-- <button class="hover:underline">Me gusta</button> -->
+            <button class="hover:underline" (click)="openComment(post.id)">Comentar</button>
           </div>
         </div>
       }

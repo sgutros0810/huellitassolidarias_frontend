@@ -52,7 +52,7 @@ export class PostformComponent {
   // }
 
 
-    async submitPost() {
+  async submitPost() {
     if (!this.post.title || !this.post.content) return;
 
     const formData = new FormData();

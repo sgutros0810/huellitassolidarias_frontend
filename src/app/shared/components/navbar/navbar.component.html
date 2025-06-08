@@ -7,6 +7,9 @@
   <!-- Paginas -->
   <ul class="flex space-x-6 text-texto-navbar text-lg">
     <li>
+      <a href="/refugios" routerLink="/shelters" class="hover:text-gray-500 transition duration-300">REFUGIOS</a>
+    </li>
+    <li>
       <a href="/adopciones" routerLink="/adopciones" class="hover:text-gray-500 transition duration-300">ADOPCIONES</a>
     </li>
     <li>
@@ -87,6 +90,10 @@
 
   <!-- Páginas -->
     <div class="flex flex-col space-y-6 text-texto-marron-oscuro text-lg p-6">
+      <a routerLink="/shelters" (click)="toggleNav()"    class="px-2 py-2 hover:text-gray-500 transition duration-300">
+        <i class="fas fa-paw text-btn-primary-dark mr-2"></i>
+        REFUGIOS
+      </a>
       <a routerLink="/adopciones" (click)="toggleNav()"    class="px-2 py-2 hover:text-gray-500 transition duration-300">
         <i class="fas fa-paw text-btn-primary-dark mr-2"></i>
         ADOPCIONES
