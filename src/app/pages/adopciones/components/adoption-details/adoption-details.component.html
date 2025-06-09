@@ -1,0 +1,39 @@
+<div class="p-6 rounded-lg bg-white shadow-md max-w-md mx-auto">
+
+  @if (adoption(); as adoption) {
+    <img [src]="'http://localhost:8080' + adoption.imageUrl" alt="{{ adoption.name }}" class="w-full h-48 object-cover rounded-md mb-4"/>
+    <h2 class="text-2xl font-bold my-2">{{ adoption.name }}</h2>
+
+    <p><strong>Edad:</strong> {{ calculateAge(adoption.birthDate) }}</p>
+    <p><strong>Especie:</strong> {{ adoption.species }}</p>
+    <p><strong>Raza:</strong> {{ adoption.breed }}</p>
+    <p><strong>Género:</strong> {{ adoption.gender }}</p>
+    <p><strong>Tamaño:</strong> {{ adoption.size }}</p>
+    <p><strong>Ubicación:</strong> {{ adoption.location }}</p>
+    <p><strong>Estado de adopción:</strong> {{ adoption.status }}</p>
+    <p><strong>Vacunado:</strong> {{ adoption.vaccinated }}</p>
+    <p><strong>Esterilizado:</strong> {{ adoption.sterilized }}</p>
+
+    <h3 class="mt-4 font-semibold">Contacto:</h3>
+    <p><strong>Teléfono:</strong> {{ adoption.contactPhone  }}</p>
+    <p><strong>Email:</strong> {{ adoption.contactEmail }}</p>
+
+    <h3 class="mt-4 font-semibold">Usuario:</h3>
+    <p><strong>Nombre:</strong> {{ adoption.user.username }}</p>
+    <p><strong>Ciudad:</strong> {{ adoption.user.city }}</p>
+    <p><strong>País:</strong> {{ adoption.user.country }}</p>
+    <p><strong>Teléfono:</strong> {{ adoption.user.phoneNumber }}</p>
+    <p><strong>Email:</strong> {{ adoption.user.email }}</p>
+
+    @if(adoption.user.websiteUrl){
+      <p><strong>Web:</strong> <a [href]="adoption.user.websiteUrl" target="_blank" rel="noopener">{{ adoption.user.websiteUrl }}</a></p>
+    }
+
+    <!-- @if(adoption.user.profileImageUrl){
+    <img [src]="'http://localhost:8080' + adoption.user.profileImageUrl" alt="Imagen del refugio" class="w-24 h-24 rounded-full mt-4 object-cover" />
+    } -->
+
+  } @else {
+    <p class="text-center text-gray-400 py-24 text-lg">Cargando datos del animal...</p>
+  }
+</div>

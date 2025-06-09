@@ -2,11 +2,17 @@ export interface AdoptionModel {
   id: number;
   name: string;
   species: string;
+  gender: string;
   breed: string;
-  age: number;
+  birthDate: string;
   size: string;
+  description: string;
+  location: string;
   vaccinated: boolean;
   sterilized: boolean;
-  forAdoption: boolean;
+  status: string;
+  contactPhone: string;
+  contactEmail: string;
+  imageUrl: string;
   userId: number;
 }

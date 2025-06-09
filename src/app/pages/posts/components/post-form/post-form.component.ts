@@ -22,35 +22,12 @@ export class PostformComponent {
   selectedFile: File | null = null;
 
   constructor(private postService: PostService, private router: Router) {
-
   }
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
     console.log(this.selectedFile)
   }
-
-  // submitPost() {
-  //   if (!this.post.title || !this.post.content) return;
-
-  //   const formData = new FormData();
-  //   formData.append('title', this.post.title);
-  //   formData.append('content', this.post.content);
-  //   formData.append('category', this.post.category);
-
-  //   if (this.selectedFile) {
-  //     formData.append('image', this.selectedFile);
-  //   } else {
-  //     console.log("Selecciona una imagen")
-  //   }
-
-  //   this.postService.createPost(formData);
-  //   // console.log('Publicación creada', response);
-  //   this.postService.getPosts(0, 0);
-
-
-  // }
-
 
   async submitPost() {
     if (!this.post.title || !this.post.content) return;
@@ -78,8 +55,6 @@ export class PostformComponent {
     }
 
   }
-
-
 
   close() {
     this.closed.emit();

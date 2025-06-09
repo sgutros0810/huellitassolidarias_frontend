@@ -1,31 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { AdoptionModel } from '../../../../core/modals/adoption.model';
 import { AdoptionService } from '../../../../core/services/adoption.service';
-import { UserService } from '../../../../core/services/user.service';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { AdoptionDetailModel } from '../../../../core/modals/adoption-detail.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-cards',
-  imports: [ CommonModule, FormsModule, RouterModule],
-  templateUrl: './cards.component.html',
-  styleUrl: './cards.component.css'
+  selector: 'app-adoption-details',
+  imports: [],
+  templateUrl: './adoption-details.component.html',
+  styleUrl: './adoption-details.component.css'
 })
-export class CardsComponent implements OnInit{
+export class AdoptionDetailsComponent {
 
-  adoptionList!: Observable<AdoptionModel[]>;
-  adoptions: AdoptionModel[] = [];
+  private route = inject(ActivatedRoute);
+  private adoptionService = inject(AdoptionService);
+
+  adoption = signal<AdoptionDetailModel | null>(null);
 
   today: string = '';
   age: number | null = null;
-  constructor(private adoptionService: AdoptionService, private userService: UserService) {}
 
-  ngOnInit(): void {
-    this.adoptionList = this.adoptionService.listAdoptionObs$;
-    this.adoptionService.getAdoptions(0, 10);
+  constructor() {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    // console.log('id del animal:', id);
+
+    this.adoptionService.getAdoptionById(id).subscribe({
+      next: (response) => {
+        this.adoption.set(response);
+        // console.log(response);
+      },
+      error: (err) => console.error('Error cargando datos del animal', err)
+    });
   }
+
 
   // Calcula la edad del animal
   calculateAge(birthDateStr: string): string {
@@ -55,6 +62,4 @@ export class CardsComponent implements OnInit{
 
     return ageStr || '0 días';
   }
-
-
 }

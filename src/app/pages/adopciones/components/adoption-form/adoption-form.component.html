@@ -1,56 +1,136 @@
-<div class="fixed bg-black/50 backdrop-blur-sm inset-0 flex items-center justify-center z-50">
-  <div class="flex flex-col justify-between overflow-y-auto relative bg-white p-10 rounded-xl shadow-xl w-full h-screen" (click)="$event.stopPropagation()">
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center lg:mt-15 z-50">
+  <div class="relative flex flex-col w-full lg:max-w-3xl h-full lg:h-[90vh] bg-white rounded-none p-6 pt-20 lg:p-10 lg:pt-20 lg:rounded-2xl shadow-lg" (click)="$event.stopPropagation()">
 
-    <!-- Botón de cerrar -->
-    <button (click)="closeModal()" class="absolute top-2 right-2 text-2xl font-bold text-gray-500 hover:text-gray-900">×</button>
 
-    <h2 class="text-2xl font-semibold mb-6 text-center">Crear nueva adopción</h2>
+    <!-- Título -->
+    <h2 class="text-3xl font-bold text-center mb-3 lg:mb-7 text-gray-800">Crear nueva adopción</h2>
 
-    <form #adoptionForm="ngForm" (ngSubmit)="submitAdoption()" class="space-y-5 flex flex-col flex-grow justify-start">
-
+    <form (ngSubmit)="submitAdoption()" #adoptionForm="ngForm" class="flex flex-col gap-6 overflow-y-auto px-1 pb-32 lg:pb-0">
       <div>
-        <label>Nombre:</label>
-        <input type="text" name="name" [(ngModel)]="adoption.name" required class="input-style" />
-      </div>
+        <!-- Datos básicos -->
+        <div class="space-y-4 border-b pb-6">
+          <div class="flex flex-col">
+            <label for="name" class="form-label">Nombre</label>
+            <input id="name" type="text" name="name" class="inputFormStyle" [(ngModel)]="adoption.name" required />
+          </div>
 
-      <div>
-        <label>Especie:</label>
-        <select name="species" [(ngModel)]="adoption.species" required class="input-style">
-          <option value="DOG">Perro</option>
-          <option value="CAT">Gato</option>
-        </select>
-      </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="species" class="form-label">Especie</label>
+              <!-- <select id="species" name="species" [(ngModel)]="adoption.species" required class="inputFormStyle">
+                <option value="DOG">Perro</option>
+                <option value="CAT">Gato</option>
+              </select> -->
+              <select id="species" name="species" [(ngModel)]="adoption.species" required class="inputFormStyle">
+                @for (species of speciesOptions; track species.value) {
+                  <option [value]="species.value">{{ species.label }}</option>
+                }
+              </select>
+            </div>
 
-      <div>
-        <label>Raza:</label>
-        <input type="text" name="breed" [(ngModel)]="adoption.breed" class="input-style" />
-      </div>
+            <div>
+              <label for="gender" class="form-label">Género</label>
+              <!-- <select id="gender" name="gender" [(ngModel)]="adoption.gender" required class="inputFormStyle">
+                <option value="MALE">Macho</option>
+                <option value="FEMALE">Hembra</option>
+                <option value="UNKNOWN">Desconocido</option>
+              </select> -->
+              <select id="gender" name="gender" [(ngModel)]="adoption.gender" required class="inputFormStyle">
+                @for (gender of genders; track gender.value) {
+                  <option [value]="gender.value">{{ gender.label }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </div>
 
-      <div>
-        <label>Edad:</label>
-        <input type="number" name="age" [(ngModel)]="adoption.age" min="0" class="input-style" />
-      </div>
+        <!-- Características del animal -->
+        <div class="space-y-4 border-b pb-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="breed" class="form-label">Raza</label>
+              <input id="breed" type="text" name="breed" [(ngModel)]="adoption.breed" class="inputFormStyle" />
+            </div>
+            <div>
+              <label for="size" class="form-label">Tamaño</label>
+              <input id="size" type="text" name="size" [(ngModel)]="adoption.size" class="inputFormStyle" />
+            </div>
+          </div>
 
-      <div>
-        <label>Tamaño:</label>
-        <input type="text" name="size" [(ngModel)]="adoption.size" class="input-style" />
-      </div>
+          <div>
+            <p for="birthDate" class="form-label">Fecha de nacimiento</p>
+            <input id="birthDate" type="date" name="birthDate" [(ngModel)]="adoption.birthDate" required [max]="today" (change)="calculateAge()" class="inputFormStyle" />
 
-      <div class="flex items-center gap-4">
-        <label>
-          <input type="checkbox" name="vaccinated" [(ngModel)]="adoption.vaccinated" />
-          Vacunado
-        </label>
-        <label>
-          <input type="checkbox" name="sterilized" [(ngModel)]="adoption.sterilized" />
-          Esterilizado
-        </label>
-      </div>
+            <!-- EDAD APROX. -->
+            @if(age !== null){
+              <p class="text-sm text-gray-600 mt-1">Edad aproximada: {{ age }} años</p>
+            }
+          </div>
+        </div>
 
-      <!-- Botones -->
-      <div class="flex flex-col lg:flex-row justify-between items-center gap-4 pt-6 mt-auto border-t border-primary-dark">
-        <button type="submit" class="w-full lg:w-auto px-5 py-2 lg:px-10 lg:py-10 bg-primary-light font-bold text-texto-marron-oscuro rounded-[8px] hover:bg-primary-dark hover:text-white" [disabled]="adoptionForm.invalid">Publicar</button>
-        <button type="button" (click)="closeModal()" class="w-full lg:w-auto py-2 px-4 lg:px-10 lg:py-10 hover:bg-red-200 hover:text-red-950 bg-red-950/70 text-white font-medium rounded-[8px] transition-colors duration-200 shadow-sm">Cancelar</button>
+        <!-- Ubicación y descripción -->
+        <div class="space-y-4 border-b pb-6">
+          <div>
+            <label for="location" class="form-label">Ubicación</label>
+            <input id="location" type="text" name="location" [(ngModel)]="adoption.location" maxlength="100" class="inputFormStyle" />
+          </div>
+
+          <div>
+            <label for="description" class="form-label">Descripción</label>
+            <textarea id="description" name="description" [(ngModel)]="adoption.description" maxlength="1000" rows="4" class="inputFormStyle resize-none"></textarea>
+          </div>
+        </div>
+
+        <!-- Estado y contacto -->
+        <div class="space-y-4 border-b pb-6">
+          <div>
+            <label for="status" class="form-label">Estado</label>
+            <select id="status" name="status" [(ngModel)]="adoption.status" required class="inputFormStyle">
+              <option value="AVAILABLE">Disponible</option>
+              <option value="RESERVED">Reservado</option>
+              <option value="ADOPTED">Adoptado</option>
+              <option value="UNDER_REVIEW">En revisión</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="contactPhone" class="form-label">Teléfono de contacto</label>
+              <input id="contactPhone" type="text" name="contactPhone" [(ngModel)]="adoption.contactPhone" class="inputFormStyle" />
+            </div>
+            <div>
+              <label for="contactEmail" class="form-label">Email de contacto</label>
+              <input id="contactEmail" type="email" name="contactEmail" [(ngModel)]="adoption.contactEmail" class="inputFormStyle" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Imagen y checkboxes -->
+        <div class="space-y-4">
+          <div>
+            <label class="form-label">Imagen</label>
+            <input type="file" (change)="onFileSelected($event)"
+              class="inputFormStyle file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-dark file:text-white hover:file:bg-primary-dark"/>
+          </div>
+
+          <div class="flex flex-wrap gap-6">
+            <div class="checkbox-label">
+              <input type="checkbox" name="vaccinated" [(ngModel)]="adoption.vaccinated" class="accent-primary-light" />
+              Vacunado
+            </div>
+            <div class="checkbox-label">
+              <input type="checkbox" name="sterilized" [(ngModel)]="adoption.sterilized" class="accent-primary-light" />
+              Esterilizado
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Botones  -->
+        <div class="flex flex-col lg:flex-row justify-between items-center gap-6 pt-8 mt-auto border-t border-primary-dark">
+          <button type="submit" class="w-full mx-2 py-2 bg-primary-dark/20 text-black font-semibold rounded-md hover:bg-primary-dark hover:text-white disabled:opacity-50" [disabled]="adoptionForm.invalid">Publicar</button>
+          <button type="button" class="w-full mx-2 py-2 bg-red-950/70 text-white rounded-md hover:bg-red-950" (click)="closeModal()">Cancelar</button>
+        </div>
       </div>
 
     </form>

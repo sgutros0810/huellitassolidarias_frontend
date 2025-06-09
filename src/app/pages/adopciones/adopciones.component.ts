@@ -6,7 +6,7 @@ import { AdoptionFormComponent } from "./components/adoption-form/adoption-form.
 
 @Component({
   selector: 'app-adopciones',
-  imports: [NavbarComponent, CardsComponent, FilterComponent, AdoptionFormComponent],
+  imports: [ CardsComponent, FilterComponent, AdoptionFormComponent],
   templateUrl: './adopciones.component.html',
   styleUrl: './adopciones.component.css'
 })
@@ -14,21 +14,15 @@ export class AdopcionesComponent {
 
   showCreateModal = false;
 
+
   openCreateModal() {
+    document.body.classList.add('overflow-hidden');
     this.showCreateModal = true;
   }
 
   closeModal() {
+    document.body.classList.remove('overflow-hidden');
     this.showCreateModal = false;
   }
 
 }
-
-
-// this.adoptionService.createAdoption(formValue).then(res => {
-//   console.log(res);
-//   alert('Adopción creada');
-// }).catch(err => {
-//   console.error(err);
-//   alert('Error al crear adopción');
-// });

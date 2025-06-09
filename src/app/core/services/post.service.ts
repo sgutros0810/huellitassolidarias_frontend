@@ -68,22 +68,9 @@ export class PostService {
   }
 
   deletePostLocal(postId: number): void{
-    console.log(this.PostModel)
+    // console.log(this.PostModel)
     this.PostModel = this.PostModel.filter(post => post.id !== postId)
     this.listPostBS.next(this.PostModel);
-    console.log(this.PostModel)
-
+    // console.log(this.PostModel)
   }
-
-  // // Obtener comentarios de un post
-  // getComments(postId: number): Observable<any[]> {
-  //   return this.http.get<any[]>(`${this.apiUrl}/${postId}/comments`);
-  // }
-
-  // // Agregar un comentario a un post
-  // addComment(postId: number, text: string): Observable<any> {
-  //   return this.http.post(`${this.apiUrl}/${postId}/comments`, { text }, {
-  //     headers: this.getAuthHeaders()
-  //   });
-  // }
 }

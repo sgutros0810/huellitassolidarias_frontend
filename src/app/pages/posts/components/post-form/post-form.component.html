@@ -12,12 +12,8 @@
 
       <div class="mt-4">
         <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-        <select
-          [(ngModel)]="post.category"
-          name="category"
-          id="category"
-          required
-          class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm shadow-sm focus:border-primary-dark focus:ring focus:ring-primary-light focus:ring-opacity-50">
+        <select [(ngModel)]="post.category" name="category" id="category" required
+        class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm shadow-sm focus:border-primary-dark focus:ring focus:ring-primary-light focus:ring-opacity-50">
             <option value="ADOPTION" selected>Adopción</option>
             <option value="ADVICE">Consejo</option>
             <option value="RESCUE">Rescate</option>
@@ -37,13 +33,14 @@
 
       <div>
         <p class="mb-5">Imagen:</p>
-        <input type="file" (change)="onFileSelected($event)" accept="image/*" class="w-full text-sm text-texto-marron-claro file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-light file:text-texto-marron-oscuro hover:file:bg-primary-dark hover:file:text-texto-marron-claro mt-2" required/>
+        <input type="file" (change)="onFileSelected($event)" accept="image/*"
+        class="w-full text-sm text-texto-marron-oscuro file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-dark file:text-texto-marron-oscuro hover:file:bg-primary-dark hover:file:text-texto-marron-claro mt-2" required/>
       </div>
 
 
       <!-- Botones -->
       <div class="flex flex-col lg:flex-row justify-between items-center gap-4 pt-6 mt-auto border-t border-primary-dark">
-        <button type="submit" class="w-full lg:w-auto px-5 py-2 lg:px-10 lg:py-10 bg-primary-light font-bold text-texto-marron-oscuro rounded-[8px] hover:bg-primary-dark hover:text-white" [disabled]="postForm.invalid">Publicar</button>
+        <button type="submit" class=" lg:w-auto px-5 py-2 lg:px-10 lg:py-10 bg-primary-light font-bold text-texto-marron-oscuro rounded-[8px] hover:bg-primary-dark hover:text-white" [disabled]="postForm.invalid">Publicar</button>
         <button type="close"  class="w-full lg:w-auto py-2 px-4 lg:px-10 lg:py-10 hover:bg-red-200 hover:text-red-950 bg-red-950/70 text-white font-medium rounded-[8px] transition-colors duration-200 shadow-sm" (click)="close()">Cancelar</button>
       </div>
 

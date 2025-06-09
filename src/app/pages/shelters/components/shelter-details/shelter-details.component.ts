@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
 import { ShelterDetailModel } from '../../../../core/modals/shelter-detail.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { GoogleMapsModule } from '@angular/google-maps';
 import { AdopcionesComponent } from "../../../adopciones/adopciones.component";
 
 @Component({

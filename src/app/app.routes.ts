@@ -10,6 +10,7 @@ import { MyprofileComponent } from './pages/myprofile/myprofile.component';
 import { PostsComponent } from './pages/posts/posts.component';
 import { SheltersComponent } from './pages/shelters/shelters.component';
 import { ShelterDetailsComponent } from './pages/shelters/components/shelter-details/shelter-details.component';
+import { AdoptionDetailsComponent } from './pages/adopciones/components/adoption-details/adoption-details.component';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -17,11 +18,12 @@ export const routes: Routes = [
   { path: 'loginshelter', component: LoginShelterComponent },
   { path: 'registeruser', component: RegisterUserComponent },
   { path: 'registershelter', component: RegisterShelterComponent },
-  { path: 'adopciones', component: AdopcionesComponent },
+  { path: 'adoptions', component: AdopcionesComponent },
   { path: 'reportes', component: ReportesComponent },
   { path: 'publicaciones', component: PostsComponent },
   { path: 'shelters', component: SheltersComponent },
   { path: 'myprofile', component: MyprofileComponent },
   { path: 'shelters/details/:id', component: ShelterDetailsComponent, title:"Detalles del refugio" },
+  { path: 'adoptions/details/:id', component: AdoptionDetailsComponent, title:"Detalles del animal" },
   { path: '**', redirectTo: '' }
 ];

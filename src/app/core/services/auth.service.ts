@@ -44,7 +44,7 @@ export class AuthService {
   handleAuthSuccess(token:string) {
     localStorage.setItem('authToken', token);
     this.token.set(token);
-    this.router.navigate(['/adopciones']);
+    this.router.navigate(['/adoptions']);
   }
 
   isUserLogged() {

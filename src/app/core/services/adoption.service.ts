@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { AdoptionModel } from '../modals/adoption.model';
+import { AdoptionDetailModel } from '../modals/adoption-detail.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,12 +34,16 @@ export class AdoptionService {
   }
 
 
-  async getAllAdoptions(page: number = 0, size: number = 10): Promise<void> {
+  async getAdoptions(page: number = 0, size: number = 10): Promise<void> {
     const params = new HttpParams().set('page', page).set('size', size);
     this.AdoptionModel = await firstValueFrom(
       this.http.get<AdoptionModel[]>(this.apiUrl, { params })
     );
     this.listAdoptionBS.next(this.AdoptionModel);
+  }
+
+  getAdoptionById(adoptionId: number): Observable<AdoptionDetailModel> {
+    return this.http.get<AdoptionDetailModel>(`${environment.apiUrl}/adoptions/details/${adoptionId}`);
   }
 
 
