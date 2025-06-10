@@ -22,6 +22,7 @@ export class AdoptionService {
   listAdoptionShelterBS: BehaviorSubject<Array<AdoptionModel>> = new BehaviorSubject<Array<AdoptionModel>>([]);
   listAdoptionShelterObs$ = this.listAdoptionShelterBS.asObservable();
 
+
   constructor() { }
 
   private getAuthHeaders(): HttpHeaders {
@@ -71,4 +72,5 @@ export class AdoptionService {
     );
     this.listAdoptionShelterBS.next(response.content);
   }
+
 }

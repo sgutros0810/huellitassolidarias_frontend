@@ -121,12 +121,12 @@
           </button>
         </div>
 
-        <div class="p-4 sm:p-6">
+        <div class="p-4 sm:p-6 h-screen">
           @if(activeTab==='publicaciones'){
             <app-my-posts-list></app-my-posts-list>
           }
           @if(activeTab==='adopciones'){
-            <!-- <app-my-adoptions-list></app-my-adoptions-list> -->
+            <app-my-adoptions-list [userId]="profile.id"></app-my-adoptions-list>
           }
           @if(activeTab==='reportes'){
             <!-- <app-my-reports-list></app-my-reports-list> -->

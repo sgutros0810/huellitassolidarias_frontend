@@ -5,6 +5,8 @@ import { BehaviorSubject, catchError, firstValueFrom, Observable, throwError } f
 import { UserProfileModel } from '../modals/user.model';
 import { ShelterModel } from '../modals/shelter.model';
 import { ShelterDetailModel } from '../modals/shelter-detail.model';
+import { PageResponse } from '../modals/page-response.model';
+import { AdoptionModel } from '../modals/adoption.model';
 
 
 @Injectable({
@@ -20,6 +22,10 @@ export class UserService {
   ShelterModel: Array<ShelterModel> = [];
   listSheltersBS: BehaviorSubject<Array<ShelterModel>> = new BehaviorSubject<Array<ShelterModel>>([]);
   listSheltersObs$ = this.listSheltersBS.asObservable();
+
+  AdoptionModel: Array<AdoptionModel> = [];
+  listProfileAdoptionBS: BehaviorSubject<Array<AdoptionModel>> = new BehaviorSubject<Array<AdoptionModel>>([]);
+  listProfileAdoptionObs$ = this.listProfileAdoptionBS.asObservable();
 
 
   constructor(private zone: NgZone) {}
@@ -107,5 +113,31 @@ export class UserService {
   getShelterById(shelterId: number): Observable<ShelterDetailModel> {
     return this.http.get<ShelterDetailModel>(`${environment.apiUrl}/shelters/details/${shelterId}`);
   }
+
+  // //Adopciones de un usuario /myprofile/adoptions
+  // async getAdoptionByUserId(userId: number, page: number = 0, size: number = 10): Promise<void> {
+  //   const response = await firstValueFrom(
+  //     this.http.get<PageResponse<AdoptionModel>>(
+  //       `${this.apiUrl}/myprofile/adoptions/${userId}?page=${page}&size=${size}`
+  //     )
+  //   );
+  //   this.listProfileAdoptionBS.next(response.content);
+  // }
+
+
+  async loadAdoptionByUserId(userId: number, page: number = 0, size: number = 10): Promise<void> {
+    const response = await firstValueFrom(
+      this.http.get<PageResponse<AdoptionModel>>(
+        `${this.apiUrl}/myprofile/adoptions/${userId}?page=${page}&size=${size}`,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')!}`
+          }
+        }
+      )
+    );
+    this.listProfileAdoptionBS.next(response.content);
+  }
+
+
 
 }

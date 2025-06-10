@@ -8,7 +8,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-center justify-center w-full">
           @for(adoption of adoptionList | async; track adoption.id) {
 
-            <div class="bg-white w-auto h-auto rounded-[16px] shadow-xl">
+            <div class="bg-white w-auto h-full rounded-[16px] shadow-xl">
               <!-- Imagen -->
               <div class="flex justify-center mt-0 ml-0 mr-0">
                 <img [src]="'http://localhost:8080' + adoption.imageUrl" alt="tortuga" class="rounded-t-[16px] w-full max-h-[180px] object-cover items-center">

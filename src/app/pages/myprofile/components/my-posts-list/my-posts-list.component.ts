@@ -8,7 +8,7 @@ import { UserService } from '../../../../core/services/user.service';
 
 @Component({
   selector: 'app-my-posts-list',
-  imports: [CommonModule, FormsModule],
+  imports: [ CommonModule, FormsModule ],
   templateUrl: './my-posts-list.component.html',
   styleUrl: './my-posts-list.component.css'
 })

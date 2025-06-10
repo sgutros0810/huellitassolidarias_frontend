@@ -7,11 +7,12 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PostService } from '../../core/services/post.service';
 import { PostModel } from '../../core/modals/post.model';
+import { MyAdoptionsListComponent } from "./components/my-adoptions-list/my-adoptions-list.component";
 
 @Component({
   standalone: true,
   selector: 'app-myprofile',
-  imports: [CommonModule, FormsModule, MyPostsListComponent],
+  imports: [CommonModule, FormsModule, MyPostsListComponent, MyAdoptionsListComponent],
   templateUrl: './myprofile.component.html',
 })
 export class MyprofileComponent implements OnInit {
