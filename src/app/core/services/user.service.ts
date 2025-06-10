@@ -125,7 +125,7 @@ export class UserService {
   // }
 
 
-  async loadAdoptionByUserId(userId: number, page: number = 0, size: number = 10): Promise<void> {
+  async getAdoptionByUserId(userId: number, page: number = 0, size: number = 10): Promise<void> {
     const response = await firstValueFrom(
       this.http.get<PageResponse<AdoptionModel>>(
         `${this.apiUrl}/myprofile/adoptions/${userId}?page=${page}&size=${size}`,{

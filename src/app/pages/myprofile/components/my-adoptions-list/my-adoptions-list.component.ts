@@ -23,7 +23,7 @@ export class MyAdoptionsListComponent {
 
   ngOnInit(): void {
     this.listProfileAdoption = this.userService.listProfileAdoptionObs$;
-    this.userService.loadAdoptionByUserId(this.userId);
+    this.userService.getAdoptionByUserId(this.userId);
   }
 
   // Calcula la edad del animal
