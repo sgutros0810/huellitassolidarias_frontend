@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { PostModel } from '../../../../core/modals/post.model';
@@ -17,12 +17,12 @@ export class MyPostsListComponent implements OnInit{
 
   myPostList!: Observable<PostModel[]>;
   posts: PostModel[] = [];
+  @Input() myPost: PostModel[] =  [];
 
   constructor(private postService: PostService, private userService: UserService) {}
 
   ngOnInit(): void {
-    this.myPostList = this.postService.listPostObs$;
-    this.postService.getPosts(0, 10);
+    this.myPostList = this.postService.getMyPosts(0, 10);
   }
 
   deletePost(postId: number){

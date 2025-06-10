@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UserService } from '../../core/services/user.service';
 import { CommonModule } from '@angular/common';
 import { UserProfileModel } from '../../core/modals/user.model';
 import { MyPostsListComponent } from "./components/my-posts-list/my-posts-list.component";
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { PostService } from '../../core/services/post.service';
+import { PostModel } from '../../core/modals/post.model';
 
 @Component({
   standalone: true,
@@ -18,8 +20,11 @@ export class MyprofileComponent implements OnInit {
   errorMessage: string | null = null;
   isEditing = false;
   selectedImage: File | null = null;
+  activeTab: 'publicaciones' | 'adopciones' | 'reportes' = 'publicaciones';
 
-  constructor(private userService: UserService, private router: Router){
+  myPosts: PostModel[] = [];
+
+  constructor(private userService: UserService, private postService: PostService, private router: Router){
   }
 
   ngOnInit(): void {
@@ -34,7 +39,21 @@ export class MyprofileComponent implements OnInit {
         this.errorMessage = 'No se pudo cargar el perfil. Inténtalo de nuevo más tarde.';
       }
     });
+
+    //Mis posts creados
+    this.postService.getMyPosts().subscribe({
+      next: (posts) => {
+        this.myPosts = posts;
+        this.errorMessage = null;
+      },
+      error: (err) => {
+        console.error('Error cargando posts', err);
+        this.errorMessage = 'No se pudo cargar tus posts. Inténtalo de nuevo más tarde.';
+      }
+    })
   }
+
+
 
   editProfile(): void {
     this.isEditing = true;
@@ -97,5 +116,9 @@ export class MyprofileComponent implements OnInit {
       next: (data) => this.profile = data,
       error: (err) => console.error('Error al recargar perfil', err)
     });
+  }
+
+  setActiveTab(tab: 'publicaciones' | 'adopciones' | 'reportes') {
+    this.activeTab = tab;
   }
 }

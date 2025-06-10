@@ -32,6 +32,7 @@ export class PostsListComponent implements OnInit {
     this.commentPostId = this.commentPostId === postId ? null : postId; // toggle
   }
 
+  // Formato de fecha y hora del post
   formatPostDate(dateStr: string | Date): string {
     const date = new Date(dateStr);
     const now = new Date();

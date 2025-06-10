@@ -1,4 +1,4 @@
-<section class="mt-10 mx-0 lg:mx-8 space-y-5 ">
+<section class="mt-5 mx-0 lg:mx-8 space-y-5 ">
 
   @if(myPostList | async;  as posts) {
 
@@ -7,7 +7,7 @@
     } @else {
       @for(post of myPostList | async ; track post.id) {
 
-        <div class="flex h-[180px] p-2 gap-2 md:gap-4 lg:gap-4 shadow-2xl bg-white rounded-xl">
+        <div class="flex h-[180px] p-2 gap-2 md:gap-4 lg:gap-4 shadow-lg bg-white rounded-xl">
 
           <!-- Si tiene imagen -->
           @if(post.imageUrl) {

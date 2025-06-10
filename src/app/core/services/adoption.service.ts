@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { AdoptionModel } from '../modals/adoption.model';
 import { AdoptionDetailModel } from '../modals/adoption-detail.model';
+import { PageResponse } from '../modals/page-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +12,15 @@ import { AdoptionDetailModel } from '../modals/adoption-detail.model';
 export class AdoptionService {
 
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl + '';
+  private apiUrl = environment.apiUrl;
 
   AdoptionModel: Array<AdoptionModel> = [];
   listAdoptionBS: BehaviorSubject<Array<AdoptionModel>> = new BehaviorSubject<Array<AdoptionModel>>([]);
   listAdoptionObs$ = this.listAdoptionBS.asObservable();
+
+
+  listAdoptionShelterBS: BehaviorSubject<Array<AdoptionModel>> = new BehaviorSubject<Array<AdoptionModel>>([]);
+  listAdoptionShelterObs$ = this.listAdoptionShelterBS.asObservable();
 
   constructor() { }
 
@@ -28,7 +33,7 @@ export class AdoptionService {
 
   //Crear adopcion
   async createAdoption(formData: FormData) {
-   return  await firstValueFrom( this.http.post(this.apiUrl, formData, {
+   return  await firstValueFrom( this.http.post(`${environment.apiUrl}/adoptions`, formData, {
       headers: this.getAuthHeaders(), responseType: 'text'
     }));
   }
@@ -37,7 +42,7 @@ export class AdoptionService {
   async getAdoptions(page: number = 0, size: number = 10): Promise<void> {
     const params = new HttpParams().set('page', page).set('size', size);
     this.AdoptionModel = await firstValueFrom(
-      this.http.get<AdoptionModel[]>(this.apiUrl, { params })
+      this.http.get<AdoptionModel[]>(`${environment.apiUrl}/adoptions?page=${page}&size=${size}`, { params })
     );
     this.listAdoptionBS.next(this.AdoptionModel);
   }
@@ -47,11 +52,23 @@ export class AdoptionService {
     return this.http.get<AdoptionDetailModel>(`${environment.apiUrl}/adoptions/details/${adoptionId}`);
   }
 
-  //Adopciones de un refugio
-  getAdoptionByShelterId(shelterId: number, page: number = 0, size: number = 10): Observable<AdoptionDetailModel[]> {
-    return this.http.get<AdoptionDetailModel[]>(`${environment.apiUrl}/shelter/adoptions/${shelterId}?page=${page}&size=${size}`);
+  //Adopciones de un refugio /shelters/details/2/adoptions
+  async getAdoptionByShelterId(shelterId: number, page: number = 0, size: number = 10): Promise<void> {
+    const response = await firstValueFrom(
+      this.http.get<PageResponse<AdoptionModel>>(
+        `${this.apiUrl}/shelters/details/${shelterId}/adoptions?page=${page}&size=${size}`
+      )
+    );
+    this.listAdoptionBS.next(response.content);
   }
 
 
-
+  async loadAdoptionByShelterId(shelterId: number, page: number = 0, size: number = 10): Promise<void> {
+    const response = await firstValueFrom(
+      this.http.get<PageResponse<AdoptionModel>>(
+        `${this.apiUrl}/shelters/details/${shelterId}/adoptions?page=${page}&size=${size}`
+      )
+    );
+    this.listAdoptionShelterBS.next(response.content);
+  }
 }

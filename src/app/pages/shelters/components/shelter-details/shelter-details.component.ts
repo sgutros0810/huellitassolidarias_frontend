@@ -1,19 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, inject, Input, signal } from '@angular/core';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
 import { ShelterDetailModel } from '../../../../core/modals/shelter-detail.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AdopcionesComponent } from "../../../adopciones/adopciones.component";
+import { ShelterAdoptionsListComponent } from "../shelter-adoptions-list/shelter-adoptions-list.component";
 
 @Component({
   selector: 'app-shelter-details',
-  imports: [CommonModule, AdopcionesComponent],
+  imports: [CommonModule, AdopcionesComponent, RouterModule, ShelterAdoptionsListComponent],
   templateUrl: './shelter-details.component.html',
   styleUrl: './shelter-details.component.css'
 })
 export class ShelterDetailsComponent {
 
+ 
   private route = inject(ActivatedRoute);
   private userService = inject(UserService);
   private sanitizer = inject(DomSanitizer);
