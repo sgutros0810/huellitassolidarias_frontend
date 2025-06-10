@@ -11,7 +11,7 @@ import { AdoptionDetailModel } from '../modals/adoption-detail.model';
 export class AdoptionService {
 
   private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl + '/adoptions';
+  private apiUrl = environment.apiUrl + '';
 
   AdoptionModel: Array<AdoptionModel> = [];
   listAdoptionBS: BehaviorSubject<Array<AdoptionModel>> = new BehaviorSubject<Array<AdoptionModel>>([]);
@@ -42,9 +42,16 @@ export class AdoptionService {
     this.listAdoptionBS.next(this.AdoptionModel);
   }
 
+  //Adopciones de un animal
   getAdoptionById(adoptionId: number): Observable<AdoptionDetailModel> {
     return this.http.get<AdoptionDetailModel>(`${environment.apiUrl}/adoptions/details/${adoptionId}`);
   }
+
+  //Adopciones de un refugio
+  getAdoptionByShelterId(shelterId: number, page: number = 0, size: number = 10): Observable<AdoptionDetailModel[]> {
+    return this.http.get<AdoptionDetailModel[]>(`${environment.apiUrl}/shelter/adoptions/${shelterId}?page=${page}&size=${size}`);
+  }
+
 
 
 }

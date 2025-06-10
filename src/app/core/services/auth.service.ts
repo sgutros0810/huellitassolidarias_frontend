@@ -20,8 +20,8 @@ export class AuthService {
     .pipe(tap(response => this.handleAuthSuccess(response.token)));
   }
 
-  loginShelter(identificacionFiscal:string, password:string){
-        return this.http.post<{token:string}>(`${environment.apiUrl}/auth/loginshelter`, {identificacionFiscal, password})
+  loginShelter(identification:string, password:string){
+        return this.http.post<{token:string}>(`${environment.apiUrl}/auth/loginshelter`, {identification, password})
         .pipe(tap(response => this.handleAuthSuccess(response.token)));
   }
 
