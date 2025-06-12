@@ -6,10 +6,11 @@ import { AdoptionModel } from '../../../../core/modals/adoption.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { UpdateAdoptionModalComponent } from "../update-adoption-modal/update-adoption-modal.component";
 
 @Component({
   selector: 'app-my-adoptions-list',
-  imports: [ CommonModule, FormsModule, RouterModule ],
+  imports: [CommonModule, FormsModule, RouterModule, UpdateAdoptionModalComponent],
   templateUrl: './my-adoptions-list.component.html',
   styleUrl: './my-adoptions-list.component.css'
 })
@@ -18,6 +19,9 @@ export class MyAdoptionsListComponent {
   listProfileAdoption!: Observable<AdoptionModel[]>;
   adoptions: AdoptionModel[] = [];
   @Input() userId!: number;
+  
+  selectedAdoptionId: number | null = null;
+  showEditModal = false;
 
 
   constructor(private adoptionService: AdoptionService, private userService: UserService) {}
@@ -62,6 +66,21 @@ export class MyAdoptionsListComponent {
         this.userService.getAdoptionByUser()
       }
     });
+  }
+
+  openEditModal(adoptionId: number): void {
+    document.body.classList.add('overflow-hidden');
+    this.selectedAdoptionId = adoptionId;
+    this.showEditModal = true;
+  }
+
+  closeModal() {
+    document.body.classList.remove('overflow-hidden');
+    this.showEditModal = false;
+    this.selectedAdoptionId = null;
+
+    // refresca la lista para ver los cambios
+    this.userService.getAdoptionByUser(0, 10);
   }
 
   // updateAdoption(adoptionId:number): void{

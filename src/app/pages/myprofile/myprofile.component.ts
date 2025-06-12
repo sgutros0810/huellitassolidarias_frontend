@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { PostService } from '../../core/services/post.service';
 import { PostModel } from '../../core/modals/post.model';
 import { MyAdoptionsListComponent } from "./components/my-adoptions-list/my-adoptions-list.component";
+import { UpdateAdoptionModalComponent } from "./components/update-adoption-modal/update-adoption-modal.component";
 
 @Component({
   standalone: true,
@@ -24,6 +25,7 @@ export class MyprofileComponent implements OnInit {
   activeTab: 'publicaciones' | 'adopciones' | 'reportes' = 'publicaciones';
 
   myPosts: PostModel[] = [];
+
 
   constructor(private userService: UserService, private postService: PostService, private router: Router){
   }
@@ -122,4 +124,5 @@ export class MyprofileComponent implements OnInit {
   setActiveTab(tab: 'publicaciones' | 'adopciones' | 'reportes') {
     this.activeTab = tab;
   }
+
 }
