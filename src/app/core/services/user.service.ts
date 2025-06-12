@@ -125,10 +125,10 @@ export class UserService {
   // }
 
 
-  async getAdoptionByUserId(userId: number, page: number = 0, size: number = 10): Promise<void> {
+  async getAdoptionByUser( page: number = 0, size: number = 10): Promise<void> {
     const response = await firstValueFrom(
       this.http.get<PageResponse<AdoptionModel>>(
-        `${this.apiUrl}/myprofile/adoptions/${userId}?page=${page}&size=${size}`,{
+        `${this.apiUrl}/myprofile/adoptions?page=${page}&size=${size}`,{
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')!}`
           }

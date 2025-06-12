@@ -12,6 +12,7 @@ import { SheltersComponent } from './pages/shelters/shelters.component';
 import { ShelterDetailsComponent } from './pages/shelters/components/shelter-details/shelter-details.component';
 import { AdoptionDetailsComponent } from './pages/adopciones/components/adoption-details/adoption-details.component';
 
+
 export const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'loginuser', component: LoginUserComponent },

@@ -73,4 +73,20 @@ export class AdoptionService {
     this.listAdoptionShelterBS.next(response.content);
   }
 
+  deleteAdoption(adoptionId: number) {
+    return this.http.delete(`${this.apiUrl}/adoptions/${adoptionId}`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text' as const
+    });
+  }
+
+  async updateAdoption(adoptionId: number, formData: FormData) : Promise<void> {
+    await firstValueFrom(
+      this.http.put(`${this.apiUrl}/adoptions/${adoptionId}`, formData, {
+        headers: this.getAuthHeaders(),
+        responseType: 'text' as const
+      })
+    );
+  }
+
 }

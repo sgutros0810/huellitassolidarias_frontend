@@ -1,19 +1,20 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormsModule  } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators  } from '@angular/forms';
 import { AdoptionService } from '../../../../core/services/adoption.service';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-adoption-form',
-  imports: [ AsyncPipe, FormsModule  ],
+  imports: [ AsyncPipe, FormsModule, ReactiveFormsModule ],
   templateUrl: './adoption-form.component.html',
   styleUrl: './adoption-form.component.css'
 })
 export class AdoptionFormComponent implements OnInit {
   @Output() closed = new EventEmitter<void>();
-
+  form!: FormGroup;
   today: string = '';
   age: number | null = null;
+  selectedFile: File | null = null;
 
   adoption = {
     name: '',
@@ -94,102 +95,90 @@ export class AdoptionFormComponent implements OnInit {
   ];
 
 
-  selectedFile: File | null = null;
 
-  constructor(private adoptionService: AdoptionService) {}
+
+  constructor(private adoptionService: AdoptionService,  private formBuilder: FormBuilder,) {}
 
   ngOnInit() {
-    this.today = new Date().toISOString().split('T')[0];
+    // this.today = new Date().toISOString().split('T')[0];
+    this.form = this.formBuilder.group({
+      name:           ['', Validators.required],
+      species:        ['', Validators.required],
+      gender:         ['', Validators.required],
+      breed:          [''],
+      size:           [''],
+      birthDate:      ['', [Validators.required, this.maxDateValidator]],
+      description:    ['', Validators.maxLength(1000)],
+      location:       ['', Validators.maxLength(100)],
+      vaccinated:     [false],
+      sterilized:     [false],
+      status:         ['AVAILABLE', Validators.required],
+      contactPhone:   ['', Validators.pattern(/^[\d+\-\s]{7,15}$/)],
+      contactEmail:   ['', Validators.email],
+      forAdoption:    [true]
+    });
+
+    // recalcula la edad cuando cambie la fecha
+    this.form.get('birthDate')!.valueChanges
+      .subscribe(() => this.calculateAge());
   }
 
-  async submitAdoption() {
-    if (!this.adoption.name || !this.adoption.species || !this.adoption.gender) return;
-
-    const formData = new FormData();
-    formData.append('name', this.adoption.name);
-    formData.append('species', this.adoption.species);
-    formData.append('gender', this.adoption.gender);
-    formData.append('breed', this.adoption.breed);
-    formData.append('birthDate', this.adoption.birthDate);
-    formData.append('size', this.adoption.size);
-    formData.append('description', this.adoption.description);
-    formData.append('location', this.adoption.location);
-    formData.append('vaccinated', this.adoption.vaccinated.toString());
-    formData.append('sterilized', this.adoption.sterilized.toString());
-    formData.append('status', this.adoption.status);
-    formData.append('contactPhone', this.adoption.contactPhone);
-    formData.append('contactEmail', this.adoption.contactEmail);
-    formData.append('forAdoption', this.adoption.forAdoption.toString());
+  //Valida que la fecha no sea posterior a hoy
+  private maxDateValidator(control: AbstractControl): ValidationErrors | null {
+    const v = control.value;
+    if (!v) return null;
+    return new Date(v) > new Date() ? { futureDate: true } : null;
+  }
 
 
-    if (this.selectedFile) {
-      formData.append('image', this.selectedFile);
-    } else {
-      console.log("Selecciona una imagen");
+  calculateAge(): void {
+    const bd = this.form.get('birthDate')!.value;
+    if (!bd) {
+      this.age = null;
+      return;
+    }
+    const birth = new Date(bd);
+    const today = new Date();
+    let a = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+      a--;
+    }
+    this.age = a;
+  }
+
+  onFileSelected(ev: Event): void {
+    const input = ev.target as HTMLInputElement;
+    this.selectedFile = input.files && input.files[0] || null;
+  }
+
+  async submitAdoption(): Promise<void> {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
     }
 
+    const data = this.form.value;
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, val]) => {
+      formData.append(key, String(val));
+    });
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
 
     try {
       await this.adoptionService.createAdoption(formData);
       await this.adoptionService.getAdoptions(0, 10);
-
-      //Reseta los campos del formulario
-      this.resetForm();
-
       this.closeModal();
-
-    } catch (error) {
-      console.error(error)
+    } catch (err) {
+      console.error(err);
+      alert('Error al publicar la adopción');
     }
   }
 
-  closeModal() {
+  closeModal(): void {
     this.closed.emit();
   }
-
-  onFileSelected(event: Event) {
-  const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-    }
-  }
-
-  //Calcular edad
-  calculateAge() {
-    if (this.adoption.birthDate) {
-      const birthDate = new Date(this.adoption.birthDate);
-      const today = new Date();
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-      this.age = age;
-    } else {
-      this.age = null;
-    }
-  }
-
-  resetForm() {
-    this.adoption = {
-      name: '',
-      species: '',
-      gender: '',
-      breed: '',
-      birthDate: '',
-      size: '',
-      description: '',
-      location: '',
-      vaccinated: false,
-      sterilized: false,
-      status: 'AVAILABLE',
-      contactPhone: '',
-      contactEmail: '',
-      forAdoption: true
-    };
-    this.selectedFile = null;
-    this.age = null;
-  }
-
 
 }

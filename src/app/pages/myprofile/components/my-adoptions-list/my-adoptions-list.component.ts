@@ -19,11 +19,12 @@ export class MyAdoptionsListComponent {
   adoptions: AdoptionModel[] = [];
   @Input() userId!: number;
 
+
   constructor(private adoptionService: AdoptionService, private userService: UserService) {}
 
   ngOnInit(): void {
     this.listProfileAdoption = this.userService.listProfileAdoptionObs$;
-    this.userService.getAdoptionByUserId(this.userId);
+    this.userService.getAdoptionByUser(0, 10);
   }
 
   // Calcula la edad del animal
@@ -54,4 +55,16 @@ export class MyAdoptionsListComponent {
 
     return ageStr || '0 días';
   }
+
+  deleteAdoption(adoptionId: number): void{
+    this.adoptionService.deleteAdoption(adoptionId).subscribe({
+      next: () => {
+        this.userService.getAdoptionByUser()
+      }
+    });
+  }
+
+  // updateAdoption(adoptionId:number): void{
+  //   this.adoptionService.updateAdoption(adoptionId)
+  // }
 }

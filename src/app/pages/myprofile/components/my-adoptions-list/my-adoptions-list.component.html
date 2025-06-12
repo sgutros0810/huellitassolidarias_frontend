@@ -1,43 +1,40 @@
-<section class="mt-5 mx-0 lg:mx-8 space-y-5 ">
-
- @if(listProfileAdoption | async;  as a) {
-
-   @if(a.length < 1) {
-      <p class="text-center text-gray-500 mt-10 h-full">No tienes adnimales en adopción</p>
+<section class="mt-5 mx-4">
+  @if(listProfileAdoption | async; as adoptions) {
+    @if(adoptions.length < 1) {
+      <p class="text-center text-gray-500 mt-10">No tienes animales en adopción</p>
     } @else {
-      @for(adoption of listProfileAdoption | async ; track adoption.id) {
-        <div class="flex h-[180px] p-2 gap-2 md:gap-4 lg:gap-4 shadow-lg bg-white rounded-xl">
-        <div class="flex justify-center mt-0 ml-0 mr-0">
-                <img [src]="'http://localhost:8080' + adoption.imageUrl" alt="tortuga" class="rounded-t-[16px] w-full max-h-[180px] object-cover items-center">
+      <div class="flex flex-wrap -mx-2">
+        @for(adoption of adoptions; track adoption.id) {
+          <div class="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
+            <div class="bg-white rounded-xl shadow p-4 flex flex-col h-full">
+              <div class="h-40 w-full overflow-hidden mb-3">
+                <img [src]="'http://localhost:8080' + adoption.imageUrl" alt="{{ adoption.name }}" class="w-full h-full object-contain rounded-lg">
               </div>
-
-              <!-- Nombre y datos -->
-              <div class="mt-5 ml-6 mr-6">
-                <h3 class="font-poppins font-bold text-[20px] text-center uppercase text-texto-marron-ligth mb-3 text-texto-gris-oscuro">{{ adoption.name}}</h3>
-                <ul class="font-poppins text-[16px] normal-case text-texto-gris-claro space-y-2">
-                  <li><strong>Edad:</strong><i class="lowercase"> {{ calculateAge(adoption.birthDate) }}</i></li>
-                  <li><strong>Animal:</strong><i class="lowercase"> {{ adoption.species }}</i></li>
-                  <li><strong>Género:</strong><i class="lowercase"> {{ adoption.gender }}</i></li>
-                  <li><strong>Tamaño:</strong><i class="lowercase"> {{ adoption.size }}</i></li>
-                  <li><strong>Ubicación:</strong><i class="lowercase"> {{ adoption.location }}</i></li>
-                </ul>
+              <h3 class="font-poppins font-bold text-lg uppercase text-texto-marron-ligth mb-2 text-center">{{ adoption.name }}</h3>
+              <ul class="text-sm text-gray-600 mb-3 flex-1">
+                <li><strong>Edad:</strong> <span class="italic lowercase">{{ calculateAge(adoption.birthDate) }}</span></li>
+                <li><strong>Animal:</strong> <span class="italic lowercase">{{ adoption.species }}</span></li>
+                <li><strong>Género:</strong> <span class="italic lowercase">{{ adoption.gender }}</span></li>
+                <li><strong>Tamaño:</strong> <span class="italic lowercase">{{ adoption.size }}</span></li>
+                <li><strong>Ubicación:</strong> <span class="italic lowercase">{{ adoption.location }}</span></li>
+              </ul>
+              <div class="mt-auto space-y-2">
+                <!-- <a [routerLink]="['/adoptions/details', adoption.id]">
+                  <button class="w-full py-2 bg-btn-primary-ligth text-white rounded hover:bg-btn-primary-dark transition">
+                    Adoptar <i class="fas fa-paw ml-1"></i>
+                  </button>
+                </a> -->
+                <div class="flex justify-between">
+                  <button class="flex-1 py-2 mr-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition">Editar</button>
+                  <button class="flex-1 py-2 ml-1 bg-red-500 text-white rounded hover:bg-red-600 transition" (click)="deleteAdoption(adoption.id)">Eliminar</button>
+                </div>
               </div>
-
-              <!-- Botón Adoptar -->
-              <div class="mt-4 ml-5 mr-5 mx-5 mb-4">
-                <a [routerLink]="['/adoptions/details', adoption.id]" routerLinkActive="router-link-active">
-                  <button class="sticky bg-btn-primary-ligth font-bold text-white text-[18px] w-full py-2 rounded-[8px] justify-center hover:bg-btn-primary-dark transition duration-300">
-                  Adoptar
-                  <!-- icono de huella -->
-                  <i class="fas fa-paw ml-4"></i>
-                </button></a>
-              </div>
-        </div>
-      }
+            </div>
+          </div>
+        }
+      </div>
     }
-
- } @else {
+  } @else {
     <p class="text-center text-gray-500 mt-10">Cargando publicaciones...</p>
   }
-
 </section>

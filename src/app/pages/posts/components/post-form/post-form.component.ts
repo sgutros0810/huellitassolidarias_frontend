@@ -1,59 +1,82 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PostService } from '../../../../core/services/post.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-postform',
-  imports: [ FormsModule ],
+  imports: [ FormsModule, ReactiveFormsModule  ],
   templateUrl: './post-form.component.html'
 })
 
-export class PostformComponent {
+export class PostformComponent implements OnInit {
 
   @Output() closed = new EventEmitter<void>();
 
-  post = {
-      title: '',
-      content: '',
-      category: ''
-  };
-
+  form!: FormGroup;
   selectedFile: File | null = null;
 
-  constructor(private postService: PostService, private router: Router) {
+  categories = [
+  { value: 'ADOPTION', label: 'Adopción' },
+  { value: 'ADVICE',   label: 'Consejo'  },
+  { value: 'RESCUE',   label: 'Rescate' }
+  ];
+
+  // post = {
+  //     title: '',
+  //     content: '',
+  //     category: ''
+  // };
+
+
+  constructor(private postService: PostService, private router: Router, private formBuilder: FormBuilder,) {
+  }
+
+  ngOnInit() {
+    this.form = this.formBuilder.group({
+      category: ['', Validators.required],
+      title:    ['', [Validators.required, Validators.minLength(4)]],
+      content:  ['', [Validators.required, Validators.minLength(10)]],
+      image:    [null, Validators.required]
+    });
   }
 
   onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-    console.log(this.selectedFile)
+    const input = (event.target as HTMLInputElement);
+    if (input.files && input.files.length) {
+      this.selectedFile = input.files[0];
+      this.form.patchValue({ image: this.selectedFile });
+    }
+    // console.log(this.selectedFile)
   }
 
   async submitPost() {
-    if (!this.post.title || !this.post.content) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
+    const { category, title, content } = this.form.value;
     const formData = new FormData();
-    formData.append('title', this.post.title);
-    formData.append('content', this.post.content);
-    formData.append('category', this.post.category);
+    formData.append('category', category);
+    formData.append('title', title);
+    formData.append('content', content);
+
 
     if (this.selectedFile) {
       formData.append('image', this.selectedFile);
-    } else {
-      console.log("Selecciona una imagen");
     }
 
     try {
       await this.postService.createPost(formData);
       await this.postService.getPosts(0, 10);
-      this.post = { title: '', content: '', category: '' };
-      this.selectedFile = null;
-      this.close();
-
-    } catch (error) {
-      console.error(error)
+      this.form.reset();
+      this.closed.emit();
+      
+    } catch (err) {
+      console.error(err);
+      alert('Error al publicar el post');
     }
-
   }
 
   close() {

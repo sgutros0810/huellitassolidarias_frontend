@@ -15,30 +15,133 @@
       <h2 class="font-bold text-2xl text-texto-marron-oscuro">Registrarse como refugio</h2>
       <p class="font-bold text-xs mt-4 text-texto-marron-claro">¡Bienvenido! Regístrate y empieza hoy.</p>
 
-
       <!-- Formulario de Refugio -->
-      <form (submit)="registerShelter()" class="flex flex-col gap-3 mt-5">
-        <input class="p-2 mt-4 rounded-xl border" type="text" name="nameShelter" placeholder="Nombre del refugio" [(ngModel)]="nameShelter">
-        <input class="p-2 mt-1 rounded-xl border" type="text" name="identification" placeholder="Nº Identificación" [(ngModel)]="identification" required>
-        <input class="p-2 mt-1 rounded-xl border" type="text" name="username" placeholder="Nombre de usuario" [(ngModel)]="username" required>
-        <input class="p-2 mt-1 rounded-xl border" type="text" name="address" placeholder="Dirección" [(ngModel)]="address">
+      <!-- <form (submit)="registerShelter()" class="flex flex-col gap-3 mt-5"> -->
+      <form [formGroup]="form" (ngSubmit)="registerShelter()" class="flex flex-col mt-5 gap-3">
 
+        <!-- Nombre del refugio -->
+        <input formControlName="nameShelter" placeholder="Nombre del refugio" class="p-2 mt-1 rounded-xl border" />
+        @if(form.get('nameShelter')?.touched && form.get('nameShelter')?.hasError('required')){
+          <small class="text-red-800 text-sm">
+            Nombre obligatorio
+          </small>
+        }
+
+        <!-- Identificacion -->
+        <input formControlName="identification" placeholder="Nº Identificación" class="p-2 mt-1 rounded-xl border" />
+        @if(form.get('identification')?.touched && form.get('identification')?.hasError('required')){
+          <small class="text-red-800 text-sm">
+            Debe tener entre 8 y 12 dígitos
+          </small>
+        }
+        @if(form.get('identification')?.touched && form.get('identification')?.hasError('minlength') && form.get('identification')?.hasError('required')){
+          <small class="text-red-800 text-sm">
+            Debe tener entre 8 y 12 dígitos
+          </small>
+        }
+
+        <!-- usuario -->
+        <input formControlName="username" type="text" placeholder="Nombre de usuario" class="p-2 mt-1 rounded-xl border"/>
+         @if(form.get('username')?.touched && form.get('username')?.hasError('required')){
+          <small class="text-red-800 text-sm">
+            El usuario es obligatorio
+          </small>
+        }
+        @if(form.get('username')?.touched && form.get('username')?.hasError('minlength')){
+          <small class="text-red-800 text-sm">
+            Mínimo 4 caracteres
+          </small>
+        }
+
+        <!-- dirección -->
+        <input formControlName="address" type="text" placeholder="Dirección" class="p-2 mt-1 rounded-xl border"/>
+        @if(form.get('address')?.touched && form.get('address')?.invalid){
+          <small class="text-red-800 text-sm">
+            La dirección es obligatoria
+          </small>
+        }
+
+
+        <!-- ciudad y país -->
         <div class="flex justify-between gap-4">
-          <input class="p-2 mt-1 rounded-xl border w-[50%]" type="text" name="city" placeholder="Ciudad" [(ngModel)]="city">
-          <input class="p-2 mt-1 rounded-xl border w-[50%]" type="text" name="country" placeholder="Pais" [(ngModel)]="country">
+          <div class="w-1/2">
+            <input formControlName="city" type="text" placeholder="Ciudad" class="p-2 mt-1 rounded-xl border w-full" />
+            @if(form.get('city')?.touched && form.get('city')?.invalid){
+              <small class="text-red-800 text-sm">
+                La ciudad es obligatoria
+              </small>
+            }
+          </div>
+          <div class="w-1/2">
+            <input formControlName="country" type="text" placeholder="País" class="p-2 mt-1 rounded-xl border w-full"/>
+            @if(form.get('country')?.touched && form.get('country')?.invalid){
+              <small class="text-red-800 text-sm">
+                El país es obligatorio
+              </small>
+            }
+          </div>
         </div>
 
-        <input class="p-2 mt-1 rounded-xl border" type="text" name="phoneNumber" placeholder="Teléfono" [(ngModel)]="phoneNumber">
-        <input class="p-2 mt-1 rounded-xl border" type="text" name="website_url" placeholder="URL de la página" [(ngModel)]="website_url">
+        <!-- teléfono -->
+        <input formControlName="phoneNumber" type="text" placeholder="Teléfono" class="p-2 mt-1 rounded-xl border"/>
+        @if(form.get('phoneNumber')?.touched && form.get('phoneNumber')?.hasError('pattern')){
+          <small class="text-red-800 text-sm">
+            Formato de teléfono no válido
+          </small>
+        }
 
-        <input class="p-2 mt-1 rounded-xl border" type="email" name="email" placeholder="Email" [(ngModel)]="email" required>
-        <input class="p-2 mt-1 rounded-xl border" type="password" name="password" placeholder="Contraseña" [(ngModel)]="password" required>
-        <input class="p-2 mt-1 rounded-xl border" type="password" name="password" placeholder="Confirmar contraseña" [(ngModel)]="password" required>
 
-        <button class="bg-btn-primary-ligth rounded-xl text-white py-2 hover:scale-105 duration-300 mt-2">
-          Registrarse
+
+        <!-- sitio web -->
+        <input formControlName="website_url" type="text" placeholder="URL de la página" class="p-2 mt-1 rounded-xl border"/>
+        @if(form.get('website_url')?.touched && form.get('website_url')?.hasError('pattern')){
+          <small class="text-red-800 text-sm">
+            URL no válida
+          </small>
+        }
+
+
+        <!-- email -->
+        <input formControlName="email" type="email" placeholder="Email" class="p-2 mt-1 rounded-xl border"/>
+        @if(form.get('email')?.touched && form.get('email')?.hasError('required')){
+          <small class="text-red-800 text-sm">
+            El email es obligatorio
+          </small>
+        }
+        @if(form.get('email')?.touched && form.get('email')?.hasError('email')){
+          <small class="text-red-800 text-sm">
+            Formato de email no válido
+          </small>
+        }
+
+
+        <!-- CONTRASEÑA -->
+        <input formControlName="password" type="password" placeholder="Contraseña" class="p-2 mt-1 rounded-xl border" />
+        <!-- Validacion contraseña -->
+         @if(form.get('password')?.touched && form.get('password')?.hasError('minlength')){
+          <small class="text-red-800 text-sm">
+            Mínimo 6 caracteres
+          </small>
+         }
+
+
+        <!-- CONFIRMAR CONTRASEÑA -->
+        <input formControlName="confirmPassword" type="password" placeholder="Confirmar contraseña" class="p-2 mt-1 rounded-xl border" />
+        <!-- Validacion Confirmar contraseña -->
+        @if(form.touched && form.hasError('notSame')){
+          <small class="text-red-800 text-sm">
+            Las contraseñas deben coincidir
+          </small>
+        }
+
+
+        <!-- Botón -->
+        <button class="bg-btn-primary-ligth rounded-xl text-white py-2 hover:scale-105 duration-300 mt-2" [disabled]="form.invalid || sending">
+           {{ sending ? 'Enviando...' : 'Registrarse' }}
         </button>
       </form>
+
+
 
 
       <!-- <div class="mt-6 grid grid-cols-3 items-center text-gray-400">

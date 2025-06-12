@@ -30,9 +30,18 @@ export class PostService {
 
   // Obtener posts de usuario
   getMyPosts(page: number = 0, size: number = 10): Observable<PostModel[]>{
-    return this.http.get<PostModel[]>(`${this.apiUrl}/my-posts?page=${page}&size=${size}`,
-      { headers: this.getAuthHeaders() }
+    const obs$ = this.http.get<PostModel[]>(`${this.apiUrl}/my-posts?page=${page}&size=${size}`,
+      {
+        headers: this.getAuthHeaders()
+      }
     )
+
+    obs$.subscribe(posts => {
+      this.PostModel = posts;
+      this.listPostBS.next(posts);
+    })
+
+    return obs$;
   }
 
   // Crear un nuevo post
@@ -56,6 +65,11 @@ export class PostService {
       );
 
       this.listPostBS.next(this.PostModel);
+  }
+
+  setPostList(posts: PostModel[]){
+    this.PostModel = posts;
+    this.listPostBS.next(posts);
   }
 
 

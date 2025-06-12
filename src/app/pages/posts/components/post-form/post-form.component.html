@@ -1,47 +1,78 @@
-
-<div class="fixed bg-black/50 backdrop-blur-sm inset-0 flex items-center justify-center z-99">
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center lg:mt-15 z-50">
   <!-- modal -->
-    <div class="flex flex-col justify-between overflow-y-auto relative bg-white p-10 rounded-xl shadow-xl w-full h-screen" (click)="$event.stopPropagation()">
+  <div class="relative flex flex-col w-full lg:max-w-3xl h-full lg:h-[90vh] bg-white rounded-none p-6 pt-20 lg:p-10 lg:pt-20 lg:rounded-2xl shadow-lg" (click)="$event.stopPropagation()">
 
-    <!-- Botón de cerrar -->
-    <button (click)="close()" class="absolute top-2 right-2 text-2xl font-bold text-gray-500 hover:text-gray-900">×</button>
+    <!-- Cerrar -->
+    <button (click)="close()" class="absolute top-2 right-2 text-2xl font-bold text-gray-500 hover:text-gray-900">
+      ×
+    </button>
 
     <h2 class="text-2xl font-semibold mb-2 text-center">Crear nuevo post</h2>
 
-    <form (ngSubmit)="submitPost()" #postForm="ngForm" class="flex flex-col flex-grow space-y-5 justify-start">
+    <form [formGroup]="form" (ngSubmit)="submitPost()" class="flex-1 flex flex-col space-y-5 overflow-y-auto pb-32">
 
-      <div class="mt-4">
-        <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-        <select [(ngModel)]="post.category" name="category" id="category" required
-        class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm shadow-sm focus:border-primary-dark focus:ring focus:ring-primary-light focus:ring-opacity-50">
-            <option value="ADOPTION" selected>Adopción</option>
-            <option value="ADVICE">Consejo</option>
-            <option value="RESCUE">Rescate</option>
+      <!-- Categoría -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Categoría *</label>
+        <select formControlName="category" class="w-full rounded-md border px-4 py-2 text-sm shadow-sm focus:border-primary-dark focus:ring focus:ring-primary-light focus:ring-opacity-50">
+          <option value="" disabled>Selecciona</option>
+          @for(c of categories; track c.value){
+            <option [value]="c.value">{{ c.label }}</option>
+          }
         </select>
+
+        @if(form.get('category')?.touched && form.get('category')?.hasError('required')){
+          <small class="text-red-600">Categoría obligatoria</small>
+        }
       </div>
 
+      <!-- Título -->
       <div>
-        <p>Título:</p>
-        <input type="text" name="title" [(ngModel)]="post.title" class="w-full border border-bg-marron-claro rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-bg-marron-claro" required/>
+        <label class="block text-sm font-medium mb-1">Título *</label>
+        <input type="text" formControlName="title" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-bg-marron-claro" placeholder="Título del post" />
+        @if(form.get('title')?.touched && form.get('title')?.hasError('required')){
+          <small class="text-red-600">Título obligatorio</small>
+        }
+        @if(form.get('title')?.touched && form.get('title')?.hasError('minlength')){
+          <small class="text-red-600">Mínimo 4 caracteres</small>
+        }
       </div>
 
+      <!-- Contenido -->
       <div>
-        <p>Contenido:</p>
-        <textarea name="content" class="w-full border border-bg-marron-claro rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-bg-marron-claro" [(ngModel)]="post.content" required></textarea>
+        <label class="block text-sm font-medium mb-1">Contenido *</label>
+        <textarea formControlName="content" rows="4" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-bg-marron-claro" placeholder="Escribe aquí..."></textarea>
+        @if(form.get('content')?.touched && form.get('content')?.hasError('required')){
+          <small class="text-red-600">Contenido obligatorio</small>
+        }
+        @if(form.get('content')?.touched && form.get('content')?.hasError('minlength')){
+          <small class="text-red-600">Mínimo 10 caracteres</small>
+        }
       </div>
 
-
+      <!-- Imagen -->
       <div>
-        <p class="mb-5">Imagen:</p>
-        <input type="file" (change)="onFileSelected($event)" accept="image/*"
-        class="w-full text-sm text-texto-marron-oscuro file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-dark file:text-texto-marron-oscuro hover:file:bg-primary-dark hover:file:text-texto-marron-claro mt-2" required/>
+        <label class="block text-sm font-medium mb-1">Imagen *</label>
+        <input type="file"
+               (change)="onFileSelected($event)"
+               accept="image/*"
+               class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-full
+                      file:border-0 file:text-sm file:font-semibold
+                      file:bg-primary-dark file:text-white hover:file:bg-primary-dark"
+        />
+        @if(form.get('image')?.touched && form.get('image')?.hasError('required')){
+          <small class="text-red-600">Debes seleccionar una imagen</small>
+        }
       </div>
 
-
-      <!-- Botones -->
-      <div class="flex flex-col lg:flex-row justify-between items-center gap-4 pt-6 mt-auto border-t border-primary-dark">
-        <button type="submit" class=" lg:w-auto px-5 py-2 lg:px-10 lg:py-10 bg-primary-light font-bold text-texto-marron-oscuro rounded-[8px] hover:bg-primary-dark hover:text-white" [disabled]="postForm.invalid">Publicar</button>
-        <button type="close"  class="w-full lg:w-auto py-2 px-4 lg:px-10 lg:py-10 hover:bg-red-200 hover:text-red-950 bg-red-950/70 text-white font-medium rounded-[8px] transition-colors duration-200 shadow-sm" (click)="close()">Cancelar</button>
+      <!-- Botones fijos -->
+      <div class="absolute bottom-0 left-0 right-0 flex flex-col lg:flex-row justify-between items-center gap-4 p-4 border-t border-primary-dark bg-white">
+        <button type="submit" class="w-full lg:w-auto mx-2 lg:px-10 py-2 bg-primary-dark font-bold text-white rounded-[8px] hover:bg-primary-dark hover:text-white disabled:bg-primary-dark/50" [disabled]="form.invalid">
+          Publicar
+        </button>
+        <button type="button" class="w-full lg:w-auto mx-2 lg:px-10 py-2 bg-red-950 text-white font-medium rounded-[8px] hover:bg-red-950/70 hover:text-red-950 transition-colors duration-200 shadow-sm" (click)="close()">
+          Cancelar
+        </button>
       </div>
 
     </form>

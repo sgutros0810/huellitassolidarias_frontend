@@ -1,45 +1,51 @@
-import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login-shelter',
-  imports: [ FormsModule],
+  imports: [ ReactiveFormsModule, RouterLink ],
   templateUrl: './login-shelter.component.html'
 })
-export class LoginShelterComponent {
+export class LoginShelterComponent implements OnInit {
 
-  private authService = inject(AuthService);
+  // private authService = inject(AuthService);
+  // identification: string = '';
+  // password: string = '';
 
-  identificacionFiscal: string = '';
-  password: string = '';
+  form!: FormGroup;
+  loading = false;
 
+  constructor( private formBuilder: FormBuilder, private auth: AuthService, private router: Router) {
 
-  loginShelter() {
+  }
 
-    if(!this.identificacionFiscal || !this.password){
-      alert('Por favor, completa todos los campos.');
-      return;
-    }
-
-    this.authService.loginShelter(this.identificacionFiscal, this.password).subscribe({
-      next: (response) => {
-        console.log('Login exitoso:', response);
-        // Redirigir o guardar token, etc.
-
-      },
-      error: (error) => {
-        console.error('Error en login:', error);
-        alert('Credenciales inválidas o error de servidor.');
-      }
+  ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      identification: ['', Validators.required],
+      password: ['', Validators.required]
     });
   }
 
+  loginShelter(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-  login() {
-    console.log(this.identificacionFiscal);
-    console.log(this.password);
+    this.loading = true;
+    const { identification, password } = this.form.value;
+
+    this.auth.loginShelter(identification, password).subscribe({
+      next: () => {
+        this.router.navigate(['/adoptions']);
+      },
+      error: () => {
+        alert('Credenciales incorrectas o error en el servidor.');
+        this.loading = false;
+      }
+    });
   }
-
 
 }

@@ -22,18 +22,20 @@ export class MyPostsListComponent implements OnInit{
   constructor(private postService: PostService, private userService: UserService) {}
 
   ngOnInit(): void {
-    this.myPostList = this.postService.getMyPosts(0, 10);
+    this.myPostList = this.postService.listPostObs$;
+    this.postService.getMyPosts(0, 10)
   }
 
   deletePost(postId: number){
     this.postService.deleteMyPost(postId).subscribe({
       next: () => {
-        this.postService.deletePostLocal(postId);
+        this.postService.deletePostLocal(postId)
       },
       error: err => {
         console.error('Error al eliminar el post', err)
       }
-    })
+    });
+
   }
 
 

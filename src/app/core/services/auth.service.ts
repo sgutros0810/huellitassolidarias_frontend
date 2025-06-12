@@ -25,6 +25,10 @@ export class AuthService {
         .pipe(tap(response => this.handleAuthSuccess(response.token)));
   }
 
+  // sendPasswordReset(email: string) {
+  //   return this.http.post(`${environment.apiUrl}/auth/forgot-password`, { email });
+  // }
+
   logout(){
     localStorage.removeItem('authToken');
     this.token.set(null);
