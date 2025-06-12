@@ -1,0 +1,65 @@
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center lg:mt-15 z-50">
+  <div class="relative flex flex-col w-full lg:max-w-3xl h-full lg:h-[90vh] bg-white rounded-none p-6 pt-20 lg:p-10 lg:pt-20 lg:rounded-2xl shadow-lg" (click)="$event.stopPropagation()">
+
+    <button (click)="close()" class="absolute top-4 right-4 text-2xl text-gray-600 hover:text-gray-900">×</button>
+    <h2 class="text-2xl font-semibold text-center mb-6">Editar publicación</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submitPost()" class="flex flex-col gap-5 overflow-y-auto pb-32">
+
+      <div>
+        <label class="mb-1">Categoría *</label>
+        <select formControlName="category" class="inputFormStyle w-full">
+          <option value="" disabled>Selecciona</option>
+          @for (c of categories; track c.value) {
+            <option [value]="c.value">{{ c.label }}</option>
+          }
+        </select>
+        @if (form.get('category')?.touched && form.get('category')?.hasError('required')) {
+          <small class="text-red-600">Requiere categoría</small>
+        }
+      </div>
+
+      <div>
+        <label class="mb-1">Título *</label>
+        <input type="text" formControlName="title" class="inputFormStyle w-full" placeholder="Título" />
+        @if (form.get('title')?.touched && form.get('title')?.hasError('required')) {
+          <small class="text-red-600">Ingresa un título</small>
+        }
+        @if (form.get('title')?.touched && form.get('title')?.hasError('minlength')) {
+          <small class="text-red-600">Mínimo 4 caracteres</small>
+        }
+      </div>
+
+      <div>
+        <label class="mb-1">Contenido *</label>
+        <textarea formControlName="content" rows="4" class="inputFormStyle w-full resize-none" placeholder="Contenido"></textarea>
+        @if (form.get('content')?.touched && form.get('content')?.hasError('required')) {
+          <small class="text-red-600">Contenido obligatorio</small>
+        }
+        @if (form.get('content')?.touched && form.get('content')?.hasError('minlength')) {
+          <small class="text-red-600">Al menos 10 caracteres</small>
+        }
+      </div>
+
+      <div>
+        <label class="form-label">Imagen</label>
+        <input type="file" (change)="onFileSelected($event)"
+          class="inputFormStyle file:mr-4 file:py-2 file:px-4 file:rounded-md
+          file:border-0 file:text-sm file:font-semibold
+          file:bg-primary-dark file:text-white hover:file:bg-primary-dark" />
+      </div>
+
+
+      <!-- Botones fijos en la parte inferior -->
+      <div class="absolute bottom-0 left-0 right-0 flex flex-col lg:flex-row justify-between items-center gap-6 p-4 border-t border-primary-dark bg-white">
+        <button type="submit" class="w-full lg:w-auto mx-2 lg:px-10 py-2 bg-primary-dark text-white font-semibold rounded-md hover:bg-primary-dark/20 hover:text-white disabled:bg-primary-dark/50" [disabled]="form.invalid">
+          Guardar
+        </button>
+        <button type="button" class="w-full lg:w-auto mx-2 lg:px-10 py-2 bg-red-950 text-white rounded-md hover:bg-red-950/70" (click)="close()">
+          Cancelar
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

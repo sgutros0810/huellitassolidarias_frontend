@@ -5,10 +5,11 @@ import { Observable } from 'rxjs';
 import { PostModel } from '../../../../core/modals/post.model';
 import { PostService } from '../../../../core/services/post.service';
 import { UserService } from '../../../../core/services/user.service';
+import { UpdatePostModalComponent } from "../update-post-modal/update-post-modal.component";
 
 @Component({
   selector: 'app-my-posts-list',
-  imports: [ CommonModule, FormsModule ],
+  imports: [CommonModule, FormsModule, UpdatePostModalComponent],
   templateUrl: './my-posts-list.component.html',
   styleUrl: './my-posts-list.component.css'
 })
@@ -19,7 +20,10 @@ export class MyPostsListComponent implements OnInit{
   posts: PostModel[] = [];
   @Input() myPost: PostModel[] =  [];
 
-  constructor(private postService: PostService, private userService: UserService) {}
+  selectedPostId: number | null = null;
+  showEditModal = false
+
+  constructor(private postService: PostService) {}
 
   ngOnInit(): void {
     this.myPostList = this.postService.listPostObs$;
@@ -35,8 +39,21 @@ export class MyPostsListComponent implements OnInit{
         console.error('Error al eliminar el post', err)
       }
     });
-
   }
 
+  openEditModal(postId: number): void {
+    document.body.classList.add('overflow-hidden');
+    this.selectedPostId = postId;
+    this.showEditModal = true;
+  }
+
+  closeModal() {
+    document.body.classList.remove('overflow-hidden');
+    this.showEditModal = false;
+    this.selectedPostId = null;
+
+    // refresca la lista para ver los cambios
+    this.postService.getMyPosts(0, 10);
+  }
 
 }

@@ -101,29 +101,9 @@ export class UserService {
     this.listSheltersBS.next(this.ShelterModel);
   }
 
-  // Obtiene todos los usaurios con ROL = REFUGIO
-  // async getSheltersById(shelterId:number) {
-  //   this.ShelterModel = (await firstValueFrom(
-  //     this.http.get<{ content: ShelterModel[] }>(this.apiUrl + `/shelters/details/${shelterId}`)
-  //   )).content;
-
-  //   this.zone.run(() => {this.listSheltersBS.next(this.ShelterModel);  });
-  // }
-
   getShelterById(shelterId: number): Observable<ShelterDetailModel> {
     return this.http.get<ShelterDetailModel>(`${environment.apiUrl}/shelters/details/${shelterId}`);
   }
-
-  // //Adopciones de un usuario /myprofile/adoptions
-  // async getAdoptionByUserId(userId: number, page: number = 0, size: number = 10): Promise<void> {
-  //   const response = await firstValueFrom(
-  //     this.http.get<PageResponse<AdoptionModel>>(
-  //       `${this.apiUrl}/myprofile/adoptions/${userId}?page=${page}&size=${size}`
-  //     )
-  //   );
-  //   this.listProfileAdoptionBS.next(response.content);
-  // }
-
 
   async getAdoptionByUser( page: number = 0, size: number = 10): Promise<void> {
     const response = await firstValueFrom(
@@ -138,6 +118,26 @@ export class UserService {
     this.listProfileAdoptionBS.next(response.content);
   }
 
+
+  // Busca refugios filtrando por nombre, usuario, ciudad o país
+  searchShelters(filters: { nameShelter?: string; username?: string; city?: string; country?: string;}): Observable<ShelterModel[]> {
+    let params = new HttpParams();
+    if (filters.nameShelter) params = params.set('nameShelter', filters.nameShelter);
+    if (filters.username)   params = params.set('username', filters.username);
+    if (filters.city)       params = params.set('city', filters.city);
+    if (filters.country)    params = params.set('country', filters.country);
+
+    return this.http.get<ShelterModel[]>(`${this.apiUrl}/shelters/search`, {
+      headers: this.getAuthHeaders(),
+      params
+    })
+    .pipe(
+      catchError(err => {
+        console.error('Error buscando refugios:', err);
+        return throwError(() => new Error('No se pudieron cargar los refugios.'));
+      })
+    );
+  }
 
 
 }

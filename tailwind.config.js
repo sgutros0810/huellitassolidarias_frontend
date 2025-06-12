@@ -1,6 +1,6 @@
 // /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./app/**/*.{js,ts,jsx,tsx}"],// Asegúrate de incluir la ruta correcta a tus archivos
+  content: ["./app/**/*.{js,ts,jsx,tsx}"],
   theme: {
     fontFamily: {
       sans: ["Montserrat"],
@@ -9,10 +9,14 @@ module.exports = {
       colors: {
         customPrincipalClaro: "#fef8ee",
         customRed: "#F43F5E",
-        customBlue: "#1E40AF", // Puedes agregar más colores
+        customBlue: "#1E40AF",
+        'btn-edit-background': 'var(--btn-edit-background)',
+        'btn-edit-hover':      'var(--btn-edit-hover)',
+        'btn-delete-background': 'var(--btn-delete-background)',
+        'btn-delete-hover':      'var(--btn-delete-hover)',
       },
       fontFamily: {
-        serif: ['IBM Plex Serif', 'serif'], // Agregar la fuente
+        serif: ['IBM Plex Serif', 'serif'],
         roboto: ['Roboto', 'roboto']
       },
     },

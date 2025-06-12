@@ -14,7 +14,6 @@ export class AdopcionesComponent {
 
   showCreateModal = false;
 
-
   openCreateModal() {
     document.body.classList.add('overflow-hidden');
     this.showCreateModal = true;

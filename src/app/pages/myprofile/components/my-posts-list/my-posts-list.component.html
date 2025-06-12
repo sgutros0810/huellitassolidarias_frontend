@@ -5,42 +5,56 @@
     @if(posts.length < 1) {
       <p class="text-center text-gray-500 mt-10">No tienes publicaciones</p>
     } @else {
-      @for(post of myPostList | async ; track post.id) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for(post of myPostList | async ; track post.id) {
 
-        <div class="flex h-[180px] p-2 gap-2 md:gap-4 lg:gap-4 shadow-lg bg-white rounded-xl">
+          <article
+            class="flex flex-col md:flex-row bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-200 overflow-hidden">
 
-          <!-- Si tiene imagen -->
-          @if(post.imageUrl) {
-            <div class="w-[120px] md:w-[160px] lg:w-[160px] px-0 lg:px-2 md:px-2 py-2 shrink-0">
-              <img [src]="'http://localhost:8080' + post.imageUrl" alt="Imagen post" class="w-full h-full object-cover rounded-2xl" />
-            </div>
-          }
-
-          <!-- Contenido del post -->
-          <div class="flex flex-col flex-grow lg:pr-2 mt-2">
-            <!-- título + fecha -->
-            <div class="flex justify-between items-start  gap-x-4">
-              <h2 class="text-lg font-semibold text-texto-marron-oscuro mb-1 ml-2 mr-5 line-clamp-1">{{ post.title }}</h2>
-              <p class="text-sm text-gray-500 whitespace-nowrap">{{ post.createdAt | date:'mediumDate' }}</p>
+            <!-- Imagen -->
+            <div class="md:w-1/3 aspect-[4/3] bg-gray-100">
+              <img
+                [src]="'http://localhost:8080' + post.imageUrl"
+                alt="{{ post.title }}"
+                class="w-full h-full object-cover" />
             </div>
 
             <!-- Contenido -->
-            <p class="text-sm text-gray-500 mt-1 ml-2 mr-5 line-clamp-3 whitespace-pre-line">{{ post.content }}</p>
+            <div class="flex flex-col flex-1 p-4">
+              <header class="flex justify-between items-start mb-2">
+                <h2 class="text-lg font-semibold line-clamp-1">{{ post.title }}</h2>
+                <time class="text-sm text-gray-500">
+                  {{ post.createdAt | date:'mediumDate' }}
+                </time>
+              </header>
+              <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+                {{ post.content }}
+              </p>
 
-            <!-- Botón 'ELIMINAR' -->
-            <div class="flex justify-end mt-auto sm:mb-2 sm:mr-2">
-              <button class="w-[100px] text-red-900  font-medium py-2 px-2 rounded-xl transition-colors duration-200" (click)="deletePost(post.id)">
-                Eliminar
-              </button>
+              <!-- Botones -->
+              <div class="mt-auto flex gap-2">
+                <button (click)="openEditModal(post.id)" class="flex-1 py-2 bg-btn-edit-background hover:bg-btn-edit-hover text-texto-marron-oscuro rounded-lg transition-colors duration-150">
+                  Editar
+                </button>
+                <button (click)="deletePost(post.id)" class="flex-1 py-2 bg-red-100 hover:bg-red-200 text-red-900 rounded-lg transition-colors duration-150">
+                  Eliminar
+                </button>
+              </div>
             </div>
 
-          </div>
-        </div>
-      }
+          </article>
+        }
+      </div>
     }
 
   } @else {
     <p class="text-center text-gray-500 mt-10">Cargando publicaciones...</p>
+  }
+
+
+  <!-- Solo muestra el modal si showEditModal es true -->
+  @if(showEditModal && selectedPostId !== null) {
+    <app-update-post-modal [postId]="selectedPostId" (closed)="closeModal()"></app-update-post-modal>
   }
 
 </section>

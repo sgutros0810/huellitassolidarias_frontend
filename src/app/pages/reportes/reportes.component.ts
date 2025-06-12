@@ -10,5 +10,16 @@ import { FilterComponent } from "../adopciones/components/filter/filter.componen
   styleUrl: './reportes.component.css'
 })
 export class ReportesComponent {
+  
+ showCreateModal = false;
 
+  openCreateModal() {
+    document.body.classList.add('overflow-hidden');
+    this.showCreateModal = true;
+  }
+
+  closeModal() {
+    document.body.classList.remove('overflow-hidden');
+    this.showCreateModal = false;
+  }
 }

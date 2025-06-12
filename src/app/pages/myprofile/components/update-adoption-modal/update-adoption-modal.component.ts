@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AdoptionService } from '../../../../core/services/adoption.service';
 import { AdoptionDetailModel } from '../../../../core/modals/adoption-detail.model';
@@ -10,7 +10,7 @@ import { AdoptionDetailModel } from '../../../../core/modals/adoption-detail.mod
   templateUrl: './update-adoption-modal.component.html',
   styleUrl: './update-adoption-modal.component.css'
 })
-export class UpdateAdoptionModalComponent {
+export class UpdateAdoptionModalComponent implements OnInit {
 
   @Input() adoptionId!: number;
   @Output() closed = new EventEmitter<void>();
@@ -101,8 +101,6 @@ export class UpdateAdoptionModalComponent {
   ];
 
 
-
-
   constructor(private adoptionService: AdoptionService,  private formBuilder: FormBuilder,) {}
 
   ngOnInit() {
@@ -129,36 +127,34 @@ export class UpdateAdoptionModalComponent {
     this.form.get('birthDate')!.valueChanges.subscribe(() => this.calculateAge());
 
     //Pone los datos que tiene guardado
-    this.adoptionService.getAdoptionById(this.adoptionId)
-      .subscribe({
-        next: (data: AdoptionDetailModel) => {
-          // Si hay imagen actual, guárdala para hacer preview
-          this.currentImageUrl = data.imageUrl
-            ? `/uploads/adoptions/${data.imageUrl}`
-            : null;
+    this.adoptionService.getAdoptionById(this.adoptionId).subscribe({
+      next: (data: AdoptionDetailModel) => {
+        
+        // Si tiene ya una imagen  imagen, la guarda
+        this.currentImageUrl = data.imageUrl ? `/uploads/adoptions/${data.imageUrl}` : null;
 
-          // Parchea todos los campos menos image
-          this.form.patchValue({
-            name:         data.name,
-            species:      data.species,
-            gender:       data.gender,
-            breed:        data.breed,
-            size:         data.size,
-            birthDate:    data.birthDate,
-            description:  data.description,
-            location:     data.location,
-            vaccinated:   data.vaccinated,
-            sterilized:   data.sterilized,
-            status:       data.status,
-            contactPhone: data.contactPhone,
-            contactEmail: data.contactEmail,
-            forAdoption:  data.status === 'AVAILABLE'
-          });
+        // Parchea todos los campos, la imagen no
+        this.form.patchValue({
+          name:         data.name,
+          species:      data.species,
+          gender:       data.gender,
+          breed:        data.breed,
+          size:         data.size,
+          birthDate:    data.birthDate,
+          description:  data.description,
+          location:     data.location,
+          vaccinated:   data.vaccinated,
+          sterilized:   data.sterilized,
+          status:       data.status,
+          contactPhone: data.contactPhone,
+          contactEmail: data.contactEmail,
+          forAdoption:  data.status === 'AVAILABLE'
+        });
 
-          // Edad inicial
-          this.calculateAge();
-        },
-        error: err => console.error('Error cargando adopción:', err)
+        // Edad inicial
+        this.calculateAge();
+      },
+      error: err => console.error('Error cargando adopción:', err)
     });
   }
 
@@ -200,7 +196,6 @@ export class UpdateAdoptionModalComponent {
   }
 
 
-
   //FormDAta
   async submitAdoption(): Promise<void> {
     if (this.form.invalid) {
@@ -214,7 +209,7 @@ export class UpdateAdoptionModalComponent {
       if (key === 'image') return;
       formData.append(key, String(val));
     });
-    
+
     if (this.selectedFile) {
       formData.append('image', this.selectedFile);
     }

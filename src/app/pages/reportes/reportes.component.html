@@ -1,15 +1,25 @@
 <section>
-  <div class="mt-15">
-    <h1 class="text-[35px] uppercase font-poppins font-semibold text-texto-marron-oscuro text-center">REPORTES</h1>
-    <p class="text-[18px] uppercase font-poppins font-normal text-texto-gris-claro text-center" >Una patita perdida, un corazón que espera</p>
+  <div class="mt-15 text-center">
+    <h1 class="text-[35px] uppercase font-poppins font-semibold text-texto-marron-oscuro">
+      REPORTES
+    </h1>
+    <p class="text-[18px] uppercase font-poppins font-normal text-texto-gris-claro">
+      Una patita perdida, un corazón que espera
+    </p>
   </div>
 
-  <div class="mt-10 mb-10 mx-15">
-    <app-filter></app-filter>
-  </div>
+  <div class="mt-10 mb-10 mx-8 md:mx-15 lg:mx-18">
+    <section class="flex flex-col items-center gap-4 mt-8 mb-8 sm:flex-row sm:justify-between sm:items-center sm:gap-6">
+      <button (click)="openCreateModal()"
+              class="w-full sm:w-auto md:max-w-[500px] px-6 py-3 bg-primary-dark hover:bg-primary-dark/40 text-white font-semibold rounded-lg shadow-md transition-colors duration-300"
+              type="button">
+        Crear reporte
+      </button>
+      <app-filter class="w-full sm:w-auto"></app-filter>
+    </section>
 
-  <div class="mt-10 mb-10 mx-5">
-    <app-card-report></app-card-report>
-    <!-- <app-cards></app-cards> -->
+    <div>
+      <app-card-report></app-card-report>
+    </div>
   </div>
 </section>

@@ -22,6 +22,14 @@
   --color-btn-primary-dark: #584A48;
   --color-btn-primary-ligth: #C9A582;
 
+  /* Editar */
+  --color-btn-edit-background: #c7b3b1;
+  --color-btn-edit-hover:   #b8a4a2;
+
+  /* Eliminar */
+  --color-btn-delete-background:  #FFD3C2;
+  --color-btn-delete-hover: #FFB6A1;
+
   /* Fuentes */
   --font-roboto: "Roboto", sans-serif;
   --font-IBM: "IBM_Plex_Serif", sans-serif;

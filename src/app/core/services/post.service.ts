@@ -87,4 +87,13 @@ export class PostService {
     this.listPostBS.next(this.PostModel);
     // console.log(this.PostModel)
   }
+
+  async updatePost(postId: number, formData: FormData) : Promise<void> {
+    await firstValueFrom(
+      this.http.put(`${this.apiUrl}/${postId}`, formData, {
+        headers: this.getAuthHeaders(),
+        responseType: 'text' as const
+      })
+    );
+  }
 }

@@ -3,32 +3,32 @@
     @if(adoptions.length < 1) {
       <p class="text-center text-gray-500 mt-10">No tienes animales en adopción</p>
     } @else {
-      <div class="flex flex-wrap -mx-2">
-        @for(adoption of adoptions; track adoption.id) {
-          <div class="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
-            <div class="bg-white rounded-xl shadow p-4 flex flex-col h-full">
-              <div class="h-40 w-full overflow-hidden mb-3">
-                <img [src]="'http://localhost:8080' + adoption.imageUrl" alt="{{ adoption.name }}" class="w-full h-full object-contain rounded-lg">
-              </div>
-              <h3 class="font-poppins font-bold text-lg uppercase text-texto-marron-ligth mb-2 text-center">{{ adoption.name }}</h3>
-              <ul class="text-sm text-gray-600 mb-3 flex-1">
-                <li><strong>Edad:</strong> <span class="italic lowercase">{{ calculateAge(adoption.birthDate) }}</span></li>
-                <li><strong>Animal:</strong> <span class="italic lowercase">{{ adoption.species }}</span></li>
-                <li><strong>Género:</strong> <span class="italic lowercase">{{ adoption.gender }}</span></li>
-                <li><strong>Tamaño:</strong> <span class="italic lowercase">{{ adoption.size }}</span></li>
-                <li><strong>Ubicación:</strong> <span class="italic lowercase">{{ adoption.location }}</span></li>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for(ad of adoptions; track ad.id) {
+          <div class="bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden">
+            <div class="h-40 bg-gray-100">
+              <img
+                [src]="'http://localhost:8080' + ad.imageUrl"
+                alt="{{ ad.name }}"
+                class="w-full h-full object-cover hover:scale-105 transition" />
+            </div>
+            <div class="p-4 flex-1 flex flex-col">
+              <h3 class="text-xl font-semibold mb-2 line-clamp-1">{{ ad.name }}</h3>
+              <ul class="text-sm text-gray-600 flex-1 space-y-1">
+                <li>Edad: {{ calculateAge(ad.birthDate) }}</li>
+                <li>Especie: {{ ad.species }}</li>
+                <li>Género: {{ ad.gender }}</li>
+                <li>Tamaño: {{ ad.size }}</li>
+                <li>Ubicación: {{ ad.location }}</li>
               </ul>
-              <div class="mt-auto space-y-2">
-                <!-- <a [routerLink]="['/adoptions/details', adoption.id]">
-                  <button class="w-full py-2 bg-btn-primary-ligth text-white rounded hover:bg-btn-primary-dark transition">
-                    Adoptar <i class="fas fa-paw ml-1"></i>
-                  </button>
-                </a> -->
-                <div class="flex justify-between">
-                  <button class="flex-1 py-2 mr-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition" (click)="openEditModal(adoption.id)">Editar</button>
-                  <button class="flex-1 py-2 ml-1 bg-red-500 text-white rounded hover:bg-red-600 transition" (click)="deleteAdoption(adoption.id)">Eliminar</button>
-                </div>
-              </div>
+            </div>
+            <div class="p-3 bg-gray-50 flex gap-2">
+              <button (click)="openEditModal(ad.id)" class="flex-1 py-2 bg-btn-edit-background hover:bg-btn-edit-hover text-texto-marron-oscuro rounded-lg transition-colors duration-150">
+                  Editar
+                </button>
+                <button (click)="deleteAdoption(ad.id)" class="flex-1 py-2 bg-red-100 hover:bg-red-200 text-red-900 rounded-lg transition-colors duration-150">
+                  Eliminar
+                </button>
             </div>
           </div>
         }
