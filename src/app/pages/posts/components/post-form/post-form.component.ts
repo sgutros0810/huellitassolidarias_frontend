@@ -22,12 +22,6 @@ export class PostformComponent implements OnInit {
   { value: 'RESCUE',   label: 'Rescate' }
   ];
 
-  // post = {
-  //     title: '',
-  //     content: '',
-  //     category: ''
-  // };
-
 
   constructor(private postService: PostService, private router: Router, private formBuilder: FormBuilder,) {
   }
@@ -72,7 +66,7 @@ export class PostformComponent implements OnInit {
       await this.postService.getPosts(0, 10);
       this.form.reset();
       this.closed.emit();
-      
+
     } catch (err) {
       console.error(err);
       alert('Error al publicar el post');

@@ -9,17 +9,38 @@
   </div>
 
   <div class="mt-10 mb-10 mx-8 md:mx-15 lg:mx-18">
+
     <section class="flex flex-col items-center gap-4 mt-8 mb-8 sm:flex-row sm:justify-between sm:items-center sm:gap-6">
-      <button (click)="openCreateModal()"
-              class="w-full sm:w-auto md:max-w-[500px] px-6 py-3 bg-primary-dark hover:bg-primary-dark/40 text-white font-semibold rounded-lg shadow-md transition-colors duration-300"
-              type="button">
+      <button
+        class="w-full sm:w-auto md:max-w-[500px] px-6 py-3 bg-primary-dark hover:bg-primary-dark/40 text-white font-semibold rounded-lg shadow-md transition-colors duration-300"
+        type="button" (click)="openCreateModal()"
+      >
         Crear reporte
       </button>
       <app-filter class="w-full sm:w-auto"></app-filter>
     </section>
 
-    <div>
-      <app-card-report></app-card-report>
-    </div>
+    @if (loading) {
+      <div class="text-center my-6">
+        <span>Cargando reportes...</span>
+      </div>
+    }
+
+    @if (!loading && reports.length > 0) {
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+        @for (report of reports; track report.id) {
+          <app-card-report [report]="report"></app-card-report>
+        }
+      </div>
+    } @else {
+      <div class="text-center my-6 text-texto-gris-claro font-poppins text-lg">
+        No hay reportes para mostrar.
+      </div>
+    }
   </div>
+
+
+  @if(showCreateModal) {
+    <app-report-form (closed)="closeModal()"></app-report-form>
+  }
 </section>

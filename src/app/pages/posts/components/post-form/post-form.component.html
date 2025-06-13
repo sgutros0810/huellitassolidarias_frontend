@@ -13,7 +13,7 @@
 
       <!-- Categoría -->
       <div>
-        <label class="block text-sm font-medium mb-1">Categoría *</label>
+        <label class="text-sm font-medium mb-1">Categoría *</label>
         <select formControlName="category" class="w-full rounded-md border px-4 py-2 text-sm shadow-sm focus:border-primary-dark focus:ring focus:ring-primary-light focus:ring-opacity-50">
           <option value="" disabled>Selecciona</option>
           @for(c of categories; track c.value){
@@ -28,7 +28,7 @@
 
       <!-- Título -->
       <div>
-        <label class="block text-sm font-medium mb-1">Título *</label>
+        <label class="text-sm font-medium mb-1">Título *</label>
         <input type="text" formControlName="title" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-bg-marron-claro" placeholder="Título del post" />
         @if(form.get('title')?.touched && form.get('title')?.hasError('required')){
           <small class="text-red-600">Título obligatorio</small>
@@ -40,7 +40,7 @@
 
       <!-- Contenido -->
       <div>
-        <label class="block text-sm font-medium mb-1">Contenido *</label>
+        <label class="text-sm font-medium mb-1">Contenido *</label>
         <textarea formControlName="content" rows="4" class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-bg-marron-claro" placeholder="Escribe aquí..."></textarea>
         @if(form.get('content')?.touched && form.get('content')?.hasError('required')){
           <small class="text-red-600">Contenido obligatorio</small>
@@ -52,14 +52,8 @@
 
       <!-- Imagen -->
       <div>
-        <label class="block text-sm font-medium mb-1">Imagen *</label>
-        <input type="file"
-               (change)="onFileSelected($event)"
-               accept="image/*"
-               class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-full
-                      file:border-0 file:text-sm file:font-semibold
-                      file:bg-primary-dark file:text-white hover:file:bg-primary-dark"
-        />
+        <label class="text-sm font-medium mb-1">Imagen *</label>
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-dark file:text-white hover:file:bg-primary-dark"/>
         @if(form.get('image')?.touched && form.get('image')?.hasError('required')){
           <small class="text-red-600">Debes seleccionar una imagen</small>
         }

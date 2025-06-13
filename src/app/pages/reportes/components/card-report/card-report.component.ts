@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import { AnimalReportModel } from '../../../../core/modals/animal-report.model';
 
 @Component({
   selector: 'app-card-report',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './card-report.component.css'
 })
 export class CardReportComponent {
-
+  @Input() report!: AnimalReportModel;
 }
