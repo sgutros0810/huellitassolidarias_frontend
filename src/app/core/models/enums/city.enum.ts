@@ -1,0 +1,10 @@
+export enum City {
+  MALAGA = 'MALAGA',
+  SEVILLA = 'SEVILLA',
+  GRANADA = 'GRANADA',
+  CORDOBA = 'CORDOBA',
+  CADIZ = 'CADIZ',
+  HUELVA = 'HUELVA',
+  JAEN = 'JAEN',
+  ALMERIA = 'ALMERIA'
+}
