@@ -17,7 +17,6 @@
       >
         Crear reporte
       </button>
-      <app-filter class="w-full sm:w-auto"></app-filter>
     </section>
 
     @if (loading) {
@@ -27,9 +26,9 @@
     }
 
     @if (!loading && reports.length > 0) {
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 items-stretch">
         @for (report of reports; track report.id) {
-          <app-card-report [report]="report"></app-card-report>
+          <app-card-report [report]="report" class="h-full"></app-card-report>
         }
       </div>
     } @else {
@@ -40,7 +39,19 @@
   </div>
 
 
-  @if(showCreateModal) {
-    <app-report-form (closed)="closeModal()"></app-report-form>
+  <!-- Modal de creación -->
+  @if (showCreateModal) {
+    <app-report-form
+      (closed)="closeCreateModal()"
+      (saved)="closeCreateModal(); loadReports()"
+    ></app-report-form>
+  }
+
+  <!-- Modal de invitación a login -->
+  @if (showLoginPrompt) {
+    <app-login-prompt-modal
+      (cancel)="closeLoginPrompt()"
+      (login)="goToLogin()"
+    ></app-login-prompt-modal>
   }
 </section>

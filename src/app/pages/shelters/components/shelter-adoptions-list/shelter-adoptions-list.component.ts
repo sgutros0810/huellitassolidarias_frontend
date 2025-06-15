@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AdoptionModel } from '../../../../core/modals/adoption.model';
+import { AdoptionModel } from '../../../../core/models/adoption.model';
 import { AdoptionService } from '../../../../core/services/adoption.service';
 import { UserService } from '../../../../core/services/user.service';
 import { CommonModule } from '@angular/common';

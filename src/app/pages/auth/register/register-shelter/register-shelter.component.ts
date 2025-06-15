@@ -3,16 +3,18 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, AbstractControlOptions, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Router } from '@angular/router';
+import {City} from '../../../../core/models/enums/city.enum';
+import {TitleCasePipe} from '@angular/common';
 
 @Component({
   selector: 'app-register-shelter',
-  imports: [ ReactiveFormsModule ],
+  imports: [ReactiveFormsModule, TitleCasePipe],
   templateUrl: './register-shelter.component.html',
   styleUrl: './register-shelter.component.css'
 })
 
 export class RegisterShelterComponent implements OnInit {
-
+  cities = Object.values(City);
   // private authService = inject(AuthService);
 
   // nameShelter: string = '';

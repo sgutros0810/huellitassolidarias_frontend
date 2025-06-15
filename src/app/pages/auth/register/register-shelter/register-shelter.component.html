@@ -65,7 +65,12 @@
         <!-- ciudad y país -->
         <div class="flex justify-between gap-4">
           <div class="w-1/2">
-            <input formControlName="city" type="text" placeholder="Ciudad" class="p-2 mt-1 rounded-xl border w-full" />
+            <select formControlName="city" class="p-2 mt-1 rounded-xl border w-full">
+              <option value="" disabled selected>Selecciona una ciudad</option>
+              @for (city of cities; track city) {
+                <option [value]="city">{{ city.toLowerCase() | titlecase }}</option>
+              }
+            </select>
             @if(form.get('city')?.touched && form.get('city')?.invalid){
               <small class="text-red-800 text-sm">
                 La ciudad es obligatoria

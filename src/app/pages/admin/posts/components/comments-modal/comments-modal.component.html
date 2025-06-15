@@ -1,0 +1,23 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center" *ngIf="visible">
+  <div class="bg-white w-full max-w-2xl rounded-lg shadow-lg p-6 relative z-50">
+    <h2 class="text-lg font-bold mb-4">Comentarios de: {{ postTitle }}</h2>
+
+    <div *ngIf="comments.length > 0; else noComments" class="space-y-4 max-h-[400px] overflow-y-auto">
+      <div *ngFor="let comment of comments" class="border p-3 rounded-md flex justify-between items-start text-sm">
+        <div>
+          <p class="text-gray-800">{{ comment.content }}</p>
+          <span class="text-xs text-gray-500">Por <strong>{{ comment.username }}</strong>, {{ comment.createdAt | date:'short' }}</span>
+        </div>
+        <button (click)="onDelete(comment.id)" class="text-red-600 text-xs hover:underline font-semibold ml-4">
+          Eliminar
+        </button>
+      </div>
+    </div>
+
+    <ng-template #noComments>
+      <p class="text-sm text-gray-500">Este post no tiene comentarios.</p>
+    </ng-template>
+
+    <button (click)="onClose()" class="absolute top-2 right-2 text-gray-600 hover:text-black text-lg">&times;</button>
+  </div>
+</div>

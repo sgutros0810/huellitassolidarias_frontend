@@ -22,8 +22,8 @@
                   <li><strong>Edad:</strong><i class="lowercase"> {{ calculateAge(adoption.birthDate) }}</i></li>
                   <li><strong>Animal:</strong><i class="lowercase"> {{ adoption.species }}</i></li>
                   <li><strong>Género:</strong><i class="lowercase"> {{ adoption.gender }}</i></li>
-                  <li><strong>Tamaño:</strong><i class="lowercase"> {{ adoption.size }}</i></li>
-                  <li><strong>Ubicación:</strong><i class="lowercase"> {{ adoption.location }}</i></li>
+<!--                  <li><strong>Tamaño:</strong><i class="lowercase"> {{ adoption.size }}</i></li>-->
+                  <li><strong>Ubicación:</strong><i class="lowercase"> {{ adoption.city | titlecase }}</i></li>
                 </ul>
               </div>
 

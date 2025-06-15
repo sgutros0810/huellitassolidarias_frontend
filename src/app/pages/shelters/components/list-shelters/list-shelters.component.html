@@ -12,11 +12,19 @@
 
          <a [routerLink]="['/shelters/details', shelter.id]" routerLinkActive="router-link-active">
           <div class="bg-white shadow-md rounded-2xl p-6 flex items-center gap-4 ">
-            <img src="img/logopro.png" alt="Foto de refugio" class="w-20 h-20 rounded-full object-cover border-2 border-primary" />
+            <img [src]="getImageSrc(shelter.profileImageUrl)" alt="Foto de refugio" class="w-20 h-20 rounded-full object-cover border-2 border-primary" />
             <div>
-              <h2 class="text-lg font-semibold text-texto-marron-oscuro">{{shelter.username}}</h2>
+              <h2 class="text-lg font-semibold text-texto-marron-oscuro flex items-center gap-2">
+                {{ shelter.username }}
+                @if(shelter.verified) {
+                  <span class="inline-flex items-center gap-1 bg-green-100 text-green-700 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                    <i class="fas fa-paw"></i> Verificado
+                  </span>
+                }
+              </h2>
+
               <p class="text-base text-texto-negro font-medium">{{shelter.nameShelter}}</p>
-              <p class="text-sm text-texto-gris-claro">📍 {{shelter.city}}, {{shelter.country}}</p>
+              <p class="text-sm text-texto-gris-claro">📍 {{shelter.city | titlecase}}, {{shelter.country}}</p>
             </div>
           </div>
          </a>

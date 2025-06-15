@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import {UserService} from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import { environment } from '../../../environments/environment';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private userService = inject(UserService);
 
   token = signal<string | null> (localStorage.getItem('authToken'));
 
@@ -45,11 +47,24 @@ export class AuthService {
     .pipe(tap(response => this.handleAuthSuccess(response.token)));
   }
 
-  handleAuthSuccess(token:string) {
+  handleAuthSuccess(token: string) {
     localStorage.setItem('authToken', token);
     this.token.set(token);
-    this.router.navigate(['/adoptions']);
+
+    this.userService.getProfile().subscribe({
+      next: (profile) => {
+        if (profile.role === 'ADMIN') {
+          this.router.navigate(['/admin/users']);
+        } else {
+          this.router.navigate(['/adoptions']);
+        }
+      },
+      error: () => {
+        this.router.navigate(['/loginuser']);
+      }
+    });
   }
+
 
   isUserLogged() {
     return !!this.token()

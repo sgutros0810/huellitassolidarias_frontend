@@ -6,19 +6,19 @@
 
   <!-- Paginas -->
   <ul class="flex space-x-6 text-texto-navbar text-lg">
-    <li>
-      <a href="/refugios" routerLink="/shelters" class="hover:text-gray-500 transition duration-300">REFUGIOS</a>
-    </li>
-    <li>
-      <a href="/adoptions" routerLink="/adoptions" class="hover:text-gray-500 transition duration-300">ADOPCIONES</a>
-    </li>
-    <li>
-      <a href="/reportes" routerLink="/reportes" class="hover:text-gray-500 transition duration-300">REPORTES</a>
-    </li>
-    <li>
-      <a href="/publicaciones" routerLink="/publicaciones" class="hover:text-gray-500 transition duration-300">PUBLICACIONES</a>
-    </li>
+    @if (isAdmin()) {
+      <li><a routerLink="/admin/users" class="hover:text-gray-500 transition duration-300">USUARIOS</a></li>
+      <li><a routerLink="/admin/posts" class="hover:text-gray-500 transition duration-300">POSTS</a></li>
+      <li><a routerLink="/admin/adoptions" class="hover:text-gray-500 transition duration-300">ADOPCIONES</a></li>
+      <li><a routerLink="/admin/reports" class="hover:text-gray-500 transition duration-300">REPORTES</a></li>
+    } @else {
+      <li><a routerLink="/shelters" class="hover:text-gray-500 transition duration-300">REFUGIOS</a></li>
+      <li><a routerLink="/adoptions" class="hover:text-gray-500 transition duration-300">ADOPCIONES</a></li>
+      <li><a routerLink="/reportes" class="hover:text-gray-500 transition duration-300">REPORTES</a></li>
+      <li><a routerLink="/publicaciones" class="hover:text-gray-500 transition duration-300">PUBLICACIONES</a></li>
+    }
   </ul>
+
 
   @if(!isAuthenticated()){
     <!-- Botones -->
@@ -31,34 +31,43 @@
       </button>
     </div>
   } @else {
-
     <div class="relative flex items-center space-x-4">
-      <button (click)="toggleUserMenu()" class="text-4xl text-texto-navbar hover:text-texto-marron-claro transition duration-300">
-        <i class="fas fa-user-circle"></i>
+      <button (click)="toggleUserMenu()" class="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border border-gray-200 shadow-sm">
+        @if (profile()?.profileImageUrl) {
+          <img
+            [src]="avatarSrc"
+            alt="Avatar"
+            class="w-full h-full object-cover"
+            (error)="onAvatarError($event)"
+          />
+        } @else {
+          <img
+            [src]="defaultAvatar"
+            alt="Avatar por defecto"
+            class="w-full h-full object-cover"
+          />
+        }
       </button>
 
-      <!-- Si el usuario abre el submenu del perfil -->
-      @if(isUserMenuOpen){
+      @if(isUserMenuOpen) {
         <div
-            class="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-xl z-50 overflow-hidden border border-gray-200">
+          class="fixed inset-0 z-40 bg-transparent"
+          (click)="closeUserMenu()"
+        ></div>
+        <div class="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-xl z-50 overflow-hidden border border-gray-200">
           <a routerLink="/myprofile" (click)="goToProfile(); closeUserMenu()"
-            class="flex items-center gap-2 px-4 py-2 text-sm text-texto-marron-claro hover:bg-gray-100">
+             class="flex items-center gap-2 px-4 py-2 text-sm text-texto-marron-oscuro hover:bg-gray-100">
             <i class="fas fa-user"></i> Mi perfil
           </a>
           <button (click)="logout(); closeUserMenu()"
-                  class="w-full flex items-center gap-2 px-4 py-2 text-sm text-texto-marron-claro hover:bg-gray-100">
+                  class="w-full flex items-center gap-2 px-4 py-2 text-sm text-texto-marron-oscuro hover:bg-gray-100">
             <i class="fas fa-sign-out-alt"></i> Cerrar sesión
           </button>
         </div>
       }
-
     </div>
   }
 </nav>
-
-
-
-
 
 
 <!-- Navbar - modo movil -->
@@ -81,24 +90,36 @@
   <!-- Menú desplegable -->
   <div class="lg:hidden fixed w-full bg-white/85 backdrop-blur-md shadow-lg px-6 pb-6 flex flex-col space-y-4 text-texto-navbar text-lg rounded-b-[15px] animate-fade-down z-99999">
 
-    <!-- Botón cerrar 'X' -->
-    <!-- <div class="flex justify-end p-4">
-      <button class="text-2xl text-texto-navbar" (click)="toggleNav()">3
-        <i class="fas fa-times"></i>
-      </button>
-    </div> -->
-
   <!-- Páginas -->
-    <div class="flex flex-col space-y-6 text-texto-marron-oscuro text-lg p-6">
-      <a routerLink="/shelters" (click)="toggleNav()"    class="px-2 py-2 hover:text-gray-500 transition duration-300">
-        <i class="fas fa-home text-btn-primary-dark mr-2"></i>
-        REFUGIOS
+  <div class="flex flex-col space-y-6 text-texto-marron-oscuro text-lg p-6">
+    @if (isAdmin()) {
+      <a routerLink="/admin/users" (click)="toggleNav()" class="px-2 py-2 hover:text-gray-500 transition duration-300">
+        <i class="fas fa-users text-btn-primary-dark mr-2"></i>
+        USUARIOS
       </a>
-      <a routerLink="/adoptions" (click)="toggleNav()"    class="px-2 py-2 hover:text-gray-500 transition duration-300">
+      <a routerLink="/admin/posts" (click)="toggleNav()" class="px-2 py-2 hover:text-gray-500 transition duration-300">
+        <i class="fas fa-newspaper text-btn-primary-dark mr-2"></i>
+        POSTS
+      </a>
+      <a routerLink="/admin/adoptions" (click)="toggleNav()" class="px-2 py-2 hover:text-gray-500 transition duration-300">
         <i class="fas fa-paw text-btn-primary-dark mr-2"></i>
         ADOPCIONES
       </a>
-      <a routerLink="/reportes" (click)="toggleNav()"      class="px-2 py-2 hover:text-gray-500 transition duration-300">
+      <a routerLink="/admin/reports" (click)="toggleNav()" class="px-2 py-2 hover:text-gray-500 transition duration-300">
+        <i class="fas fa-file-alt text-btn-primary-dark mr-2"></i>
+        REPORTES
+      </a>
+
+    } @else {
+      <a routerLink="/shelters" (click)="toggleNav()" class="px-2 py-2 hover:text-gray-500 transition duration-300">
+        <i class="fas fa-home text-btn-primary-dark mr-2"></i>
+        REFUGIOS
+      </a>
+      <a routerLink="/adoptions" (click)="toggleNav()" class="px-2 py-2 hover:text-gray-500 transition duration-300">
+        <i class="fas fa-paw text-btn-primary-dark mr-2"></i>
+        ADOPCIONES
+      </a>
+      <a routerLink="/reportes" (click)="toggleNav()" class="px-2 py-2 hover:text-gray-500 transition duration-300">
         <i class="fas fa-file-alt text-btn-primary-dark mr-2"></i>
         REPORTES
       </a>
@@ -106,9 +127,11 @@
         <i class="fas fa-newspaper text-btn-primary-dark mr-2"></i>
         PUBLICACIONES
       </a>
-    </div>
+    }
+  </div>
 
-    <!-- Botones -->
+
+  <!-- Botones -->
     <div class="p-6 space-y-6">
       <!-- Si el usuario no esta logeado le aparecera los botones de registrarse o iniciar sesión -->
       @if(!isAuthenticated()) {

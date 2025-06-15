@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Input, signal } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { UserService } from '../../../../core/services/user.service';
-import { ShelterDetailModel } from '../../../../core/modals/shelter-detail.model';
+import { ShelterDetailModel } from '../../../../core/models/shelter-detail.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AdopcionesComponent } from "../../../adopciones/adopciones.component";
 import { ShelterAdoptionsListComponent } from "../shelter-adoptions-list/shelter-adoptions-list.component";
+import {buildImageUrl} from '../../../../shared/utils/image-url.util';
 
 @Component({
   selector: 'app-shelter-details',
@@ -15,11 +16,12 @@ import { ShelterAdoptionsListComponent } from "../shelter-adoptions-list/shelter
 })
 export class ShelterDetailsComponent {
 
- 
+
   private route = inject(ActivatedRoute);
   private userService = inject(UserService);
   private sanitizer = inject(DomSanitizer);
 
+  defaultImage = '/img/logopro.png';
   shelter = signal<ShelterDetailModel | null>(null);
   mapUrl!: SafeResourceUrl;
   activeTab = signal<'datos' | 'ayuda' | 'adopciones'>('datos'); // campo activo, por defecto es 'datos'
@@ -37,6 +39,10 @@ export class ShelterDetailsComponent {
       },
       error: (err) => console.error('Error cargando refugio', err)
     });
+  }
+
+  getImageSrc(imageUrl: string | null | undefined): string {
+    return buildImageUrl(imageUrl, this.defaultImage);
   }
 
   // Cambiar pestaña activa

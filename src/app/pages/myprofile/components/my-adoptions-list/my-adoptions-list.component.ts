@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { AdoptionService } from '../../../../core/services/adoption.service';
 import { UserService } from '../../../../core/services/user.service';
 import { Observable } from 'rxjs';
-import { AdoptionModel } from '../../../../core/modals/adoption.model';
+import { AdoptionModel } from '../../../../core/models/adoption.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -19,7 +19,7 @@ export class MyAdoptionsListComponent {
   listProfileAdoption!: Observable<AdoptionModel[]>;
   adoptions: AdoptionModel[] = [];
   @Input() userId!: number;
-  
+
   selectedAdoptionId: number | null = null;
   showEditModal = false;
 

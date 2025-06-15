@@ -1,102 +1,183 @@
 <section class="min-h-screen bg-gray-50 px-4 sm:px-6 pt-4 sm:pt-6">
   <div class="max-w-6xl mx-auto">
 
-    <!-- Perfil - datos del usuario -->
-    @if(profile){
+    <!-- Perfil -->
+    @if (profile) {
       <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6">
         <div class="flex flex-col md:flex-row sm:flex-row sm:items-center sm:space-x-6 space-y-4 sm:space-y-0">
 
-          <!-- Foto del usuario -->
           <div class="flex justify-center sm:justify-start">
-            <img [src]="'http://localhost:8080' + profile.profileImageUrl" alt="Avatar" class="w-24 h-24 rounded-full object-cover shadow-md" />
+            <img [src]="imageSrc" alt="Avatar" class="w-24 h-24 rounded-full object-cover shadow-md"
+                 (error)="onAvatarError($event)"/>
           </div>
 
-          <!-- Información del usuario -->
           <div class="flex-grow text-center sm:text-left">
             <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">
-              {{profile.name}} {{profile.lastname}}
+              {{ profile.name }} {{ profile.lastname }}
             </h1>
-            <p class="text-gray-600 text-sm font-light text-texto-marron-claro">{{'@' + profile.username}}</p>
+            <p class="text-gray-600 text-sm font-light text-texto-marron-claro">{{ '@' + profile.username }}</p>
+            @if (profile.role === 'REFUGIO' && profile.verified) {
+              <span class="inline-flex items-center gap-1 bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded-full">
+                  <i class="fas fa-paw"></i> Verificado
+              </span>
+            }
+            @if(profile.role === 'REFUGIO') {
+              <div class="mt-4">
+                @if(!profile.verified) {
+                  <button
+                    (click)="requestVerification()"
+                    [disabled]="verificationRequested"
+                    [ngClass]="{
+                      'bg-primary-dark hover:bg-primary-dark/80 cursor-pointer': !verificationRequested,
+                      'bg-gray-400 cursor-not-allowed': verificationRequested
+                    }"
+                    class="text-white px-6 py-2 rounded font-semibold transition-colors"
+                  >
+                    {{ verificationRequested ? 'Solicitud enviada' : 'Solicitar verificación' }}
+                  </button>
+                }
+              </div>
+            }
+
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm text-gray-600 mt-4">
-              @if(!isEditing){
+              @if (!isEditing) {
                 <div>
-                  <strong>Email:</strong> {{profile.email}}
+                  <strong>Email:</strong> {{ profile.email }}
                 </div>
                 <div>
-                  <strong>Ubicación:</strong> {{profile.city}}, {{profile.country}}
+                  <strong>Ubicación:</strong> {{ profile.city | titlecase }}, {{ profile.country }}
                 </div>
                 <div>
-                  <strong>Miembro desde:</strong> {{profile.creationDate | date:'MMMM yyyy'}}
+                  <strong>Miembro desde:</strong> {{ profile.creationDate | date:'MMMM yyyy' }}
                 </div>
               }
 
-              @if(profile.role !== 'USUARIO' && !isEditing){
+              @if (profile.role == 'REFUGIO' && !isEditing) {
                 <div>
-                  <strong>Refugio:</strong> {{profile.nameShelter}}
+                  <strong>Refugio:</strong> {{ profile.nameShelter }}
                 </div>
                 <div>
-                  <strong>Teléfono:</strong> {{profile.phoneNumber}}
+                  <strong>Teléfono:</strong> {{ profile.phoneNumber }}
                 </div>
-                @if(profile.websiteUrl){
+                @if (profile.websiteUrl) {
                   <div>
                     <strong>Web:</strong>
                     <a [href]="profile.websiteUrl" target="_blank" class="text-texto-marron-oscuro hover:underline">
-                      {{profile.websiteUrl}}
+                      {{ profile.websiteUrl }}
                     </a>
                   </div>
                 }
+
               }
 
-              <!-- Formulario de edición -->
-              @if(isEditing){
+              @if (isEditing) {
                 <ng-container>
                   <div class="col-span-full">
                     <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
                       <div>
                         <label class="text-gray-700 font-semibold mb-1">Email</label>
-                        <input [(ngModel)]="profile.email" name="email" class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100" disabled />
-                      </div>
-                      <div>
-                        <label class="text-gray-700 font-semibold mb-1">Ciudad</label>
-                        <input [(ngModel)]="profile.city" name="city" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark" />
-                      </div>
-                      <div>
-                        <label class="text-gray-700 font-semibold mb-1">País</label>
-                        <input [(ngModel)]="profile.country" name="country" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark" />
-                      </div>
-                      <div>
-                        <label class="text-gray-700 font-semibold mb-1">Teléfono</label>
-                        <input [(ngModel)]="profile.phoneNumber" name="phoneNumber" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark" />
+                        <input [(ngModel)]="profile.email" name="email"
+                               class="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100" disabled/>
                       </div>
 
-                      @if(profile.role !== 'USUARIO'){
+                      <div>
+                        <label class="text-gray-700 font-semibold mb-1">Ciudad</label>
+                        <select [(ngModel)]="profile.city"
+                                name="city"
+                                class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark">
+                          <option *ngFor="let city of cities" [value]="city[0]">
+                            {{ city[1] | titlecase }}
+                          </option>
+                        </select>
+                      </div>
+
+
+                      <div>
+                        <label class="text-gray-700 font-semibold mb-1">País</label>
+                        <input [(ngModel)]="profile.country" name="country"
+                               class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark"/>
+                      </div>
+
+                      <div>
+                        <label class="text-gray-700 font-semibold mb-1">Teléfono</label>
+                        <input [(ngModel)]="profile.phoneNumber" name="phoneNumber"
+                               class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark"/>
+                      </div>
+
+                      @if (profile.role !== 'USUARIO') {
                         <div>
                           <label class="text-gray-700 font-semibold mb-1">Refugio</label>
-                          <input [(ngModel)]="profile.nameShelter" name="nameShelter" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark" />
+                          <input [(ngModel)]="profile.nameShelter" name="nameShelter"
+                                 class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark"/>
                         </div>
 
                         <div>
                           <label class="text-gray-700 font-semibold mb-1">Sitio web</label>
-                          <input [(ngModel)]="profile.websiteUrl" name="websiteUrl" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark" />
+                          <input [(ngModel)]="profile.websiteUrl" name="websiteUrl"
+                                 class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark"/>
+                        </div>
+                      }
+
+                      <div class="col-span-full">
+                        <label class="text-gray-700 font-semibold mb-1">Imagen de perfil</label>
+                        <input type="file"
+                               (change)="onFileSelected($event)"
+                               accept="image/*"
+                               class="inputFormStyle file:mr-4 file:py-2 file:px-4 file:rounded-md
+                        file:border-0 file:text-sm file:font-semibold
+                        file:bg-primary-dark file:text-white hover:file:bg-primary-dark"/>
+                      </div>
+
+                      @if (profile.role === 'REFUGIO' && profile.verified) {
+                        <div class="col-span-full grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+
+                          <div>
+                            <label class="text-gray-700 font-semibold mb-1">Cuenta bancaria (IBAN)</label>
+                            <input [(ngModel)]="profile.bankAccount" name="bankAccount"
+                                   class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark"/>
+                          </div>
+
+                          <div>
+                            <label class="text-gray-700 font-semibold mb-1">Bizum</label>
+                            <input [(ngModel)]="profile.bizum" name="bizum"
+                                   class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark"/>
+                          </div>
+
+                          <div>
+                            <label class="text-gray-700 font-semibold mb-1">PayPal</label>
+                            <input [(ngModel)]="profile.paypal" name="paypal"
+                                   class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark"/>
+                          </div>
+
+                          <div class="md:col-span-2">
+                            <label class="text-gray-700 font-semibold mb-1">Mensaje para donación</label>
+                            <textarea [(ngModel)]="profile.donationMessage" name="donationMessage"
+                                      rows="3"
+                                      class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-primary-dark resize-none"></textarea>
+                          </div>
+
                         </div>
                       }
                     </form>
                   </div>
                 </ng-container>
               }
+
             </div>
           </div>
 
-          <!-- Botones -->
           <div class="mt-6">
             <div class="flex flex-col md:flex-col sm:flex-row sm:justify-end sm:items-center gap-4">
-              <button (click)="isEditing ? saveProfile() : editProfile()" class="bg-primary-dark hover:bg-primary-dark/80 text-white text-base px-6 py-3 rounded-md font-semibold shadow transition-all">
-                {{isEditing ? 'Guardar' : 'Editar Perfil'}}
+              <button (click)="isEditing ? saveProfile() : editProfile()"
+                      class="bg-primary-dark hover:bg-primary-dark/80 text-white text-base px-6 py-3 rounded-md font-semibold shadow transition-all">
+                {{ isEditing ? 'Guardar' : 'Editar Perfil' }}
               </button>
 
-              @if(isEditing){
-                <button (click)="cancelEdit()" class="bg-red-950 hover:bg-red-950/80 text-white text-base px-6 py-3 rounded-xl font-semibold shadow transition-all">
+              @if (isEditing) {
+                <button (click)="cancelEdit()"
+                        class="bg-red-950 hover:bg-red-950/80 text-white text-base px-6 py-3 rounded-md font-semibold shadow transition-all">
                   Cancelar
                 </button>
               }
@@ -110,30 +191,38 @@
       <!-- Tabs -->
       <div class="bg-white rounded-lg shadow-lg">
         <div class="flex flex-col sm:flex-row border-b border-gray-200">
-          <button (click)="setActiveTab('publicaciones')" class="px-4 sm:px-6 py-3 font-semibold text-gray-700 border-b-2 transition-colors" [ngClass]="{'border-primary-dark text-blue-600': activeTab==='publicaciones', 'border-transparent hover:text-gray-900': activeTab!=='publicaciones'}">
+          <button (click)="setActiveTab('publicaciones')"
+                  class="px-4 sm:px-6 py-3 font-semibold text-gray-700 border-b-2 transition-colors"
+                  [ngClass]="{'border-primary-dark text-blue-600': activeTab==='publicaciones', 'border-transparent hover:text-gray-900': activeTab!=='publicaciones'}">
             Mis Publicaciones
           </button>
-          <button (click)="setActiveTab('adopciones')" class="px-4 sm:px-6 py-3 font-semibold text-gray-700 border-b-2 transition-colors" [ngClass]="{'border-primary-dark text-blue-600': activeTab==='adopciones', 'border-transparent hover:text-gray-900': activeTab!=='adopciones'}">
+          <button (click)="setActiveTab('adopciones')"
+                  class="px-4 sm:px-6 py-3 font-semibold text-gray-700 border-b-2 transition-colors"
+                  [ngClass]="{'border-primary-dark text-blue-600': activeTab==='adopciones', 'border-transparent hover:text-gray-900': activeTab!=='adopciones'}">
             Mis Adopciones
           </button>
-          <button (click)="setActiveTab('reportes')" class="px-4 sm:px-6 py-3 font-semibold text-gray-700 border-b-2 transition-colors" [ngClass]="{'border-primary-dark text-blue-600': activeTab==='reportes', 'border-transparent hover:text-gray-900': activeTab!=='reportes'}">
+          <button (click)="setActiveTab('reportes')"
+                  class="px-4 sm:px-6 py-3 font-semibold text-gray-700 border-b-2 transition-colors"
+                  [ngClass]="{'border-primary-dark text-blue-600': activeTab==='reportes', 'border-transparent hover:text-gray-900': activeTab!=='reportes'}">
             Mis Reportes
           </button>
         </div>
 
         <div class="p-4 sm:p-6 h-screen">
-          @if(activeTab==='publicaciones'){
+          @if (activeTab === 'publicaciones') {
             <app-my-posts-list></app-my-posts-list>
           }
-          @if(activeTab==='adopciones'){
+          @if (activeTab === 'adopciones') {
             <app-my-adoptions-list [userId]="profile.id"></app-my-adoptions-list>
           }
-          @if(activeTab==='reportes'){
-            <!-- <app-my-reports-list></app-my-reports-list> -->
+          @if (activeTab === 'reportes') {
+            <app-my-reports-list></app-my-reports-list>
           }
         </div>
       </div>
     }
   </div>
+
+  <app-toast #toast></app-toast>
 
 </section>

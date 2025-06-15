@@ -1,11 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators  } from '@angular/forms';
 import { AdoptionService } from '../../../../core/services/adoption.service';
-import { AsyncPipe } from '@angular/common';
+import {AsyncPipe, TitleCasePipe} from '@angular/common';
+import {City} from '../../../../core/models/enums/city.enum';
 
 @Component({
   selector: 'app-adoption-form',
-  imports: [ AsyncPipe, FormsModule, ReactiveFormsModule ],
+  imports: [FormsModule, ReactiveFormsModule, TitleCasePipe],
   templateUrl: './adoption-form.component.html',
   styleUrl: './adoption-form.component.css'
 })
@@ -16,6 +17,8 @@ export class AdoptionFormComponent implements OnInit {
   age: number | null = null;
   selectedFile: File | null = null;
 
+  cities = Object.values(City);
+
   adoption = {
     name: '',
     species: '',
@@ -24,7 +27,7 @@ export class AdoptionFormComponent implements OnInit {
     birthDate: '',
     size: '',
     description: '',
-    location: '',
+    city: '',
     vaccinated: false,
     sterilized: false,
     status: 'AVAILABLE',
@@ -41,8 +44,7 @@ export class AdoptionFormComponent implements OnInit {
   ];
 
 
-  speciesOptions =
-  [
+  speciesOptions = [
     { value: 'DOG', label: 'Perro' },
     { value: 'CAT', label: 'Gato' },
     { value: 'RABBIT', label: 'Conejo' },
@@ -55,44 +57,24 @@ export class AdoptionFormComponent implements OnInit {
     { value: 'CHINCHILLA', label: 'Chinchilla' },
     { value: 'HEDGEHOG', label: 'Erizo' },
     { value: 'HORSE', label: 'Caballo' },
-    { value: 'DONKEY', label: 'Burro' },
-    { value: 'PONY', label: 'Poni' },
-    { value: 'COW', label: 'Vaca' },
     { value: 'PIG', label: 'Cerdo' },
     { value: 'GOAT', label: 'Cabra' },
     { value: 'SHEEP', label: 'Oveja' },
-    { value: 'LLAMA', label: 'Llama' },
-    { value: 'ALPACA', label: 'Alpaca' },
-    { value: 'MONKEY', label: 'Mono' },
     { value: 'PARROT', label: 'Loro' },
     { value: 'CANARY', label: 'Canario' },
     { value: 'PIGEON', label: 'Paloma' },
-    { value: 'DOVE', label: 'Tórtola' },
     { value: 'CHICKEN', label: 'Gallina' },
     { value: 'DUCK', label: 'Pato' },
-    { value: 'GOOSE', label: 'Ganso' },
-    { value: 'TURKEY', label: 'Pavo' },
-    { value: 'REPTILE', label: 'Reptil' },
-    { value: 'SNAKE', label: 'Serpiente' },
     { value: 'TURTLE', label: 'Tortuga' },
-    { value: 'TORTOISE', label: 'Tortuga terrestre' },
-    { value: 'IGUANA', label: 'Iguana' },
-    { value: 'GECKO', label: 'Geco' },
     { value: 'LIZARD', label: 'Lagarto' },
-    { value: 'FROG', label: 'Rana' },
-    { value: 'TOAD', label: 'Sapo' },
     { value: 'FISH', label: 'Pez' },
-    { value: 'BETTA', label: 'Pez Betta' },
-    { value: 'GOLDFISH', label: 'Pez Dorado' },
-    { value: 'KOI', label: 'Pez Koi' },
     { value: 'OTHER_BIRD', label: 'Otra ave' },
     { value: 'OTHER_MAMMAL', label: 'Otro mamífero' },
     { value: 'OTHER_REPTILE', label: 'Otro reptil' },
-    { value: 'OTHER_AMPHIBIAN', label: 'Otro anfibio' },
     { value: 'OTHER_AQUATIC', label: 'Otro acuático' },
-    { value: 'EXOTIC', label: 'Exótico' },
     { value: 'OTHER', label: 'Otro' }
   ];
+
 
 
 
@@ -102,20 +84,32 @@ export class AdoptionFormComponent implements OnInit {
   ngOnInit() {
     // this.today = new Date().toISOString().split('T')[0];
     this.form = this.formBuilder.group({
-      name:           ['', Validators.required],
-      species:        ['', Validators.required],
-      gender:         ['', Validators.required],
-      breed:          [''],
-      size:           [''],
-      birthDate:      ['', [Validators.required, this.maxDateValidator]],
-      description:    ['', Validators.maxLength(1000)],
-      location:       ['', Validators.maxLength(100)],
-      vaccinated:     [false],
-      sterilized:     [false],
-      status:         ['AVAILABLE', Validators.required],
-      contactPhone:   ['', Validators.pattern(/^[\d+\-\s]{7,15}$/)],
-      contactEmail:   ['', Validators.email],
-      forAdoption:    [true]
+      name: ['', Validators.required],
+      species: ['', Validators.required],
+      gender: ['', Validators.required],
+      breed: [''],
+      size: [''],
+      birthDate: ['', [Validators.required, this.maxDateValidator]],
+      description: ['', Validators.maxLength(1000)],
+      city: ['', Validators.required],
+      vaccinated: [false],
+      sterilized: [false],
+      status: ['AVAILABLE', Validators.required],
+      contactPhone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[\d+\-\s]{7,15}$/)
+        ]
+      ],
+      contactEmail: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
+      forAdoption: [true]
     });
 
     // recalcula la edad cuando cambie la fecha
@@ -161,7 +155,9 @@ export class AdoptionFormComponent implements OnInit {
     const data = this.form.value;
     const formData = new FormData();
     Object.entries(data).forEach(([key, val]) => {
-      formData.append(key, String(val));
+      if (val !== null && val !== undefined) {
+        formData.append(key, val.toString());
+      }
     });
     if (this.selectedFile) {
       formData.append('image', this.selectedFile);

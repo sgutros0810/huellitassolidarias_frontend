@@ -1,18 +1,18 @@
 <div class="p-6 rounded-lg bg-white shadow-md max-w-md mx-auto">
 
   @if (adoption(); as adoption) {
-    <img [src]="'http://localhost:8080' + adoption.imageUrl" alt="{{ adoption.name }}" class="w-full h-48 object-cover rounded-md mb-4"/>
+    <img [src]="getImageSrc(adoption.imageUrl)" alt="{{ adoption.name }}" class="w-full h-48 object-cover rounded-md mb-4"/>
     <h2 class="text-2xl font-bold my-2">{{ adoption.name }}</h2>
 
     <p><strong>Edad:</strong> {{ calculateAge(adoption.birthDate) }}</p>
-    <p><strong>Especie:</strong> {{ adoption.species }}</p>
+    <p><strong>Especie:</strong> {{ speciesMap[adoption.species] || adoption.species }}</p>
     <p><strong>Raza:</strong> {{ adoption.breed }}</p>
-    <p><strong>Género:</strong> {{ adoption.gender }}</p>
-    <p><strong>Tamaño:</strong> {{ adoption.size }}</p>
-    <p><strong>Ubicación:</strong> {{ adoption.location }}</p>
-    <p><strong>Estado de adopción:</strong> {{ adoption.status }}</p>
-    <p><strong>Vacunado:</strong> {{ adoption.vaccinated }}</p>
-    <p><strong>Esterilizado:</strong> {{ adoption.sterilized }}</p>
+    <p><strong>Género:</strong> {{ genderMap[adoption.gender] || adoption.gender }}</p>
+<!--    <p><strong>Tamaño:</strong> {{ adoption.size }}</p>-->
+    <p><strong>Ubicación:</strong> {{ adoption.city | titlecase }}</p>
+    <p><strong>Estado de adopción:</strong> {{ statusMap[adoption.status] || adoption.status }}</p>
+    <p><strong>Vacunado:</strong> {{ translateBoolean(adoption.vaccinated) }}</p>
+    <p><strong>Esterilizado:</strong> {{ translateBoolean(adoption.sterilized) }}</p>
 
     <h3 class="mt-4 font-semibold">Contacto:</h3>
     <p><strong>Teléfono:</strong> {{ adoption.contactPhone  }}</p>
@@ -20,7 +20,7 @@
 
     <h3 class="mt-4 font-semibold">Usuario:</h3>
     <p><strong>Nombre:</strong> {{ adoption.user.username }}</p>
-    <p><strong>Ciudad:</strong> {{ adoption.user.city }}</p>
+    <p><strong>Ciudad:</strong> {{ adoption.user.city | titlecase }}</p>
     <p><strong>País:</strong> {{ adoption.user.country }}</p>
     <p><strong>Teléfono:</strong> {{ adoption.user.phoneNumber }}</p>
     <p><strong>Email:</strong> {{ adoption.user.email }}</p>

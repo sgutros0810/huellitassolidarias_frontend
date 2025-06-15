@@ -1,10 +1,10 @@
-<div class="bg-[var(--color-primary)] border-4 border-[var(--color-bg-marron-oscuro)] rounded-xl shadow-2xl flex flex-col items-center p-4 w-full max-w-xs mx-auto relative">
+<div class="h-full bg-[var(--color-primary)] border-4 border-[var(--color-bg-marron-oscuro)] rounded-xl shadow-2xl flex flex-col items-center p-4 w-full max-w-xs mx-auto relative">
 
   <span class="absolute -top-5 left-1/2 -translate-x-1/2 bg-[var(--color-bg-marron-claro)] text-[var(--color-bg-marron-oscuro)] font-extrabold text-lg tracking-wide px-6 py-1 rounded-md shadow border-2 border-white z-10 font-poppins">
     SE BUSCA
   </span>
 
-  <img [src]="'http://localhost:8080' + report.imageUrl" [alt]="report.name" class="rounded-lg mt-6 w-full h-48 object-cover border-4 border-white shadow"/>
+  <img [src]="imageSrc" [alt]="report.name" class="rounded-lg mt-6 w-full h-48 object-cover border-4 border-white shadow"/>
 
   <h3 class="mt-4 text-2xl font-extrabold text-[var(--color-bg-marron-oscuro)] uppercase tracking-wider text-center font-poppins">
     {{ report.name }}
@@ -19,19 +19,33 @@
       {{ report.location }}
     </li>
     <li>
-      <span class="font-bold text-[var(--color-bg-marron-claro)]">Estado:</span>
-      {{ report.state }}
-    </li>
-    <li>
       <span class="font-bold text-[var(--color-bg-marron-claro)]">Reportado por:</span>
       {{ report.username }}
     </li>
+
+    <li>
+      <span class="font-bold text-[var(--color-bg-marron-claro)]">Nombre a contactar:</span>
+      {{ report.contactName }}
+    </li>
+
+    <li>
+      <span class="font-bold text-[var(--color-bg-marron-claro)]">Numero a contactar:</span>
+      {{ report.contactPhone }}
+    </li>
   </ul>
 
-  <button
-    class="bg-[var(--color-btn-primary-ligth)] hover:bg-[var(--color-btn-primary-dark)] text-[var(--color-bg-marron-oscuro)] hover:text-white font-extrabold text-lg rounded-md w-full py-2 flex items-center justify-center gap-2 transition duration-300 shadow-lg mt-auto font-poppins"
-  >
-    Informar
-    <i class="fas fa-paw"></i>
-  </button>
+  @if (showMarkAsFound) {
+    <button
+      type="button"
+      (click)="onMark()"
+      class="w-full mt-2
+             bg-[var(--color-btn-primary-ligth)] hover:bg-[var(--color-btn-primary-dark)]
+             text-[var(--color-bg-marron-oscuro)] hover:text-white
+             font-extrabold text-sm rounded-md py-2
+             transition duration-300 shadow-md"
+    >
+      <i class="fas fa-check mr-2"></i>
+      Marcar como encontrado
+    </button>
+  }
 </div>

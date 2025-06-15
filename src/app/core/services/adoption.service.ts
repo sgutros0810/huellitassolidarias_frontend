@@ -2,9 +2,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
-import { AdoptionModel } from '../modals/adoption.model';
-import { AdoptionDetailModel } from '../modals/adoption-detail.model';
-import { PageResponse } from '../modals/page-response.model';
+import { AdoptionModel } from '../models/adoption.model';
+import { AdoptionDetailModel } from '../models/adoption-detail.model';
+import { PageResponse } from '../models/page-response.model';
 
 @Injectable({
   providedIn: 'root'

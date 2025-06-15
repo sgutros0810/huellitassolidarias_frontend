@@ -1,24 +1,57 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
-import { UserProfileModel } from '../../../core/modals/user.model';
+import { UserProfileModel } from '../../../core/models/user.model';
+import { UserService } from '../../../core/services/user.service';
+import { buildImageUrl } from '../../utils/image-url.util';
 
 @Component({
   selector: 'app-navbar',
-  imports: [ RouterLink, CommonModule ],
+  standalone: true,
+  imports: [RouterLink, CommonModule],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
-
   private router = inject(Router);
   private authService = inject(AuthService);
+  private userService = inject(UserService);
+  private cdr = inject(ChangeDetectorRef);
 
+  defaultAvatar = '/img/avatar-default.png';
   isUserMenuOpen = false;
-  authenticated:boolean = false;
   isNavOpen = false;
-  profile: UserProfileModel | null = null;
+
+  profile = signal<UserProfileModel | null>(null);
+  isAuthenticated = computed(() => this.authService.isUserLogged());
+  isAdmin = computed(() => this.profile()?.role === 'ADMIN');
+
+  constructor() {
+    effect(() => {
+      if (this.isAuthenticated()) {
+        this.userService.profile$.subscribe(profile => {
+          this.profile.set(profile);
+          this.cdr.detectChanges();
+        });
+
+        this.userService.getProfile().subscribe();
+      } else {
+        this.profile.set(null);
+      }
+    });
+  }
+
+  get avatarSrc(): string {
+    const currentProfile = this.profile();
+    if (!currentProfile) return this.defaultAvatar;
+    const url = currentProfile.profileImageUrl ?? '';
+    return url.startsWith('data:') ? url : buildImageUrl(url, this.defaultAvatar);
+  }
+
+
+  onAvatarError(ev: Event) {
+    (ev.target as HTMLImageElement).src = this.defaultAvatar;
+  }
 
   goToLogin() {
     this.router.navigate(['/loginuser']);
@@ -29,22 +62,12 @@ export class NavbarComponent {
   }
 
   goToProfile() {
-   this.router.navigate(['/myprofile']);
-  }
-
-  isAuthenticated() {
-    return this.authService.isUserLogged();
+    this.router.navigate(['/myprofile']);
   }
 
   toggleNav() {
     this.isNavOpen = !this.isNavOpen;
-    const isMobile = window.innerWidth < 1024;
-
-    if (this.isNavOpen && isMobile) {
-      document.body.classList.add('overflow-hidden');
-    } else {
-      document.body.classList.remove('overflow-hidden');
-    }
+    document.body.classList.toggle('overflow-hidden', this.isNavOpen && window.innerWidth < 1024);
   }
 
   toggleUserMenu() {
@@ -56,6 +79,9 @@ export class NavbarComponent {
   }
 
   logout() {
-    return this.authService.logout();
+    this.authService.logout();
+    this.userService.clearProfile();
+    this.profile.set(null);
+    this.router.navigate(['/']);
   }
 }

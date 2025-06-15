@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PostService } from '../../../../core/services/post.service';
-import { PostDetailModel } from '../../../../core/modals/post-detail.model';
+import { PostDetailModel } from '../../../../core/models/post-detail.model';
 import { AsyncPipe } from '@angular/common';
-import { PostModel } from '../../../../core/modals/post.model';
+import { PostModel } from '../../../../core/models/post.model';
 
 @Component({
   selector: 'app-update-post-modal',

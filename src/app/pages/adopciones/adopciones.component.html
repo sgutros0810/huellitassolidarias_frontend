@@ -12,14 +12,21 @@
     <button (click)="openCreateModal()" class="w-full sm:w-auto md:max-w-[500px] px-6 py-3 bg-primary-dark hover:bg-primary-dark/40 text-white font-semibold rounded-lg shadow-md transition-colors duration-300" type="button">
       Crear adopción
     </button>
-    <app-filter class="w-full sm:w-auto"></app-filter>
+    <app-filter (filtered)="onFilteredAdoptions($event)" class="w-full sm:w-auto"></app-filter>
   </section>
 
   <section class="mb-16 px-4 sm:px-0">
-    <app-cards></app-cards>
+    <app-cards [adoptions]="filteredAdoptions"></app-cards>
   </section>
 
   @if(showCreateModal) {
     <app-adoption-form (closed)="closeModal()"></app-adoption-form>
+  }
+
+  @if(showLoginPrompt) {
+    <app-login-prompt-modal
+      (cancel)="closeLoginPrompt()"
+      (login)="goToLogin()"
+    ></app-login-prompt-modal>
   }
 </div>

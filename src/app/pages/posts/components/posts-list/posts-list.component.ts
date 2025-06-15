@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommentsPostComponent } from "../comments-post/comments-post.component";
-import { PostModel } from '../../../../core/modals/post.model';
+import { PostModel } from '../../../../core/models/post.model';
 import { Observable } from 'rxjs';
 import { PostService } from '../../../../core/services/post.service';
 import { AsyncPipe } from '@angular/common';
+import {buildImageUrl} from '../../../../shared/utils/image-url.util';
+import {UserProfileModel} from '../../../../core/models/user.model';
 
 @Component({
   selector: 'app-posts-list',
@@ -20,12 +22,19 @@ export class PostsListComponent implements OnInit {
   postList: Observable<Array<PostModel>> | undefined;
   commentPostId: number | null = null;
 
+  defaultAvatar = '/img/avatar-default.png';
+
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
     // this.loadMorePosts();
     this.postList = this.postService.listPostObs$;
     this.postService.getPosts(this.page, this.size);
+  }
+
+
+  onAvatarError(event: Event) {
+    (event.target as HTMLImageElement).src = this.defaultAvatar;
   }
 
   openComment(postId: number) {
@@ -63,4 +72,5 @@ export class PostsListComponent implements OnInit {
   }
 
 
+  protected readonly buildImageUrl = buildImageUrl;
 }

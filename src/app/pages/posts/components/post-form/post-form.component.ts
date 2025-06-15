@@ -4,7 +4,7 @@ import { PostService } from '../../../../core/services/post.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-postform',
+  selector: 'app-post-form',
   imports: [ FormsModule, ReactiveFormsModule  ],
   templateUrl: './post-form.component.html'
 })

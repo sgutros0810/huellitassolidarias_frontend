@@ -18,8 +18,8 @@
                 <li>Edad: {{ calculateAge(ad.birthDate) }}</li>
                 <li>Especie: {{ ad.species }}</li>
                 <li>Género: {{ ad.gender }}</li>
-                <li>Tamaño: {{ ad.size }}</li>
-                <li>Ubicación: {{ ad.location }}</li>
+<!--                <li>Tamaño: {{ ad.size }}</li>-->
+                <li>Ubicación: {{ ad.city | titlecase }}</li>
               </ul>
             </div>
             <div class="p-3 bg-gray-50 flex gap-2">

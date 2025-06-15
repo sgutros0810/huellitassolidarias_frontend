@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { PostModel } from '../../../../core/modals/post.model';
+import { PostModel } from '../../../../core/models/post.model';
 import { PostService } from '../../../../core/services/post.service';
 import { UserService } from '../../../../core/services/user.service';
 import { UpdatePostModalComponent } from "../update-post-modal/update-post-modal.component";

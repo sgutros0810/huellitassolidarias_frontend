@@ -1,0 +1,74 @@
+<div class="hidden lg:flex justify-center gap-6 bg-transparent py-4">
+
+  <!-- Filtro: Animal -->
+  <div class="flex items-center">
+    <label for="animal" class="text-[16px] text-texto-gris-oscuro mr-2">Animal:</label>
+    <select
+      #animalSelect
+      id="animal"
+      class="bg-transparent border border-gray-300 px-3 py-2 rounded-md text-texto-gris-oscuro max-h-40 overflow-y-auto w-48"
+      (change)="updateFilter('species', animalSelect.value)"
+    >
+      <option value="">Todos</option>
+      @for (option of speciesOptions; track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+
+    </select>
+  </div>
+
+  <!-- Filtro: Ciudad -->
+  <div class="flex items-center">
+    <label for="ciudad" class="text-[16px] text-texto-gris-oscuro mr-2">Ciudad:</label>
+    <select
+      #citySelect
+      id="ciudad"
+      class="bg-transparent border border-gray-300 px-3 py-2 rounded-md text-texto-gris-oscuro"
+      (change)="updateFilter('city', citySelect.value)"
+    >
+      <option value="">Todas</option>
+      @for (city of cities; track city) {
+        <option [value]="city">{{ city.toLowerCase() | titlecase }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- Filtro: Género -->
+  <div class="flex items-center">
+    <label for="genero" class="text-[16px] text-texto-gris-oscuro mr-2">Género:</label>
+    <select
+      #genderSelect
+      id="genero"
+      class="bg-transparent border border-gray-300 px-3 py-2 rounded-md text-texto-gris-oscuro"
+      (change)="updateFilter('gender', genderSelect.value)"
+    >
+      <option value="">Todos</option>
+      @for (gender of genderList; track gender) {
+        <option [value]="gender">{{ gender.toLowerCase() | titlecase }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- Filtro: Tamaño -->
+<!--  <div class="flex items-center">-->
+<!--    <label for="tamano" class="text-[16px] text-texto-gris-oscuro mr-2">Tamaño:</label>-->
+<!--    <select-->
+<!--      #sizeSelect-->
+<!--      id="tamano"-->
+<!--      class="bg-transparent border border-gray-300 px-3 py-2 rounded-md text-texto-gris-oscuro"-->
+<!--      (change)="updateFilter('size', sizeSelect.value)"-->
+<!--    >-->
+<!--      <option value="">Todos</option>-->
+<!--      @for (size of sizeList; track size) {-->
+<!--        <option [value]="size">{{ size.toLowerCase() | titlecase }}</option>-->
+<!--      }-->
+<!--    </select>-->
+<!--  </div>-->
+</div>
+
+<!-- Icono de filtro (modo móvil) -->
+<div class="lg:hidden flex justify-end bg-transparent py-4">
+  <button id="iconoFiltro" class="text-2xl text-texto-marron-oscuro hover:text-gray-900" data-dropdown-toggle="dropdownId">
+    <i class="fas fa-sliders-h"></i>
+  </button>
+</div>

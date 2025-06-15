@@ -1,0 +1,111 @@
+<app-toast #toast></app-toast>
+
+<section class="max-w-6xl mx-auto px-4 py-6">
+  <h1 class="text-xl sm:text-2xl font-semibold text-center text-texto-marron-oscuro mb-6 uppercase font-poppins">
+    Gestión de publicaciones
+  </h1>
+
+  <div class="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
+    <input
+      type="text"
+      [(ngModel)]="search"
+      (input)="onSearchChanged()"
+      placeholder="Buscar por nombre de usuario..."
+      class="w-full sm:w-[300px] px-4 py-2 border border-gray-300 rounded-md text-sm font-poppins"
+    />
+  </div>
+
+
+  <div class="grid gap-4">
+    @for (post of posts; track post.id) {
+      <div class="flex flex-col gap-4 p-4 border border-gray-200 rounded-md shadow-sm bg-white">
+
+        <div class="flex flex-col sm:flex-row gap-4 items-start">
+          @if (post.imageUrl) {
+            <img [src]="buildImageUrl(post.imageUrl)" alt="Imagen del post"
+                 class="w-full sm:w-[160px] h-[120px] rounded-md object-cover" />
+          }
+
+          <div class="flex-1">
+            <h2 class="text-lg font-bold text-gray-800 font-poppins mb-1">{{ post.title }}</h2>
+            <p class="text-sm text-gray-700 mb-2 line-clamp-3">{{ post.content }}</p>
+            <div class="text-xs text-gray-500 font-poppins flex justify-between items-center">
+              <span>Por: <strong>{{ post.username }}</strong></span>
+              <span>{{ post.createdAt | date: 'shortDate' }}</span>
+            </div>
+            <div class="flex gap-4 mt-3">
+              <button
+                (click)="openDeleteModal(post.id)"
+                class="text-red-600 hover:underline text-sm font-medium transition-all">
+                Eliminar publicación
+              </button>
+
+              <button
+                (click)="openCommentsModal(post.id, post.title)"
+                class="text-primary-dark hover:underline text-sm font-medium transition-all">
+                Ver comentarios
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="mt-8 flex justify-between items-center font-poppins text-[16px]">
+    <button [disabled]="page === 0"
+            (click)="changePage(-1)"
+            class="px-4 py-2 bg-primary-dark text-white rounded disabled:opacity-50 hover:bg-primary-dark/80 transition">
+      Anterior
+    </button>
+
+    <span class="text-texto-gris-claro">Página {{ page + 1 }} de {{ totalPages }}</span>
+
+    <button [disabled]="page >= totalPages - 1"
+            (click)="changePage(1)"
+            class="px-4 py-2 bg-primary-dark text-white rounded disabled:opacity-50 hover:bg-primary-dark/80 transition">
+      Siguiente
+    </button>
+  </div>
+
+  @if (modalOpen) {
+    <app-modal-confirm
+      [title]="'¿Eliminar publicación?'"
+      [message]="'¿Seguro que quieres eliminar este post? Esta acción no se puede deshacer.'"
+      [cancelText]="'Cancelar'"
+      [confirmText]="'Eliminar'"
+      (confirm)="onConfirmDelete()"
+      (cancel)="onCancelDelete()" />
+  }
+</section>
+
+
+@if (commentsModalOpen && selectedPostId !== null) {
+  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-white w-full max-w-2xl rounded-lg shadow-lg p-6 relative z-[999]">
+    <h2 class="text-lg font-bold mb-4">Comentarios de: {{ selectedPostTitle }}</h2>
+
+      @if (commentsMap[selectedPostId] && commentsMap[selectedPostId]!.length > 0) {
+        <div class="space-y-4 max-h-[400px] overflow-y-auto">
+          @for (comment of commentsMap[selectedPostId]!; track comment.id) {
+            <div class="border p-3 rounded-md flex justify-between items-start text-sm">
+              <div>
+                <p class="text-gray-800">{{ comment.content }}</p>
+                <span class="text-xs text-gray-500">Por <strong>{{ comment.username }}</strong>, {{ comment.createdAt | date:'short' }}</span>
+              </div>
+              <button (click)="onDeleteComment(comment.id)"
+                      class="text-red-600 text-xs hover:underline font-semibold ml-4">
+                Eliminar
+              </button>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="text-sm text-gray-500">Este post no tiene comentarios.</p>
+      }
+
+      <button (click)="closeCommentsModal()" class="absolute top-2 right-2 text-gray-600 hover:text-black text-lg">&times;</button>
+    </div>
+  </div>
+}
+

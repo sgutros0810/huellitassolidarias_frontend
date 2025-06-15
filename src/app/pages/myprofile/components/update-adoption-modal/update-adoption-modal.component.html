@@ -56,14 +56,14 @@
 
       <!-- Raza y Tamaño -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
+        <div class="md:col-span-2">
           <label class="form-label">Raza</label>
           <input formControlName="breed" class="inputFormStyle" placeholder="Raza" />
         </div>
-        <div>
-          <label class="form-label">Tamaño</label>
-          <input formControlName="size" class="inputFormStyle" placeholder="Tamaño" />
-        </div>
+<!--        <div>-->
+<!--          <label class="form-label">Tamaño</label>-->
+<!--          <input formControlName="size" class="inputFormStyle" placeholder="Tamaño" />-->
+<!--        </div>-->
       </div>
 
       <!-- Fecha de nacimiento y edad -->
@@ -92,8 +92,16 @@
 
       <!-- Ubicación y descripción -->
       <div>
-        <label class="form-label">Ubicación</label>
-        <input formControlName="location" maxlength="100" class="inputFormStyle" />
+        <label class="form-label">Ciudad *</label>
+        <select formControlName="city" class="inputFormStyle">
+          <option value="" disabled selected>Selecciona</option>
+          @for (c of cities; track c) {
+            <option [value]="c">{{ c.toLowerCase() | titlecase }}</option>
+          }
+        </select>
+        @if(form.get('city')?.touched && form.get('city')?.hasError('required')) {
+          <small class="text-red-600">Ciudad obligatoria</small>
+        }
       </div>
       <div>
         <label class="form-label">Descripción</label>

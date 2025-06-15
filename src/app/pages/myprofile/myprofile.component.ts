@@ -1,128 +1,166 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { UserService } from '../../core/services/user.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserProfileModel } from '../../core/modals/user.model';
-import { MyPostsListComponent } from "./components/my-posts-list/my-posts-list.component";
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+import { Router } from '@angular/router';
+import { UserService } from '../../core/services/user.service';
 import { PostService } from '../../core/services/post.service';
-import { PostModel } from '../../core/modals/post.model';
-import { MyAdoptionsListComponent } from "./components/my-adoptions-list/my-adoptions-list.component";
-import { UpdateAdoptionModalComponent } from "./components/update-adoption-modal/update-adoption-modal.component";
+
+import { UserProfileModel } from '../../core/models/user.model';
+import { City } from '../../core/models/enums/city.enum';
+
+import { MyPostsListComponent } from './components/my-posts-list/my-posts-list.component';
+import { MyAdoptionsListComponent } from './components/my-adoptions-list/my-adoptions-list.component';
+import { MyReportsListComponent } from './components/my-reports-list/my-reports-list.component';
+import { ToastComponent } from '../../shared/components/toast/toast.component';
+import { buildImageUrl } from '../../shared/utils/image-url.util';
+import {PostModel} from '../../core/models/post.model';
 
 @Component({
   standalone: true,
   selector: 'app-myprofile',
-  imports: [CommonModule, FormsModule, MyPostsListComponent, MyAdoptionsListComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MyPostsListComponent,
+    MyAdoptionsListComponent,
+    MyReportsListComponent,
+    ToastComponent
+  ],
   templateUrl: './myprofile.component.html',
 })
 export class MyprofileComponent implements OnInit {
+  @ViewChild(ToastComponent) toastComponent?: ToastComponent;
 
   profile: UserProfileModel | null = null;
-  errorMessage: string | null = null;
   isEditing = false;
   selectedImage: File | null = null;
   activeTab: 'publicaciones' | 'adopciones' | 'reportes' = 'publicaciones';
+  cities = Object.entries(City);
+  defaultAvatar = '/img/avatar-default.png';
 
-  myPosts: PostModel[] = [];
+  private originalImageUrl: string | null = null;
+  private myPosts: PostModel[] | undefined;
+  verificationRequested = false;
 
+  constructor(
+    private userService: UserService,
+    private postService: PostService,
+    private router: Router
+  ) {}
 
-  constructor(private userService: UserService, private postService: PostService, private router: Router){
+  get imageSrc(): string {
+    if (!this.profile) return this.defaultAvatar;
+    const url = this.profile.profileImageUrl ?? '';
+    return url.startsWith('data:')
+      ? url
+      : buildImageUrl(url, this.defaultAvatar);
+  }
+
+  onAvatarError(event: Event) {
+    (event.target as HTMLImageElement).src = this.defaultAvatar;
   }
 
   ngOnInit(): void {
-
     this.userService.getProfile().subscribe({
-      next: (data) => {
+      next: data => {
         this.profile = data;
-        this.errorMessage = null;
+        this.verificationRequested = data.verificationRequested;
       },
-      error: (err) => {
-        console.error('Error cargando perfil', err);
-        this.errorMessage = 'No se pudo cargar el perfil. Inténtalo de nuevo más tarde.';
-      }
+      error: err => console.error('Error cargando perfil', err)
     });
 
-    //Mis posts creados
     this.postService.getMyPosts().subscribe({
-      next: (posts) => {
+      next: posts => {
         this.myPosts = posts;
-        this.errorMessage = null;
-      },
-      error: (err) => {
-        console.error('Error cargando posts', err);
-        this.errorMessage = 'No se pudo cargar tus posts. Inténtalo de nuevo más tarde.';
-      }
-    })
+
+        },
+      error: err => console.error('Error cargando posts', err)
+    });
   }
-
-
 
   editProfile(): void {
     this.isEditing = true;
+    this.originalImageUrl = this.profile?.profileImageUrl ?? null;
   }
 
-  saveProfile() {
-    if (!this.profile) {
-      console.error("Error al cargar el perfil.");
-      return;
-    }
-    if (this.profile.role === 'REFUGIO') {
-      this.userService.updateShelterProfile(this.profile).subscribe({
-        next: () => {
-          this.isEditing = false;
-        },
-        error: (err) => {
-          console.error('Error al actualizar perfil', err);
+  saveProfile(): void {
+    if (!this.profile) return;
+
+    const imageToUpload = this.selectedImage;
+    const finish = () => {
+      this.isEditing     = false;
+      this.selectedImage = null;
+      this.userService.getProfile().subscribe();
+      if (this.toastComponent) {
+        this.toastComponent.message = 'Perfil actualizado correctamente';
+        this.toastComponent.show();
+      }
+    };
+
+    const update$ = this.profile.role === 'REFUGIO'
+      ? this.userService.updateShelterProfile(this.profile)
+      : this.userService.updateUserProfile(this.profile);
+
+    update$.pipe(
+      switchMap(() => {
+        if (imageToUpload) {
+          const fd = new FormData();
+          fd.append('image', imageToUpload);
+          return this.userService.updateProfileImage(fd);
         }
-      });
-    } else {
-      this.userService.updateUserProfile(this.profile).subscribe({
-        next: () => {
-          this.isEditing = false;
-        },
-        error: (err) => console.error('Error al actualizar usuario', err)
-      });
-    }
+        return of(null);
+      })
+    ).subscribe({
+      next: finish,
+      error: err => console.error('Error al guardar', err)
+    });
   }
 
   cancelEdit(): void {
-    this.isEditing = false;
-  }
-
-  onFileSelected(event: any) {
-    this.selectedImage = event.target.files[0];
-    console.log(this.selectedImage)
-  }
-
-
-  uploadImage() {
-    if (!this.selectedImage) {
-      return;
+    this.isEditing     = false;
+    this.selectedImage = null;
+    if (this.profile) {
+      this.profile.profileImageUrl = this.originalImageUrl!;
+      this.userService.emitProfile(this.profile);
     }
+  }
 
-    const formData = new FormData();
-    formData.append('image', this.selectedImage);
-
-    this.userService.updateProfileImage(formData).subscribe({
+  requestVerification() {
+    this.userService.requestShelterVerification().subscribe({
       next: () => {
-        this.refreshProfile(); // recarga datos con nueva URL
-        this.selectedImage = null;
+        this.verificationRequested = true;
+        if (this.toastComponent) {
+          this.toastComponent.message = 'Solicitud de verificacion enviada correctamente';
+          this.toastComponent.show();
+        }
       },
-      error: err => console.error('Error al subir imagen', err)
+      error: () => {
+        if (this.toastComponent) {
+          this.toastComponent.message = 'Error al mandar solicitud de verificacion';
+          this.toastComponent.show();
+        }
+      }
     });
   }
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (!file || !this.profile) return;
 
-  refreshProfile() {
-    this.userService.getProfile().subscribe({
-      next: (data) => this.profile = data,
-      error: (err) => console.error('Error al recargar perfil', err)
-    });
+    this.selectedImage = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.profile!.profileImageUrl = reader.result as string;
+      this.userService.emitProfile(this.profile!);
+    };
+    reader.readAsDataURL(file);
   }
 
   setActiveTab(tab: 'publicaciones' | 'adopciones' | 'reportes') {
     this.activeTab = tab;
   }
-
 }

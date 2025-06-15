@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommentService } from '../../../../core/services/comment.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CommentModel } from '../../../../core/modals/comments.model';
+import { CommentModel } from '../../../../core/models/comments.model';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -62,7 +62,7 @@ export class CommentsPostComponent implements OnInit{
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
-    }).format(date); 
+    }).format(date);
   }
 
 }

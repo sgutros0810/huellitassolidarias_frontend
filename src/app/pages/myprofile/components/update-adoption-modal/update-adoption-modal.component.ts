@@ -1,12 +1,13 @@
-import { AsyncPipe } from '@angular/common';
+import {AsyncPipe, TitleCasePipe} from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AdoptionService } from '../../../../core/services/adoption.service';
-import { AdoptionDetailModel } from '../../../../core/modals/adoption-detail.model';
+import { AdoptionDetailModel } from '../../../../core/models/adoption-detail.model';
+import {City} from '../../../../core/models/enums/city.enum';
 
 @Component({
   selector: 'app-update-adoption-modal',
-  imports: [ AsyncPipe, FormsModule, ReactiveFormsModule ],
+  imports: [FormsModule, ReactiveFormsModule, TitleCasePipe],
   templateUrl: './update-adoption-modal.component.html',
   styleUrl: './update-adoption-modal.component.css'
 })
@@ -20,7 +21,7 @@ export class UpdateAdoptionModalComponent implements OnInit {
   age: number | null = null;
   selectedFile: File | null = null;
   currentImageUrl: string | null = null;
-
+  cities = Object.values(City);
 
   adoption = {
     name: '',
@@ -28,9 +29,9 @@ export class UpdateAdoptionModalComponent implements OnInit {
     gender: '',
     breed: '',
     birthDate: '',
-    size: '',
+    // size: '',
     description: '',
-    location: '',
+    city: '',
     vaccinated: false,
     sterilized: false,
     status: 'AVAILABLE',
@@ -110,10 +111,9 @@ export class UpdateAdoptionModalComponent implements OnInit {
       species:      ['', Validators.required],
       gender:       ['', Validators.required],
       breed:        [''],
-      size:         [''],
       birthDate:    ['', [Validators.required, this.maxDateValidator]],
       description:  ['', Validators.maxLength(1000)],
-      location:     ['', Validators.maxLength(100)],
+      city: ['', Validators.required],
       vaccinated:   [false],
       sterilized:   [false],
       status:       ['AVAILABLE', Validators.required],
@@ -129,7 +129,7 @@ export class UpdateAdoptionModalComponent implements OnInit {
     //Pone los datos que tiene guardado
     this.adoptionService.getAdoptionById(this.adoptionId).subscribe({
       next: (data: AdoptionDetailModel) => {
-        
+
         // Si tiene ya una imagen  imagen, la guarda
         this.currentImageUrl = data.imageUrl ? `/uploads/adoptions/${data.imageUrl}` : null;
 
@@ -142,7 +142,7 @@ export class UpdateAdoptionModalComponent implements OnInit {
           size:         data.size,
           birthDate:    data.birthDate,
           description:  data.description,
-          location:     data.location,
+          city:     data.city,
           vaccinated:   data.vaccinated,
           sterilized:   data.sterilized,
           status:       data.status,

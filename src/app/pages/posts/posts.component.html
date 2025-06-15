@@ -21,7 +21,14 @@
   </div>
 
   @if(mostrarFormulario) {
-    <app-postform (closed)="closeModal()"></app-postform>
+    <app-post-form (closed)="closeModal()"></app-post-form>
+  }
+
+  @if(showLoginPrompt) {
+    <app-login-prompt-modal
+      (cancel)="closeLoginPrompt()"
+      (login)="goToLogin()"
+    ></app-login-prompt-modal>
   }
 
 </section>

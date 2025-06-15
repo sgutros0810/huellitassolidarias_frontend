@@ -1,0 +1,78 @@
+<app-toast #toast></app-toast>
+
+<section class="max-w-6xl mx-auto px-4 py-6">
+  <h1 class="text-xl sm:text-2xl font-semibold text-center text-texto-marron-oscuro mb-6 uppercase font-poppins">
+    Gestión de reportes
+  </h1>
+
+  <div class="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
+    <input
+      type="text"
+      [(ngModel)]="search"
+      (input)="onSearchChanged()"
+      placeholder="Buscar por nombre de usuario..."
+      class="w-full sm:w-[300px] px-4 py-2 border border-gray-300 rounded-md text-sm font-poppins"
+    />
+  </div>
+
+  <section class="overflow-x-auto rounded-xl shadow-lg">
+    <table class="min-w-full bg-white rounded-xl overflow-hidden font-poppins">
+      <thead>
+      <tr class="bg-primary-dark text-white text-left text-[16px]">
+        <th class="px-4 py-3">Imagen</th>
+        <th class="px-4 py-3">Animal</th>
+        <th class="px-4 py-3">Usuario</th>
+        <th class="px-4 py-3">Estado</th>
+        <th class="px-4 py-3">Ubicación</th>
+        <th class="px-4 py-3">Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (report of reports; track report.id) {
+          <tr class="border-t hover:bg-gray-50">
+            <td class="px-4 py-3">
+              <img [src]="buildImageUrl(report.imageUrl)" alt="animal" class="w-20 h-20 object-cover rounded" />
+            </td>
+            <td class="px-4 py-3 font-medium">{{ report.name }}</td>
+            <td class="px-4 py-3">{{ report.username }}</td>
+            <td class="px-4 py-3">{{ report.state }}</td>
+            <td class="px-4 py-3">{{ report.location }}</td>
+            <td class="px-4 py-3">
+              <button (click)="confirmDelete(report.id, report.name)"
+                      class="text-red-600 hover:underline font-semibold text-sm">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+
+  <div class="mt-8 flex justify-between items-center font-poppins text-[16px]">
+    <button [disabled]="page === 0"
+            (click)="changePage(-1)"
+            class="px-4 py-2 bg-primary-dark text-white rounded disabled:opacity-50 hover:bg-primary-dark/80 transition">
+      Anterior
+    </button>
+
+    <span class="text-texto-gris-claro">Página {{ page + 1 }} de {{ totalPages }}</span>
+
+    <button [disabled]="page >= totalPages - 1"
+            (click)="changePage(1)"
+            class="px-4 py-2 bg-primary-dark text-white rounded disabled:opacity-50 hover:bg-primary-dark/80 transition">
+      Siguiente
+    </button>
+  </div>
+
+  @if (modalOpen) {
+    <app-modal-confirm
+      [title]="'¿Confirmar eliminación?'"
+      [message]="'¿Seguro que quieres eliminar el reporte de ' + selectedName + '?'"
+      [cancelText]="'Cancelar'"
+      [confirmText]="'Eliminar'"
+      (confirm)="onConfirmDelete()"
+      (cancel)="onCancelDelete()"
+    />
+  }
+</section>

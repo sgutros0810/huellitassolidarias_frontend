@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AnimalReportModel } from '../modals/animal-report.model';
+import { AnimalReportModel } from '../models/animal-report.model';
 
 
 
@@ -37,6 +37,28 @@ export class AnimalReportService {
       this.http.get<Page<AnimalReportModel>>(this.apiUrl, { params })
     );
     this.animalReportsBS.next(response.content);
+  }
+
+  async getMyReports(page = 0, size = 10): Promise<void> {
+    const params = new HttpParams().set('page', page).set('size', size);
+    const response = await firstValueFrom(
+      this.http.get<Page<AnimalReportModel>>(
+        `${this.apiUrl}/myprofile`,
+        { params, headers: this.getAuthHeaders() }
+      )
+    );
+    this.animalReportsBS.next(response.content);
+  }
+
+  async updateReportState(id: number, state: 'FOUND' | 'MISSING'): Promise<void> {
+    const params = new HttpParams().set('state', state);
+    await firstValueFrom(
+      this.http.patch<void>(
+        `${this.apiUrl}/${id}/state`,
+        null,
+        { params, headers: this.getAuthHeaders() }
+      )
+    );
   }
 
   async getReportsByState(state: string, page: number = 0, size: number = 10): Promise<void> {

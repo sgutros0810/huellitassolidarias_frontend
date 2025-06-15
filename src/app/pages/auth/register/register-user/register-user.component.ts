@@ -2,17 +2,19 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, AbstractControlOptions, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Router } from '@angular/router';
+import {City} from '../../../../core/models/enums/city.enum';
+import {TitleCasePipe} from '@angular/common';
 
 
 @Component({
   selector: 'app-register-user',
-  imports: [ FormsModule, ReactiveFormsModule ],
+  imports: [FormsModule, ReactiveFormsModule, TitleCasePipe],
   templateUrl: './register-user.component.html',
   styleUrl: './register-user.component.css'
 })
 export class RegisterUserComponent implements OnInit {
 
-
+  cities = Object.values(City);
   form!: FormGroup;
   isSubmitting = false;
 

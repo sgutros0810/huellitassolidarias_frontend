@@ -1,23 +1,19 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable, NgZone } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { BehaviorSubject, catchError, firstValueFrom, Observable, throwError } from 'rxjs';
-import { UserProfileModel } from '../modals/user.model';
-import { ShelterModel } from '../modals/shelter.model';
-import { ShelterDetailModel } from '../modals/shelter-detail.model';
-import { PageResponse } from '../modals/page-response.model';
-import { AdoptionModel } from '../modals/adoption.model';
-
+import { BehaviorSubject, catchError, firstValueFrom, Observable, tap, throwError } from 'rxjs';
+import { UserProfileModel } from '../models/user.model';
+import { ShelterModel } from '../models/shelter.model';
+import { ShelterDetailModel } from '../models/shelter-detail.model';
+import { PageResponse } from '../models/page-response.model';
+import { AdoptionModel } from '../models/adoption.model';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class UserService {
-
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
-
 
   ShelterModel: Array<ShelterModel> = [];
   listSheltersBS: BehaviorSubject<Array<ShelterModel>> = new BehaviorSubject<Array<ShelterModel>>([]);
@@ -27,10 +23,11 @@ export class UserService {
   listProfileAdoptionBS: BehaviorSubject<Array<AdoptionModel>> = new BehaviorSubject<Array<AdoptionModel>>([]);
   listProfileAdoptionObs$ = this.listProfileAdoptionBS.asObservable();
 
+  private profileSubject = new BehaviorSubject<UserProfileModel | null>(null);
+  profile$ = this.profileSubject.asObservable();
 
   constructor(private zone: NgZone) {}
 
-  //
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('authToken');
     return new HttpHeaders({
@@ -38,12 +35,11 @@ export class UserService {
     });
   }
 
-  // Recicibir datos del usaurio
   getProfile(): Observable<UserProfileModel> {
     return this.http.get<UserProfileModel>(`${this.apiUrl}/myprofile`, {
       headers: this.getAuthHeaders()
     }).pipe(
-      // Error al obtener el perfil del usuario
+      tap(profile => this.profileSubject.next(profile)),
       catchError(err => {
         console.error('Error obteniendo perfil:', err);
         return throwError(() => new Error('Error al obtener el perfil, inténtalo más tarde.'));
@@ -51,26 +47,24 @@ export class UserService {
     );
   }
 
-  // Editar perfil del usuario por ID de usaurio
   updateUserProfile(profile: Partial<UserProfileModel>): Observable<UserProfileModel> {
     return this.http.put<UserProfileModel>(`${this.apiUrl}/userprofile`, profile, {
       headers: this.getAuthHeaders()
     }).pipe(
+      tap(updated => this.profileSubject.next(updated)),
       catchError(err => {
-        // Error al editar el perfil
         console.error('Error al actualizar el perfil:', err);
         return throwError(() => new Error('No se ha podido actualizar el perfil. Inténtalo de nuevo.'));
       })
     );
   }
 
-  // Editar perfil del usuario por ID de usaurio
   updateShelterProfile(profile: Partial<UserProfileModel>): Observable<UserProfileModel> {
     return this.http.put<UserProfileModel>(`${this.apiUrl}/shelterprofile`, profile, {
       headers: this.getAuthHeaders()
     }).pipe(
+      tap(updated => this.profileSubject.next(updated)),
       catchError(err => {
-        // Error al editar el perfil
         console.error('Error al actualizar el perfil:', err);
         return throwError(() => new Error('No se ha podido actualizar el perfil. Inténtalo de nuevo.'));
       })
@@ -82,10 +76,17 @@ export class UserService {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')!}`
       }
-    });
+    }).pipe(
+      tap(() => {
+        this.getProfile().subscribe();
+      }),
+      catchError(err => {
+        console.error('Error al subir imagen:', err);
+        return throwError(() => new Error('No se pudo subir la imagen.'));
+      })
+    );
   }
 
-  // Obtiene todos los usaurios con ROL = REFUGIO
   async getShelters(page: number, size: number): Promise<void> {
     if (page < 0) page = 0;
     if (size < 1) size = 10;
@@ -105,10 +106,10 @@ export class UserService {
     return this.http.get<ShelterDetailModel>(`${environment.apiUrl}/shelters/details/${shelterId}`);
   }
 
-  async getAdoptionByUser( page: number = 0, size: number = 10): Promise<void> {
+  async getAdoptionByUser(page: number = 0, size: number = 10): Promise<void> {
     const response = await firstValueFrom(
       this.http.get<PageResponse<AdoptionModel>>(
-        `${this.apiUrl}/myprofile/adoptions?page=${page}&size=${size}`,{
+        `${this.apiUrl}/myprofile/adoptions?page=${page}&size=${size}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('authToken')!}`
           }
@@ -118,9 +119,7 @@ export class UserService {
     this.listProfileAdoptionBS.next(response.content);
   }
 
-
-  // Busca refugios filtrando por nombre, usuario, ciudad o país
-  searchShelters(filters: { nameShelter?: string; username?: string; city?: string; country?: string;}): Observable<ShelterModel[]> {
+  searchShelters(filters: { nameShelter?: string; username?: string; city?: string; country?: string; }): Observable<ShelterModel[]> {
     let params = new HttpParams();
     if (filters.nameShelter) params = params.set('nameShelter', filters.nameShelter);
     if (filters.username)   params = params.set('username', filters.username);
@@ -130,8 +129,7 @@ export class UserService {
     return this.http.get<ShelterModel[]>(`${this.apiUrl}/shelters/search`, {
       headers: this.getAuthHeaders(),
       params
-    })
-    .pipe(
+    }).pipe(
       catchError(err => {
         console.error('Error buscando refugios:', err);
         return throwError(() => new Error('No se pudieron cargar los refugios.'));
@@ -139,5 +137,22 @@ export class UserService {
     );
   }
 
+  requestShelterVerification() {
+    return this.http.put<void>(`${this.apiUrl}/shelters/request-verification`, null, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+
+  // Por si hace falta ewmitir manualmente
+  emitProfile(profile: UserProfileModel) {
+    if (profile) {
+      this.profileSubject.next(profile);
+    }
+  }
+
+  clearProfile() {
+    this.profileSubject.next(null);
+  }
 
 }

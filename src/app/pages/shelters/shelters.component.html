@@ -1,17 +1,21 @@
-
 <section class="mx-8 lg:mx-20">
-  <!-- Titulo -->
   <div class="mt-15">
     <h1 class="text-[35px] uppercase font-poppins font-semibold text-texto-marron-oscuro text-center">REFUGIOS</h1>
-    <p class="text-[18px] uppercase font-poppins font-normal text-texto-gris-claro text-center" >Ellos no hablan, pero su mirada pide un hogar</p>
+    <p class="text-[18px] uppercase font-poppins font-normal text-texto-gris-claro text-center">
+      Ellos no hablan, pero su mirada pide un hogar
+    </p>
   </div>
 
   <!-- Buscador -->
   <div class="flex justify-center px-4 py-8 md:justify-end lg:justify-end lg:px-9 lg:py-14">
-    <app-search-shelters></app-search-shelters>
+    <input
+      type="text"
+      class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-md text-sm font-poppins"
+      placeholder="Buscar refugio por nombre..."
+      [(ngModel)]="search"
+      (input)="onSearchChange()"
+    />
   </div>
 
-  <!-- Listado de usuarios -->
-  <app-list-shelters></app-list-shelters>
+  <app-list-shelters [searchTerm]="search" />
 </section>
-

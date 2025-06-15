@@ -8,24 +8,21 @@
       <div [id]="'comments-'+ postId" class="max-h-60 overflow-y-auto space-y-2 pr-2">
         @for(comment of comments; track comment.id){
           <div class="bg-gray-100 rounded-md p-3 text-sm">
-            <p class="font-semibold text-gray-700">{{ comment.username }}</p>
+            <p class="font-semibold text-gray-700">{{ "@" + comment.username }}</p>
             <p class="text-gray-600 whitespace-pre-line break-words">{{ comment.content }}</p>
             <p class="text-xs text-gray-400 text-right">{{ formatCommentDate(comment.createdAt) }}</p>
           </div>
         }
       </div>
-    <!-- Si es menos a 0 comentarios  -->
     } @else {
         <h2>No hay comentarios</h2>
     }
 
-  <!-- Si esta null o undefined la lista de comentarios -->
   } @else {
     <h2>No hay comentarios</h2>
   }
 
 
-    <!-- Añadir un nuevo comentario -->
     <div class="mt-3">
       <textarea [(ngModel)]="newComment" placeholder="Escribe tu comentario..." class="w-full border rounded-md p-2 text-sm focus:outline-none focus:ring focus:ring-primary"></textarea>
       <button (click)="addComment()"

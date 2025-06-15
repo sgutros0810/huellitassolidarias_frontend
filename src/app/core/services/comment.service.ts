@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, OnInit, NgZone } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { PostModel } from '../modals/post.model';
+import { PostModel } from '../models/post.model';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
-import { CommentModel } from '../modals/comments.model';
+import { CommentModel } from '../models/comments.model';
 
 @Injectable({
   providedIn: 'root'

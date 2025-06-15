@@ -9,7 +9,9 @@
 
           <!-- Usuario y fecha -->
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
+            <div class="w-12 h-12 bg-gray-300 rounded-full">
+              <img [src]="buildImageUrl(post.profileImageUrl, defaultAvatar)" alt="Avatar" class="w-12 h-12 rounded-full object-cover shadow-md" (error)="onAvatarError($event)" />
+            </div>
             <div>
               <p class="font-semibold text-texto-marron-oscuro">{{ post.username }}</p>
               <p class="text-xs text-gray-500">{{ formatPostDate(post.createdAt) }}</p>
@@ -29,7 +31,7 @@
           <!-- Imagen -->
           @if(post.imageUrl) {
             <div class="w-full rounded-lg overflow-hidden">
-              <img [src]="'http://localhost:8080' + post.imageUrl" alt="Imagen del post" class="w-full h-auto object-cover" />
+              <img [src]="buildImageUrl(post.imageUrl, '/img/default-post.jpg')" alt="Imagen del post" class="w-full h-auto object-cover" />
             </div>
           }
 

@@ -1,12 +1,16 @@
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
-import { AdoptionModel } from '../../../../core/modals/adoption.model';
+import { AdoptionModel } from '../../../../core/models/adoption.model';
 import { AdoptionService } from '../../../../core/services/adoption.service';
-import { AdoptionDetailModel } from '../../../../core/modals/adoption-detail.model';
+import { AdoptionDetailModel } from '../../../../core/models/adoption-detail.model';
 import { ActivatedRoute } from '@angular/router';
+import {TitleCasePipe} from '@angular/common';
+import {buildImageUrl} from '../../../../shared/utils/image-url.util';
 
 @Component({
   selector: 'app-adoption-details',
-  imports: [],
+  imports: [
+    TitleCasePipe
+  ],
   templateUrl: './adoption-details.component.html',
   styleUrl: './adoption-details.component.css'
 })
@@ -16,6 +20,48 @@ export class AdoptionDetailsComponent {
   private adoptionService = inject(AdoptionService);
 
   adoption = signal<AdoptionDetailModel | null>(null);
+
+  defaultAdoptionImage = '/img/adopciones/default-adoption.jpg';
+
+  speciesMap: Record<string, string> = {
+    DOG: 'Perro',
+    CAT: 'Gato',
+    RABBIT: 'Conejo',
+    HAMSTER: 'Hámster',
+    GUINEA_PIG: 'Cobayo',
+    FERRET: 'Hurón',
+    MOUSE: 'Ratón',
+    RAT: 'Rata',
+    CHINCHILLA: 'Chinchilla',
+    HEDGEHOG: 'Erizo',
+    TURTLE: 'Tortuga',
+    TORTOISE: 'Tortuga terrestre',
+    IGUANA: 'Iguana',
+    LIZARD: 'Lagarto',
+    SNAKE: 'Serpiente',
+    BIRD: 'Ave',
+    PARROT: 'Loro',
+    CANARY: 'Canario',
+    PIGEON: 'Paloma',
+    CHICKEN: 'Gallina',
+    DUCK: 'Pato',
+    FISH: 'Pez',
+    OTHER: 'Otro'
+  };
+
+  genderMap: Record<string, string> = {
+    MALE: 'Macho',
+    FEMALE: 'Hembra',
+    UNKNOWN: 'Desconocido'
+  };
+
+  statusMap: Record<string, string> = {
+    AVAILABLE: 'Disponible',
+    RESERVED: 'Reservado',
+    ADOPTED: 'Adoptado',
+    UNDER_REVIEW: 'En revisión'
+  };
+
 
   today: string = '';
   age: number | null = null;
@@ -31,6 +77,15 @@ export class AdoptionDetailsComponent {
       },
       error: (err) => console.error('Error cargando datos del animal', err)
     });
+  }
+
+  getImageSrc(imageUrl: string | null | undefined): string {
+    return buildImageUrl(imageUrl, this.defaultAdoptionImage);
+  }
+
+  // Traducir true o false a si o no
+  translateBoolean(value: boolean | null | undefined): string {
+    return value ? 'Sí' : 'No';
   }
 
 

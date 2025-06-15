@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
-import { PostModel } from '../modals/post.model';
+import { PostModel } from '../models/post.model';
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +52,7 @@ export class PostService {
   }
 
 
-  async getPosts(page: number, size: number): Promise<void>{
+  async getPosts(page: number, size: number): Promise<void> {
     if (page < 0) page = 0;
     if (size < 1) size = 10;
 
@@ -60,12 +60,14 @@ export class PostService {
       .set('page', page.toString())
       .set('size', size.toString());
 
-      this.PostModel = await firstValueFrom(
-        this.http.get<PostModel[]>(this.apiUrl, {params})
-      );
+    const response = await firstValueFrom(
+      this.http.get<any>(this.apiUrl, { params })
+    );
 
-      this.listPostBS.next(this.PostModel);
+    this.PostModel = response.content;
+    this.listPostBS.next(this.PostModel);
   }
+
 
   setPostList(posts: PostModel[]){
     this.PostModel = posts;

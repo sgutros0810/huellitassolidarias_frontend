@@ -11,6 +11,11 @@ import { PostsComponent } from './pages/posts/posts.component';
 import { SheltersComponent } from './pages/shelters/shelters.component';
 import { ShelterDetailsComponent } from './pages/shelters/components/shelter-details/shelter-details.component';
 import { AdoptionDetailsComponent } from './pages/adopciones/components/adoption-details/adoption-details.component';
+import {UsersAdminComponent} from './pages/admin/users/users-admin.component';
+import {adminGuard} from './core/guards/admin.guard';
+import {AdminPostsComponent} from './pages/admin/posts/admin-posts.component';
+import {AdminAdoptionsComponent} from './pages/admin/adoptions/admin-adoptions.component';
+import {AdminReportsComponent} from './pages/admin/reports/admin-reports.component';
 
 
 export const routes: Routes = [
@@ -26,5 +31,10 @@ export const routes: Routes = [
   { path: 'myprofile', component: MyprofileComponent },
   { path: 'shelters/details/:id', component: ShelterDetailsComponent, title:"Detalles del refugio" },
   { path: 'adoptions/details/:id', component: AdoptionDetailsComponent, title:"Detalles del animal" },
+
+  { path: 'admin/users', component: UsersAdminComponent, canActivate: [adminGuard] },
+  { path: 'admin/posts', component: AdminPostsComponent, canActivate: [adminGuard] },
+  { path: 'admin/adoptions', component: AdminAdoptionsComponent, canActivate: [adminGuard] },
+  { path: 'admin/reports', component: AdminReportsComponent, canActivate: [adminGuard] },
   { path: '**', redirectTo: '' }
 ];

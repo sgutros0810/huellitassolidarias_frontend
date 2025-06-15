@@ -1,0 +1,18 @@
+@if (loading) {
+  <p>Cargando mis reportes…</p>
+}
+
+@if (!loading && reports.length > 0) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+    @for (report of reports; track report.id) {
+      <app-card-report
+        [report]="report"
+        [showMarkAsFound]="true"
+        (markAsFound)="markFound($event)"
+        class="h-full"
+      ></app-card-report>
+    }
+  </div>
+} @else {
+  <p class="text-center text-gray-500 mt-10">No tienes reportes pendientes.</p>
+}
