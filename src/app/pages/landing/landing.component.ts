@@ -4,11 +4,12 @@ import { FooterComponent } from "../../shared/components/footer/footer.component
 import { CommonModule } from '@angular/common';
 import { SliderComponent } from "./components/slider/slider.component";
 import { CardComponent } from "./components/card/card.component";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
-  imports: [CommonModule, SliderComponent, CardComponent],
+  imports: [CommonModule, SliderComponent, CardComponent, RouterLink],
   styleUrl: './landing.component.css'
 })
 export class LandingComponent {

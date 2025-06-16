@@ -16,6 +16,7 @@ import {adminGuard} from './core/guards/admin.guard';
 import {AdminPostsComponent} from './pages/admin/posts/admin-posts.component';
 import {AdminAdoptionsComponent} from './pages/admin/adoptions/admin-adoptions.component';
 import {AdminReportsComponent} from './pages/admin/reports/admin-reports.component';
+import { authGuard } from './core/auth.guard';
 
 
 export const routes: Routes = [
@@ -28,13 +29,13 @@ export const routes: Routes = [
   { path: 'reportes', component: ReportesComponent },
   { path: 'publicaciones', component: PostsComponent },
   { path: 'shelters', component: SheltersComponent },
-  { path: 'myprofile', component: MyprofileComponent },
+  { path: 'myprofile', component: MyprofileComponent, canActivate: [ authGuard] },
   { path: 'shelters/details/:id', component: ShelterDetailsComponent, title:"Detalles del refugio" },
   { path: 'adoptions/details/:id', component: AdoptionDetailsComponent, title:"Detalles del animal" },
 
-  { path: 'admin/users', component: UsersAdminComponent, canActivate: [adminGuard] },
-  { path: 'admin/posts', component: AdminPostsComponent, canActivate: [adminGuard] },
-  { path: 'admin/adoptions', component: AdminAdoptionsComponent, canActivate: [adminGuard] },
-  { path: 'admin/reports', component: AdminReportsComponent, canActivate: [adminGuard] },
+  { path: 'admin/users', component: UsersAdminComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'admin/posts', component: AdminPostsComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'admin/adoptions', component: AdminAdoptionsComponent, canActivate: [adminGuard, authGuard] },
+  { path: 'admin/reports', component: AdminReportsComponent, canActivate: [adminGuard, authGuard] },
   { path: '**', redirectTo: '' }
 ];
