@@ -11,39 +11,39 @@
   </section>
 
 
-  <section class="flex flex-wrap items-center gap-4 mt-8 mb-8 justify-center sm:justify-between">
+  <section class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-8 mb-8 justify-center sm:justify-start max-w-full">
 
     <input
       type="text"
       [(ngModel)]="search"
       (input)="onSearchChanged()"
       placeholder="Buscar por nombre o email..."
-      class="px-4 py-2 border rounded-lg shadow-sm font-poppins text-[16px] text-gray-700 w-full sm:w-[240px]"
+      class="px-4 py-2 border rounded-lg shadow-sm font-poppins text-[16px] text-gray-700 w-full sm:w-[260px]"
     />
 
     <select [(ngModel)]="selectedRole" (change)="loadUsers()"
-            class="px-4 py-2 border rounded-lg shadow-sm font-poppins text-[16px] text-gray-700 w-full sm:w-[180px]">
+            class="px-2 py-2 border rounded-lg shadow-sm font-poppins text-[16px] text-gray-700 w-full sm:w-[180px]">
       <option value="">Todos los roles</option>
       <option value="USUARIO">Usuario</option>
       <option value="REFUGIO">Refugio</option>
       <option value="ADMIN">Admin</option>
     </select>
 
+    <select [(ngModel)]="onlyActive" (change)="loadUsers()"
+            class="px-2 py-2 border rounded-lg shadow-sm font-poppins text-[16px] text-gray-700 w-full sm:w-[180px]">
+      <option value="">Cualquier estado</option>
+      <option value="true">Activos</option>
+      <option value="false">Desactivados</option>
+    </select>
+
     <select [(ngModel)]="onlyVerified" (change)="loadUsers()"
-            class="px-4 py-2 border rounded-lg shadow-sm font-poppins text-[16px] text-gray-700 w-full sm:w-[180px]">
-      <option value="">Todos</option>
+            class="px-2 py-2 border rounded-lg shadow-sm font-poppins text-[16px] text-gray-700 w-full sm:w-[180px]">
+      <option value="">Estado verificación</option>
       <option value="true">Solo verificados</option>
       <option value="false">No verificados</option>
       <option value="pending">Pendiente de verificar</option>
     </select>
 
-
-    <select [(ngModel)]="onlyActive" (change)="loadUsers()"
-            class="px-4 py-2 border rounded-lg shadow-sm font-poppins text-[16px] text-gray-700 w-full sm:w-[180px]">
-      <option value="">Todos</option>
-      <option value="true">Activos</option>
-      <option value="false">Desactivados</option>
-    </select>
   </section>
 
 
